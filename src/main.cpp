@@ -25,17 +25,13 @@ void clearScreen() {
 
     paint.Clear(UNCOLORED);
     epd.SetFrameMemory(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-    // epd.SetFrameMemory(paint.GetImage(), 0, 64, paint.GetWidth(), paint.GetHeight());
     epd.SetFrameMemory(paint.GetImage(), 0, 128, paint.GetWidth(), paint.GetHeight());
-    // epd.SetFrameMemory(paint.GetImage(), 0, 192, paint.GetWidth(), paint.GetHeight());
     epd.SetFrameMemory(paint.GetImage(), 0, 256, paint.GetWidth(), paint.GetHeight());
     epd.DisplayFrame();
 
     paint.Clear(COLORED);
     epd.SetFrameMemory(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-    // epd.SetFrameMemory(paint.GetImage(), 0, 64, paint.GetWidth(), paint.GetHeight());
     epd.SetFrameMemory(paint.GetImage(), 0, 128, paint.GetWidth(), paint.GetHeight());
-    // epd.SetFrameMemory(paint.GetImage(), 0, 192, paint.GetWidth(), paint.GetHeight());
     epd.SetFrameMemory(paint.GetImage(), 0, 256, paint.GetWidth(), paint.GetHeight());
     epd.DisplayFrame();
 
@@ -86,9 +82,7 @@ void setup() {
 
 void loop() {
     drawRectangle(64, 64, 64, 64);
-
     drawRectangle(64, 64, 64, 144);
-
     drawRectangle(64, 64, 64, 224);
 
     epd.DisplayFrame();
