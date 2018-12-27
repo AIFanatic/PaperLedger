@@ -1,0 +1,26 @@
+{
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\PC\\.platformio\\penv\\Scripts;C:\\Users\\PC\\.platformio\\penv;C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Bitvise SSH Client;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Users\\PC\\Miniconda3;C:\\Users\\PC\\Miniconda3\\Library\\mingw-w64\\bin;C:\\Users\\PC\\Miniconda3\\Library\\usr\\bin;C:\\Users\\PC\\Miniconda3\\Library\\bin;C:\\Users\\PC\\Miniconda3\\Scripts;C:\\Users\\PC\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Docker Toolbox;C:\\xampp\\php;C:\\Program Files\\apache-maven-3.6.0\\bin;C:\\Program Files (x86)\\Nmap;C:\\Program Files\\Adobe\\Adobe After Effects CC 2019\\Support Files;;C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Bitvise SSH Client;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Users\\PC\\Miniconda3;C:\\Users\\PC\\Miniconda3\\Library\\mingw-w64\\bin;C:\\Users\\PC\\Miniconda3\\Library\\usr\\bin;C:\\Users\\PC\\Miniconda3\\Library\\bin;C:\\Users\\PC\\Miniconda3\\Scripts;C:\\Users\\PC\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\PC\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\Docker Toolbox;C:\\xampp\\php;C:\\Program Files\\apache-maven-3.6.0\\bin;C:\\Program Files (x86)\\Nmap;C:\\Program Files\\Adobe\\Adobe After Effects CC 2019\\Support Files;",
+        "PLATFORMIO_CALLER": "vscode"
+    },
+    "files.associations": {
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "*.tcc": "cpp",
+        "vector": "cpp",
+        "unordered_map": "cpp",
+        "system_error": "cpp",
+        "deque": "cpp",
+        "unordered_set": "cpp",
+        "limits": "cpp"
+    },
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/mac/.platformio/penv/bin:/Users/mac/.platformio/penv:/usr/local/php5-5.6.36-20180703-123509/bin:/usr/local/opt/php@5.6/bin:/usr/local/opt/mysql@5.7/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands",
+        "PLATFORMIO_CALLER": "vscode"
+    },
+    "git.ignoreLimitWarning": true
+}
