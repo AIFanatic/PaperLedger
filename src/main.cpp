@@ -1,6 +1,6 @@
 #include <SPI.h>
-#include <./libraries/epd2in9.h>
-#include <./libraries/epdpaint.h>
+#include <epd2in9.h>
+#include <epdpaint.h>
 #include "imagedata.h"
 
 #define COLORED     0
