@@ -1,91 +1,83 @@
-#include <SPI.h>
-#include <epd2in9.h>
-#include <epdpaint.h>
-#include "imagedata.h"
+#include "settings.h"
 
-#define COLORED     0
-#define UNCOLORED   1
+#include "Render.h"
 
-/**
-  * Due to RAM not enough in Arduino UNO, a frame buffer is not allowed.
-  * In this case, a smaller image buffer is allocated and you have to 
-  * update a partial display several times.
-  * 1 byte = 8 pixels, therefore you have to set 8*N pixels at a time.
-  */
-unsigned char image[2048];
-Paint paint(image, 0, 0);    // width should be the multiple of 8 
-Epd epd;
-unsigned long time_start_ms;
-unsigned long time_now_s;
+#include <WiFi.h>
+// #include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <ESPmDNS.h>
 
-void clearScreen() {
-    paint.SetWidth(128);
-    paint.SetHeight(128);
-    paint.SetRotate(ROTATE_90);
+#include "esp_wifi.h"
+#include "Esp.h"
 
-    paint.Clear(UNCOLORED);
-    epd.SetFrameMemory(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-    epd.SetFrameMemory(paint.GetImage(), 0, 128, paint.GetWidth(), paint.GetHeight());
-    epd.SetFrameMemory(paint.GetImage(), 0, 256, paint.GetWidth(), paint.GetHeight());
-    epd.DisplayFrame();
+Render *render;
 
-    paint.Clear(COLORED);
-    epd.SetFrameMemory(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-    epd.SetFrameMemory(paint.GetImage(), 0, 128, paint.GetWidth(), paint.GetHeight());
-    epd.SetFrameMemory(paint.GetImage(), 0, 256, paint.GetWidth(), paint.GetHeight());
-    epd.DisplayFrame();
+AsyncWebServer server(80);
 
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
+void WebServerStart(void)
+{
 
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-}
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-void drawRectangle(int w, int h, int x, int y) {
-    paint.SetWidth(w+8);
-    paint.SetHeight(h+8);
-    paint.SetRotate(ROTATE_90);
+    while (WiFi.waitForConnectResult() != WL_CONNECTED)
+    {
+        Serial.print(".");
+        esp_restart();
+    }
+    Serial.println(F("WiFi connected"));
+    Serial.println("");
+    Serial.println(WiFi.localIP());
 
-    paint.Clear(UNCOLORED);
-    paint.DrawRectangle(4, 4, w+4, h+4, COLORED);
-    epd.SetFrameMemory(paint.GetImage(), x - ((w+8)/2), y - ((h+8)/2), paint.GetWidth(), paint.GetHeight()); // Flip coordinates
+    if (MDNS.begin("ttgo"))
+    {
+        Serial.println("MDNS responder started");
+    }
+
+    server.on("/display/draw", HTTP_POST, [](AsyncWebServerRequest *request) {
+        request->send(200, "text/plain", "");
+
+        if(request->params() == 0) {
+            return;
+        }
+
+        String name = request->getParam(0)->name();
+        String params = request->getParam(0)->value();
+
+        if(name.equals("body")) {
+            render->drawFromJson(params);
+        }
+    });
+
+    server.on("/display/clear", HTTP_POST, [](AsyncWebServerRequest *request) {
+        request->send(200, "text/plain", "");
+
+        render->clearScreen();
+    });
+
+    server.on("/display/clearBuffer", HTTP_POST, [](AsyncWebServerRequest *request) {
+        request->send(200, "text/plain", "");
+
+        render->clearBuffer();
+    });
+
+    server.onNotFound([](AsyncWebServerRequest *request) {
+        request->send(404, "text/plain", "Not found");
+    });
+
+    MDNS.addService("http", "tcp", 80);
+
+    server.begin();
 }
 
 void setup() {
     // put your setup code here, to run once:
-    Serial.begin(9600);
-    if (epd.Init(lut_full_update) != 0) {
-        Serial.print("e-Paper init failed");
-        return;
-    }
+    Serial.begin(115200);
+   
+    render = new Render();
 
-    /** 
-     *  there are 2 memory areas embedded in the e-paper display
-     *  and once the display is refreshed, the memory area will be auto-toggled,
-     *  i.e. the next action of SetFrameMemory will set the other memory area
-     *  therefore you have to clear the frame memory twice.
-     */
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-
-    if (epd.Init(lut_partial_update) != 0) {
-        Serial.print("e-Paper init failed");
-        return;
-    }
-
-    clearScreen();
+    WebServerStart();
 }
 
 void loop() {
-    drawRectangle(64, 64, 64, 64);
-    drawRectangle(64, 64, 64, 144);
-    drawRectangle(64, 64, 64, 224);
-
-    epd.DisplayFrame();
-
-    delay(500);
 }
