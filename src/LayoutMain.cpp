@@ -1,7 +1,8 @@
-#include "Layout.h"
+#include "LayoutMain.h"
 
-Layout::Layout(Render *_render) {
+LayoutMain::LayoutMain(Render *_render, void *_display) {
     render = _render;
+    display = _display;
     
     render->clearScreen();
     render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
@@ -10,10 +11,10 @@ Layout::Layout(Render *_render) {
     initMenu();
 };
 
-Layout::~Layout() {
+LayoutMain::~LayoutMain() {
 };
 
-void Layout::initButtons() {
+void LayoutMain::initButtons() {
     Serial.println("BUTTONS INIT");
 
     leftButton = new Pushbutton(LEFT_BUTTON);
@@ -21,22 +22,22 @@ void Layout::initButtons() {
     okButton = new Pushbutton(OK_BUTTON);
 };
 
-void Layout::leftButtonClicked() {
+void LayoutMain::leftButtonClicked() {
     menuRoot->moveUp();
-    Serial.println("left button clicked");
+    Serial.println("MAIN - left button clicked");
 };
 
-void Layout::rightButtonClicked() {
+void LayoutMain::rightButtonClicked() {
     menuRoot->moveDown();
     Serial.println("right button clicked");
 };
 
-void Layout::okButtonClicked() {
+void LayoutMain::okButtonClicked() {
     menuRoot->moveRight();
     Serial.println("ok button clicked");
 };
 
-void Layout::updateButtons() {
+void LayoutMain::updateButtons() {
     if (leftButton->getSingleDebouncedPress()) {
         leftButtonClicked();
     }
@@ -48,14 +49,14 @@ void Layout::updateButtons() {
     }
 }
 
-void Layout::update() {
+void LayoutMain::update() {
     updateButtons();
 }
 
 
 
 
-void Layout::initMenu() {
+void LayoutMain::initMenu() {
     menuRoot = new MenuBackend(nullptr, menuChangeEventStatic, this);
 
 	Serial.println("Setting up menu...");
@@ -73,12 +74,12 @@ void Layout::initMenu() {
         setup_back.addRight(setup);
 }
 
-void Layout::menuChangeEventStatic(MenuChangeEvent changed, void *context) {
-    Layout *instance = (Layout *)context;
+void LayoutMain::menuChangeEventStatic(MenuChangeEvent changed, void *context) {
+    LayoutMain *instance = (LayoutMain *)context;
     instance->menuChangeEvent(changed);
 }
 
-void Layout::menuChangeEvent(MenuChangeEvent changed) {
+void LayoutMain::menuChangeEvent(MenuChangeEvent changed) {
 	Serial.print("Menu change ");
 	Serial.print(changed.from.getName());
 	Serial.print(" ");
@@ -99,7 +100,7 @@ void Layout::menuChangeEvent(MenuChangeEvent changed) {
     else if(strcmp(changed.to.getName(), "Wifi_Menu") == 0) {
         render->drawFromJson(reinterpret_cast<const char*>(MENU_WIFI)); // Have to show since LayoutList will update the frame
 
-        new LayoutWifi(render);
+        (reinterpret_cast<Display *>(display))->show(1);
     }
     else if(strcmp(changed.to.getName(), "Wallet") == 0) {
         render->drawFromJson(reinterpret_cast<const char*>(MENU_WALLET));
