@@ -2,7 +2,7 @@
 
 Render::Render() {
     initDisplay();
-    clearScreen();
+    // clearScreen();
 };
 
 Render::~Render() {
@@ -70,21 +70,24 @@ void Render::drawFromJson(String json) {
         int y = obj["y"];
         int color = obj["color"];
 
+        bool requireFrameUpdate = false;
+
         if(type.equals("rectangle")) {
             int w = obj["w"];
             int h = obj["h"];
             drawRectangle(x, y, w, h, color);
-            addImageToFrameCentered(x, y);
+            requireFrameUpdate = true;
         }
         else if(type.equals("circle")) {
             int r = obj["r"];
             drawCircle(x, y, r, color);
-            addImageToFrameCentered(x, y);
+            requireFrameUpdate = true;
         }
         else if(type.equals("text")) {
             const char *text = obj["text"];
-            drawText(x, y, text, color);
-            addImageToFrameCentered(x, y, true);
+            int size = obj["size"];
+            drawText(x, y, text, size, color);
+            requireFrameUpdate = true;
         }
         else if(type.equals("image")) {
             int index = obj["index"];
@@ -98,35 +101,72 @@ void Render::drawFromJson(String json) {
         else if(type.equals("clearBuffer")) {
             clearBuffer();
         }
+
+        if(requireFrameUpdate) {
+            addImageToFrame(x, y);
+        }
     }
 
     epd.DisplayFrame();
 }
 
-void Render::drawRectangle(int x, int y, int w, int h, int color) {
+void Render::drawRectangle(int x, int y, int w, int h, int color, bool filled) {
     paint->SetWidth(h+8);
     paint->SetHeight(w+8);
-
     paint->Clear(!color);
+
+    if(filled) {
+        paint->DrawFilledRectangle(4, 4, w+4, h+4, color);    
+        return;
+    }
+
     paint->DrawRectangle(4, 4, w+4, h+4, color);
 }
 
-void Render::drawCircle(int x, int y, int r, int color) {
+void Render::drawCircle(int x, int y, int r, int color, bool filled) {
     paint->SetWidth(r*2+8);
     paint->SetHeight(r*2+8);
-
     paint->Clear(!color);
+
+    if(filled) {
+        paint->DrawFilledCircle(r+4, r+4, r, color);    
+        return;
+    }
+
     paint->DrawCircle(r+4, r+4, r, color);
 }
 
-void Render::drawText(int x, int y, const char *text, int color) {
-    // 18 px per letter - font24
-    int w = strlen(text) * 18;
-    paint->SetWidth(24); // Should be 32
+void Render::drawText(int x, int y, const char *text, int size, int color) {
+    sFONT *font = &Font24;
+
+    if(size == 8) { font = &Font8; }
+    else if(size == 12) { font = &Font12; }
+    else if(size == 16) { font = &Font16; }
+    else if(size == 20) { font = &Font20; }
+    else if(size == 24) { font = &Font24; }
+
+    int w = strlen(text) * font->Width;
+    paint->SetWidth(font->Height);
     paint->SetHeight(w);
 
     paint->Clear(!color);
-    paint->DrawStringAt(0, 2, text, &Font24, color);
+    paint->DrawStringAt(0, 2, text, font, color);
+}
+
+void Render::drawText(int x, int y, const char *text, int size, int color, int w, int h) {
+    sFONT *font = &Font24;
+
+    if(size == 8) { font = &Font8; }
+    else if(size == 12) { font = &Font12; }
+    else if(size == 16) { font = &Font16; }
+    else if(size == 20) { font = &Font20; }
+    else if(size == 24) { font = &Font24; }
+
+    paint->SetWidth(h);
+    paint->SetHeight(w);
+
+    paint->Clear(!color);
+    paint->DrawStringAt(4, 4, text, font, color);
 }
 
 void Render::drawImage(int index, int x, int y, int w, int h) {
@@ -138,38 +178,11 @@ void Render::drawImage(int index, int x, int y, int w, int h) {
     epd.SetFrameMemory(ICONS[index], y, x, w, h);
 }
 
-void Render::addImageToFrameCentered(int x, int y, bool startsFromTop) {
-    // Flip coordinates
-    int img_center_x = y - (paint->GetHeight() / 2);
-    int img_center_y = x - (paint->GetWidth() / 2);
-    
-    if(startsFromTop) {
-        img_center_x = y - (paint->GetWidth() / 2);
-        img_center_y = x - (paint->GetHeight() / 2);
-    }
-
-    epd.SetFrameMemory(paint->GetImage(), img_center_x, img_center_y, paint->GetWidth(), paint->GetHeight());
-}
-
 void Render::addImageToFrame(int x, int y) {
-    epd.SetFrameMemory(paint->GetImage(), x, y, paint->GetWidth(), paint->GetHeight());
+    // Flip coordinates
+    epd.SetFrameMemory(paint->GetImage(), y, x, paint->GetWidth(), paint->GetHeight());
 }
 
-
-// [
-// 	{
-// 		"type": "circle",
-//         "x": 10,
-//         "y": 10,
-//         "r": 10,
-//         "color": 1
-// 	},
-// 	{
-// 		"type": "rectangle",
-//         "x": 10,
-//         "y": 10,
-//         "w": 10,
-//         "h": 10,
-//         "color": 1
-// 	}
-// ]
+void Render::draw() {
+    epd.DisplayFrame();
+}

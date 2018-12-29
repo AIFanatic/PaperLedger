@@ -1,8 +1,6 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <Arduino.h>
-
 #include <epd2in9.h>
 #include <epdpaint.h>
 #include <ArduinoJson.h>
@@ -22,13 +20,15 @@ class Render {
         void clearBuffer();
         void drawFromJson(String json);
 
-        void drawRectangle(int x, int y, int w, int h, int color);
-        void drawCircle(int x, int y, int r, int color);
-        void drawText(int x, int y, const char *text, int color);
+        void drawRectangle(int x, int y, int w, int h, int color, bool filled = false);
+        void drawCircle(int x, int y, int r, int color, bool filled = false);
+        void drawText(int x, int y, const char *text, int size, int color);
+        void drawText(int x, int y, const char *text, int size, int color, int w, int h);
         void drawImage(int index, int x, int y, int w, int h);
 
-        void addImageToFrameCentered(int x, int y, bool startsFromTop = false);
         void addImageToFrame(int x, int y);
+
+        void draw();
 
     private:
         unsigned char image[2048];

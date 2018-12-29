@@ -1,6 +1,8 @@
 #include "settings.h"
 
 #include "Render.h"
+#include "Layout.h"
+#include "LayoutList.h"
 
 #include <WiFi.h>
 // #include <AsyncTCP.h>
@@ -11,6 +13,7 @@
 #include "Esp.h"
 
 Render *render;
+Layout *layout;
 
 AsyncWebServer server(80);
 
@@ -75,9 +78,25 @@ void setup() {
     Serial.begin(115200);
    
     render = new Render();
+    // LayoutList *list = new LayoutList(render);
+    // list->init(10, 10, 128, 64, 12);
+    // list->add("Hello");
+    // list->add("World");
+    // list->add("Hey");
+    // // list->add("you");
+    // list->draw();
+
+    // delay(5000);
+    // list->setActive(list->getActive()+1);
+    // delay(5000);
+    // list->setActive(list->getActive()+1);
+
+
+    layout = new Layout(render);
 
     WebServerStart();
 }
 
 void loop() {
+    layout->update();
 }
