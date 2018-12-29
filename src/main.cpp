@@ -1,8 +1,9 @@
 #include "settings.h"
 
 #include "Render.h"
-#include "Layout.h"
-#include "LayoutList.h"
+#include "Display.h"
+// #include "Layout.h"
+// #include "LayoutList.h"
 
 #include <WiFi.h>
 // #include <AsyncTCP.h>
@@ -13,7 +14,8 @@
 #include "Esp.h"
 
 Render *render;
-Layout *layout;
+// Layout *layout;
+Display *display;
 
 AsyncWebServer server(80);
 
@@ -92,11 +94,14 @@ void setup() {
     // list->setActive(list->getActive()+1);
 
 
-    layout = new Layout(render);
+    // layout = new Layout(render);
+    display = new Display(render);
+    display->show(0);
 
     WebServerStart();
 }
 
 void loop() {
-    layout->update();
+    // layout->update();
+    display->update();
 }

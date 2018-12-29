@@ -1,28 +1,23 @@
-#ifndef LAYOUT_H
-#define LAYOUT_H
+#ifndef LAYOUTMAIN_H
+#define LAYOUTMAIN_H
 
 #include <Render.h>
+#include <Display.h>
 #include <MenuBackend.h>
 #include <Pushbutton.h>
-#include <LayoutList.h>
-#include <LayoutWifi.h>
 
 #include "menus.h"
 
-#define LEFT_BUTTON GPIO_NUM_37
-#define RIGHT_BUTTON GPIO_NUM_39
-#define OK_BUTTON GPIO_NUM_38
-
-class Layout {
+class LayoutMain {
     public:
-        Layout(Render *render);
-        ~Layout(void);
+        LayoutMain(Render *render, void *_display);
+        ~LayoutMain(void);
 
         void update();
 
     private:
-        void initButtons();
         void initMenu();
+        void initButtons();
         void updateButtons();
 
         void leftButtonClicked();
@@ -30,8 +25,7 @@ class Layout {
         void okButtonClicked();
 
         Render *render;
-
-        LayoutList *activeList;
+        void *display;
 
         Pushbutton *leftButton;
         Pushbutton *rightButton;
