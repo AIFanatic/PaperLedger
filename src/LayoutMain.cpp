@@ -1,6 +1,6 @@
 #include "LayoutMain.h"
 
-LayoutMain::LayoutMain(Render *_render, void *_display): LayoutBase(_render, _display) {
+LayoutMain::LayoutMain(Render *_render, Display *_display): LayoutBase(_render, _display) {
     render->clearScreen();
     render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
 
@@ -71,9 +71,7 @@ void LayoutMain::menuChangeEvent(MenuChangeEvent changed) {
     }
     else if(strcmp(changed.to.getName(), "Wifi_Menu") == 0) {
         render->drawFromJson(reinterpret_cast<const char*>(MENU_WIFI)); // Have to show since LayoutList will update the frame
-
-        // TODO: Hackish, fix
-        (reinterpret_cast<Display *>(display))->show(1);
+        display->show(LAYOUT_WIFI);
     }
     else if(strcmp(changed.to.getName(), "Wallet") == 0) {
         render->drawFromJson(reinterpret_cast<const char*>(MENU_WALLET));

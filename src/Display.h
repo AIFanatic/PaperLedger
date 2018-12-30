@@ -2,8 +2,7 @@
 #define DISPLAY_H
 
 #include <Render.h>
-#include <LayoutMain.h>
-#include <LayoutWifi.h>
+#include <menus.h>
 
 class Display {
     public:
@@ -20,11 +19,6 @@ class Display {
         int currentIndex;
 
         void *currentDisplay;
-
-        enum DISPLAYS {
-            LAYOUT_MAIN,
-            LAYOUT_WIFI
-        };
 };
 
 #endif

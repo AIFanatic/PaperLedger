@@ -26,3 +26,9 @@ const unsigned char _MENU_BACK[] PROGMEM = "[{\"type\":\"text\",\"x\":150,\"y\":
 #define LEFT_BUTTON GPIO_NUM_37
 #define RIGHT_BUTTON GPIO_NUM_39
 #define OK_BUTTON GPIO_NUM_38
+
+
+enum DISPLAYS {
+    LAYOUT_MAIN,
+    LAYOUT_WIFI
+};

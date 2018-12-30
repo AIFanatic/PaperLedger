@@ -7,11 +7,9 @@
 #include <MenuBackend.h>
 #include <LayoutList.h>
 
-#include "menus.h"
-
 class LayoutWifi: public LayoutBase {
     public:
-        LayoutWifi(Render *render, void *_display);
+        LayoutWifi(Render *render, Display *_display);
         ~LayoutWifi(void);
 
     private:
