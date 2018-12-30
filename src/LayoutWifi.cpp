@@ -1,6 +1,6 @@
 #include "LayoutWifi.h"
 
-LayoutWifi::LayoutWifi(Render *_render, void *_display): LayoutBase(_render, _display) {
+LayoutWifi::LayoutWifi(Render *_render, Display *_display): LayoutBase(_render, _display) {
     initMenu();
     showMenu();
 };
@@ -56,7 +56,7 @@ void LayoutWifi::menuChangeEvent(MenuChangeEvent changed) {
         menuList->setActive(3);
     }
     else if(strcmp(changed.to.getName(), "Wifi_Back_Pressed") == 0) {
-        (reinterpret_cast<Display *>(display))->show(0);
+        display->show(LAYOUT_MAIN);
     }
 }
 

@@ -1,4 +1,6 @@
 #include "Display.h"
+#include <LayoutMain.h>
+#include <LayoutWifi.h>
 
 Display::Display(Render *_render) {
     render = _render;

@@ -6,11 +6,9 @@
 #include <LayoutBase.h>
 #include <MenuBackend.h>
 
-#include "menus.h"
-
 class LayoutMain: public LayoutBase {
     public:
-        LayoutMain(Render *render, void *_display);
+        LayoutMain(Render *render, Display *_display);
         ~LayoutMain(void);
 
     private:
