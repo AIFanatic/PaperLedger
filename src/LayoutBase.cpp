@@ -1,7 +1,13 @@
 #include "LayoutBase.h"
 
+LayoutBase::LayoutBase(Render* _render, void *_display) {
+    render = _render;
+    display = _display;
+    initButtons();
+};
+
 void LayoutBase::initButtons() {
-    Serial.println("BUTTONS INIT");
+    Serial.println("LayoutBase BUTTONS INIT");
 
     leftButton = new Pushbutton(LEFT_BUTTON);
     rightButton = new Pushbutton(RIGHT_BUTTON);

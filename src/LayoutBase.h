@@ -9,22 +9,21 @@
 class LayoutBase {
     public:
 
-        LayoutBase(Render*) ;
-        LayoutBase(const LayoutBase& base) ;
-        LayoutBase& operator=(const LayoutBase& base) = default;
-        virtual ~LayoutBase() {};
+        LayoutBase(Render *_render, void *_display);
+        // virtual ~LayoutBase() {};
 
         void update();
+
+        Render *render;
+        void *display;
+
+        virtual void leftButtonClicked() = 0;
+        virtual void rightButtonClicked() = 0;
+        virtual void okButtonClicked() = 0;
 
     private:
         void initButtons();
         void updateButtons();
-
-        void leftButtonClicked();
-        void rightButtonClicked();
-        void okButtonClicked();
-
-        Render *render;
 
         Pushbutton *leftButton;
         Pushbutton *rightButton;

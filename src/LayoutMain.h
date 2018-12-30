@@ -3,33 +3,22 @@
 
 #include <Render.h>
 #include <Display.h>
+#include <LayoutBase.h>
 #include <MenuBackend.h>
-#include <Pushbutton.h>
 
 #include "menus.h"
 
-class LayoutMain {
+class LayoutMain: public LayoutBase {
     public:
         LayoutMain(Render *render, void *_display);
         ~LayoutMain(void);
 
-        void update();
-
     private:
         void initMenu();
-        void initButtons();
-        void updateButtons();
 
         void leftButtonClicked();
         void rightButtonClicked();
         void okButtonClicked();
-
-        Render *render;
-        void *display;
-
-        Pushbutton *leftButton;
-        Pushbutton *rightButton;
-        Pushbutton *okButton;
         
         static void menuChangeEventStatic(MenuChangeEvent changed, void *context);
         void menuChangeEvent(MenuChangeEvent changed);
