@@ -1,11 +1,7 @@
 #include "LayoutWifi.h"
 
-LayoutWifi::LayoutWifi(Render *_render, void *_display) {
-    render = _render;
-    display = _display;
-
+LayoutWifi::LayoutWifi(Render *_render, void *_display): LayoutBase(_render, _display) {
     initMenu();
-    initButtons();
     showMenu();
 };
 
@@ -18,6 +14,12 @@ void LayoutWifi::initMenu() {
     menuRoot->getRoot().add(wifi_status);
     wifi_status.addAfter(wifi_connect);
     wifi_connect.addAfter(wifi_disconnect);
+    wifi_disconnect.addAfter(wifi_back);
+        wifi_back.addRight(wifi_back_pressed);
+
+    // wrap
+    wifi_status.addBefore(wifi_back);
+    wifi_back.addAfter(wifi_status);
 }
 
 void LayoutWifi::showMenu() {
@@ -40,21 +42,26 @@ void LayoutWifi::menuChangeEvent(MenuChangeEvent changed) {
 	Serial.print(changed.from.getName());
 	Serial.print(" ");
 	Serial.println(changed.to.getName());
+
+    if(strcmp(changed.to.getName(), "Wifi_Status") == 0) {
+        menuList->setActive(0);
+    }
+    else if(strcmp(changed.to.getName(), "Wifi_Connect") == 0) {
+        menuList->setActive(1);
+    }
+    else if(strcmp(changed.to.getName(), "Wifi_Disconnect") == 0) {
+        menuList->setActive(2);
+    }
+    else if(strcmp(changed.to.getName(), "Wifi_Back") == 0) {
+        menuList->setActive(3);
+    }
+    else if(strcmp(changed.to.getName(), "Wifi_Back_Pressed") == 0) {
+        (reinterpret_cast<Display *>(display))->show(0);
+    }
 }
 
 
 
-
-
-
-
-void LayoutWifi::initButtons() {
-    Serial.println("BUTTONS INIT");
-
-    leftButton = new Pushbutton(LEFT_BUTTON);
-    rightButton = new Pushbutton(RIGHT_BUTTON);
-    okButton = new Pushbutton(OK_BUTTON);
-};
 
 void LayoutWifi::leftButtonClicked() {
     menuRoot->moveUp();
@@ -70,19 +77,3 @@ void LayoutWifi::okButtonClicked() {
     menuRoot->moveRight();
     Serial.println("ok button clicked");
 };
-
-void LayoutWifi::updateButtons() {
-    if (leftButton->getSingleDebouncedPress()) {
-        leftButtonClicked();
-    }
-    if (rightButton->getSingleDebouncedPress()) {
-        rightButtonClicked();
-    }
-    if (okButton->getSingleDebouncedPress()) {
-        okButtonClicked();
-    }
-}
-
-void LayoutWifi::update() {
-    updateButtons();
-}

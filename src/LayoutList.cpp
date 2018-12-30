@@ -23,7 +23,7 @@ void LayoutList::add(const char *text) {
 }
 
 void LayoutList::setActive(int index) {
-    if(index > 0 && index <= rowLen) {
+    if(index >= 0 && index <= rowLen) {
         activeRow = index;
         draw();
     }
