@@ -1,7 +1,6 @@
 #include "LayoutMain.h"
 
 LayoutMain::LayoutMain(Render *_render, Display *_display): LayoutBase(_render, _display) {
-    render->clearScreen();
     render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
 
     initMenu();
@@ -44,6 +43,9 @@ void LayoutMain::initMenu() {
     // wrap
     send.addBefore(setup);
     setup.addAfter(send);
+
+    // Move from root to first menu
+    menuRoot->moveDown();
 }
 
 void LayoutMain::menuChangeEventStatic(MenuChangeEvent changed, void *context) {

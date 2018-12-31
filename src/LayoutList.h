@@ -8,7 +8,7 @@ class LayoutList {
         LayoutList(Render *render);
         ~LayoutList(void);
 
-        void init(int _x, int _y, int _w, int _h, int _fontSize);
+        void init(int _x, int _y, int _w, int _h, int _fontSize, int _color);
         void add(const char *text);
         void setActive(int index);
         int getActive();
@@ -26,6 +26,11 @@ class LayoutList {
         int w;
         int h;
         int fontSize;
+        int color;
+
+        uint16_t textWidth;
+        uint16_t textHeight;
+        int textMargin = 4;
 
         int activeRow;
 };

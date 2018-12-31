@@ -4,6 +4,7 @@
 
 Display::Display(Render *_render) {
     render = _render;
+    render->clearScreen();
 };
 
 Display::~Display() {

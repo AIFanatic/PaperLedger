@@ -24,12 +24,15 @@ void LayoutWifi::initMenu() {
 
 void LayoutWifi::showMenu() {
     menuList = new LayoutList(render);
-    menuList->init(130, 0, 156, 72, 12);
+    menuList->init(128, 32, 160, 80, 9, BLACK);
     menuList->add("Status");
     menuList->add("Connect");
     menuList->add("Disconnect");
     menuList->add("Back");
     menuList->draw();
+    
+    // Move from root to first menu
+    menuRoot->moveDown();
 }
 
 void LayoutWifi::menuChangeEventStatic(MenuChangeEvent changed, void *context) {

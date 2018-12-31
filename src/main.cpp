@@ -2,8 +2,7 @@
 
 #include "Render.h"
 #include "Display.h"
-// #include "Layout.h"
-// #include "LayoutList.h"
+#include "LayoutList.h"
 
 #include <WiFi.h>
 // #include <AsyncTCP.h>
@@ -54,18 +53,6 @@ void WebServerStart(void)
         }
     });
 
-    server.on("/display/clear", HTTP_POST, [](AsyncWebServerRequest *request) {
-        request->send(200, "text/plain", "");
-
-        render->clearScreen();
-    });
-
-    server.on("/display/clearBuffer", HTTP_POST, [](AsyncWebServerRequest *request) {
-        request->send(200, "text/plain", "");
-
-        render->clearBuffer();
-    });
-
     server.onNotFound([](AsyncWebServerRequest *request) {
         request->send(404, "text/plain", "Not found");
     });
@@ -80,12 +67,16 @@ void setup() {
     Serial.begin(115200);
    
     render = new Render();
+
+    display = new Display(render);
+    display->show(0);
+
     // LayoutList *list = new LayoutList(render);
-    // list->init(10, 10, 128, 64, 12);
-    // list->add("Hello");
-    // list->add("World");
-    // list->add("Hey");
-    // // list->add("you");
+    // list->init(128, 32, 160, 80, 18, BLACK);
+    // list->add("Status");
+    // list->add("Connect");
+    // list->add("Disconnect");
+    // list->add("Back");
     // list->draw();
 
     // delay(5000);
@@ -93,15 +84,9 @@ void setup() {
     // delay(5000);
     // list->setActive(list->getActive()+1);
 
-
-    // layout = new Layout(render);
-    display = new Display(render);
-    display->show(0);
-
     WebServerStart();
 }
 
 void loop() {
-    // layout->update();
     display->update();
 }
