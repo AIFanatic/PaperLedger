@@ -1,7 +1,6 @@
 #include "LayoutBase.h"
 
-LayoutBase::LayoutBase(Render* _render, Display *_display) {
-    render = _render;
+LayoutBase::LayoutBase(Display *_display) {
     display = _display;
     initButtons();
 };

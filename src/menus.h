@@ -30,5 +30,6 @@ const unsigned char _MENU_BACK[] PROGMEM = "[{\"type\": \"fill\", \"color\": 1},
 
 enum DISPLAYS {
     LAYOUT_MAIN,
-    LAYOUT_WIFI
+    LAYOUT_WIFI,
+    LAYOUT_RECEIVE
 };

@@ -9,12 +9,11 @@
 class LayoutBase {
     public:
 
-        LayoutBase(Render *_render, Display *_display);
+        LayoutBase(Display *_display);
         // virtual ~LayoutBase() {};
 
         void update();
 
-        Render *render;
         Display *display;
 
         virtual void leftButtonClicked() = 0;

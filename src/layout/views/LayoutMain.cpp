@@ -1,7 +1,7 @@
 #include "LayoutMain.h"
 
-LayoutMain::LayoutMain(Render *_render, Display *_display): LayoutBase(_render, _display) {
-    render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
+LayoutMain::LayoutMain(Display *_display): LayoutBase(_display) {
+    display->render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
 
     initMenu();
 };
@@ -32,6 +32,7 @@ void LayoutMain::initMenu() {
 	menuRoot->getRoot().add(send);
     
     send.addAfter(receive);
+        receive.addRight(receive_menu);
     receive.addAfter(setup);
     setup.addRight(wifi);
         //we want looping both up and down
@@ -60,25 +61,27 @@ void LayoutMain::menuChangeEvent(MenuChangeEvent changed) {
 	Serial.println(changed.to.getName());
 
     if(strcmp(changed.to.getName(), "Send") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_SEND));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_SEND));
     }
     else if(strcmp(changed.to.getName(), "Receive") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_RECEIVE));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_RECEIVE));
+    }
+    else if(strcmp(changed.to.getName(), "Receive_Menu") == 0) {
+        display->show(LAYOUT_RECEIVE);
     }
     else if(strcmp(changed.to.getName(), "Setup") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_SETUP));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_SETUP));
     }
     else if(strcmp(changed.to.getName(), "Wifi") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_WIFI));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_WIFI));
     }
     else if(strcmp(changed.to.getName(), "Wifi_Menu") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_WIFI)); // Have to show since LayoutList will update the frame
         display->show(LAYOUT_WIFI);
     }
     else if(strcmp(changed.to.getName(), "Wallet") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_WALLET));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_WALLET));
     }
     else if(strcmp(changed.to.getName(), "Back") == 0) {
-        render->drawFromJson(reinterpret_cast<const char*>(MENU_BACK));
+        display->render->drawFromJson(reinterpret_cast<const char*>(MENU_BACK));
     }
 }

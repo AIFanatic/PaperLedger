@@ -9,7 +9,7 @@
 
 class LayoutMain: public LayoutBase {
     public:
-        LayoutMain(Render *render, Display *_display);
+        LayoutMain(Display *_display);
         ~LayoutMain(void);
 
     private:
@@ -27,6 +27,7 @@ class LayoutMain: public LayoutBase {
         MenuItem send = MenuItem("Send");
         
         MenuItem receive = MenuItem("Receive");
+            MenuItem receive_menu = MenuItem("Receive_Menu");
 
         MenuItem setup = MenuItem("Setup");
             MenuItem wifi = MenuItem("Wifi");

@@ -1,5 +1,5 @@
-#ifndef LAYOUTWIFI_H
-#define LAYOUTWIFI_H
+#ifndef LAYOUTRECEIVE_H
+#define LAYOUTRECEIVE_H
 
 #include "../Render.h"
 #include "../Display.h"
@@ -8,10 +8,10 @@
 
 #include <MenuBackend.h>
 
-class LayoutWifi: public LayoutBase {
+class LayoutReceive: public LayoutBase {
     public:
-        LayoutWifi(Display *_display);
-        ~LayoutWifi(void);
+        LayoutReceive(Display *_display);
+        ~LayoutReceive(void);
 
     private:
         void initMenu();
