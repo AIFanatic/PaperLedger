@@ -2,59 +2,33 @@
 
 Render::Render() {
     initDisplay();
-    // clearScreen();
 };
 
 Render::~Render() {
 };
 
 void Render::initDisplay() {
-    paint = new Paint(image, 0, 0);
+    io = new GxIO_Class(SPI, ELINK_SS, ELINK_DC, ELINK_RESET);
+    display = new GxEPD_Class(*io, ELINK_RESET, ELINK_BUSY);
 
-    if (epd.Init(lut_full_update) != 0) {
-        Serial.print("e-Paper init failed");
+    SPI.begin(SPI_CLK, SPI_MISO, SPI_MOSI, -1);
+
+    static bool isInit = false;
+    if (isInit)
+    {
         return;
     }
-
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-
-    if (epd.Init(lut_partial_update) != 0) {
-        Serial.print("e-Paper init failed");
-        return;
-    }
-    
-    paint->SetRotate(ROTATE_90);
+    isInit = true;
+    display->init();
+    display->setRotation(1);
+    display->eraseDisplay();
+    display->setTextColor(GxEPD_BLACK);
+    display->setFont(&FreeMonoBold9pt7b);
+    display->setTextSize(0);
 }
 
-void Render::clearScreen() {
-    paint->SetWidth(128);
-    paint->SetHeight(128);
-
-    paint->Clear(BLACK);
-    epd.SetFrameMemory(paint->GetImage(), 0, 0, paint->GetWidth(), paint->GetHeight());
-    epd.SetFrameMemory(paint->GetImage(), 0, 128, paint->GetWidth(), paint->GetHeight());
-    epd.SetFrameMemory(paint->GetImage(), 0, 256, paint->GetWidth(), paint->GetHeight());
-    epd.DisplayFrame();
-
-    paint->Clear(WHITE);
-    epd.SetFrameMemory(paint->GetImage(), 0, 0, paint->GetWidth(), paint->GetHeight());
-    epd.SetFrameMemory(paint->GetImage(), 0, 128, paint->GetWidth(), paint->GetHeight());
-    epd.SetFrameMemory(paint->GetImage(), 0, 256, paint->GetWidth(), paint->GetHeight());
-    epd.DisplayFrame();
-
-    clearBuffer();
-}
-
-void Render::clearBuffer() {
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
-
-    epd.ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
-    epd.DisplayFrame();
+void Render::clearScreen(bool partialUpdate) {
+    display->eraseDisplay(partialUpdate);
 }
 
 void Render::drawFromJson(String json) {
@@ -70,119 +44,103 @@ void Render::drawFromJson(String json) {
         int y = obj["y"];
         int color = obj["color"];
 
-        bool requireFrameUpdate = false;
-
         if(type.equals("rectangle")) {
             int w = obj["w"];
             int h = obj["h"];
-            drawRectangle(x, y, w, h, color);
-            requireFrameUpdate = true;
+            bool filled = obj["filled"];
+            drawRectangle(x, y, w, h, color, filled);
         }
         else if(type.equals("circle")) {
             int r = obj["r"];
-            drawCircle(x, y, r, color);
-            requireFrameUpdate = true;
+            bool filled = obj["filled"];
+            drawCircle(x, y, r, color, filled);
         }
         else if(type.equals("text")) {
             const char *text = obj["text"];
             int size = obj["size"];
-            drawText(x, y, text, size, color);
-            requireFrameUpdate = true;
+            int w = obj["w"];
+            drawText(x, y, text, size, color, w);
         }
         else if(type.equals("image")) {
             int index = obj["index"];
+            int mode = obj["mode"];
             int w = obj["w"];
             int h = obj["h"];
-            drawImage(index, x, y, w, h);
+            drawImage(index, x, y, w, h, color, mode);
         }
         else if(type.equals("clear")) {
-            clearScreen();
+            bool partial = obj["partial"];
+            clearScreen(partial);
         }
-        else if(type.equals("clearBuffer")) {
-            clearBuffer();
-        }
-
-        if(requireFrameUpdate) {
-            addImageToFrame(x, y);
+        else if(type.equals("fill")) {
+            fillScreen(color);
         }
     }
 
-    epd.DisplayFrame();
+    display->updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, false);
+}
+
+void Render::fillScreen(int color) {
+    display->fillScreen(color);
 }
 
 void Render::drawRectangle(int x, int y, int w, int h, int color, bool filled) {
-    paint->SetWidth(h+8);
-    paint->SetHeight(w+8);
-    paint->Clear(!color);
-
     if(filled) {
-        paint->DrawFilledRectangle(4, 4, w+4, h+4, color);    
+        display->fillRect(x, y, w, h, color);
         return;
     }
 
-    paint->DrawRectangle(4, 4, w+4, h+4, color);
+    display->drawRect(x, y, w, h, color);
 }
 
 void Render::drawCircle(int x, int y, int r, int color, bool filled) {
-    paint->SetWidth(r*2+8);
-    paint->SetHeight(r*2+8);
-    paint->Clear(!color);
-
     if(filled) {
-        paint->DrawFilledCircle(r+4, r+4, r, color);    
+        display->fillCircle(x, y, r, color);
         return;
     }
 
-    paint->DrawCircle(r+4, r+4, r, color);
+    display->drawCircle(x, y, r, color);
 }
 
-void Render::drawText(int x, int y, const char *text, int size, int color) {
-    sFONT *font = &Font24;
+void Render::drawText(int x, int y, const char *text, int size, int color, int w) {
+    int16_t x1, y1;
+    uint16_t w1, h1;
 
-    if(size == 8) { font = &Font8; }
-    else if(size == 12) { font = &Font12; }
-    else if(size == 16) { font = &Font16; }
-    else if(size == 20) { font = &Font20; }
-    else if(size == 24) { font = &Font24; }
-
-    int w = strlen(text) * font->Width;
-    paint->SetWidth(font->Height);
-    paint->SetHeight(w);
-
-    paint->Clear(!color);
-    paint->DrawStringAt(0, 2, text, font, color);
+    setFont(size);
+    display->setTextColor(color);
+    display->setCursor(x, y);
+    display->print(text);
 }
 
-void Render::drawText(int x, int y, const char *text, int size, int color, int w, int h) {
-    sFONT *font = &Font24;
+void Render::setFont(int size) {
+    if(currentFontSize != size) {
+        const GFXfont *font = &FreeMonoBold24pt7b;
 
-    if(size == 8) { font = &Font8; }
-    else if(size == 12) { font = &Font12; }
-    else if(size == 16) { font = &Font16; }
-    else if(size == 20) { font = &Font20; }
-    else if(size == 24) { font = &Font24; }
+        if(size == 9) { font = &FreeMonoBold9pt7b; }
+        else if(size == 12) { font = &FreeMonoBold12pt7b; }
+        else if(size == 18) { font = &FreeMonoBold18pt7b; }
+        else if(size == 24) { font = &FreeMonoBold24pt7b; }
 
-    paint->SetWidth(h);
-    paint->SetHeight(w);
+        display->setFont(font);
 
-    paint->Clear(!color);
-    paint->DrawStringAt(4, 4, text, font, color);
-}
-
-void Render::drawImage(int index, int x, int y, int w, int h) {
-    if(index < 0 || index >= (sizeof(ICONS)/sizeof(const unsigned char* const))) {
-        Serial.println("Invalid image index");
-        return;
+        currentFontSize = size;
     }
-    epd.SetFrameMemory(ICONS[index], y, x, w, h);
-    epd.SetFrameMemory(ICONS[index], y, x, w, h);
 }
 
-void Render::addImageToFrame(int x, int y) {
-    // Flip coordinates
-    epd.SetFrameMemory(paint->GetImage(), y, x, paint->GetWidth(), paint->GetHeight());
+void Render::drawImage(int index, int x, int y, int w, int h, int color, int mode) {
+    display->drawBitmap(ICONS[index], x, y, w, h, color, mode);
 }
 
 void Render::draw() {
-    epd.DisplayFrame();
+    display->updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, false);
+}
+
+void Render::draw(int x, int y, int w, int h, bool adjustRotate) {
+    display->updateWindow(x, y, w, h, adjustRotate);
+}
+
+void Render::getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1) {
+    int16_t x1, y1;
+
+    display->getTextBounds(text, x, y, &x1, &y1, &w1, &h1);
 }

@@ -32,6 +32,13 @@ class LayoutMain: public LayoutBase {
                 MenuItem wifi_menu = MenuItem("Wifi_Menu");
             MenuItem wallet = MenuItem("Wallet");
             MenuItem setup_back = MenuItem("Back");
+
+        // Layout main boundaries (not including date)
+        int x = 0;
+        int y = 0;
+        int w = 128;
+        int h = 128;
+
 };
 
 #endif
