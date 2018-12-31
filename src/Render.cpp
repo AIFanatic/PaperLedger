@@ -103,9 +103,6 @@ void Render::drawCircle(int x, int y, int r, int color, bool filled) {
 }
 
 void Render::drawText(int x, int y, const char *text, int size, int color, int w) {
-    int16_t x1, y1;
-    uint16_t w1, h1;
-
     setFont(size);
     display->setTextColor(color);
     display->setCursor(x, y);
