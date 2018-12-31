@@ -1,6 +1,6 @@
 #include "settings.h"
 
-#include "./layout/Render.h"
+// #include "./layout/Render.h"
 #include "./layout/Display.h"
 #include "./layout/helpers/LayoutList.h"
 
@@ -12,8 +12,9 @@
 #include "esp_wifi.h"
 #include "Esp.h"
 
+#include "filesystem.h"
+
 Render *render;
-// Layout *layout;
 Display *display;
 
 AsyncWebServer server(80);
@@ -66,9 +67,9 @@ void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
    
-    render = new Render();
+    // render = new Render();
 
-    display = new Display(render);
+    display = new Display();
     display->show(0);
 
     // LayoutList *list = new LayoutList(render);
@@ -85,6 +86,8 @@ void setup() {
     // list->setActive(list->getActive()+1);
 
     WebServerStart();
+
+    // initFilesystem();
 }
 
 void loop() {

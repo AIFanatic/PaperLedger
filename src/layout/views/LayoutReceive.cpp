@@ -1,14 +1,14 @@
-#include "LayoutWifi.h"
+#include "LayoutReceive.h"
 
-LayoutWifi::LayoutWifi(Display *_display): LayoutBase(_display) {
+LayoutReceive::LayoutReceive(Display *_display): LayoutBase(_display) {
     initMenu();
     showMenu();
 };
 
-LayoutWifi::~LayoutWifi() {
+LayoutReceive::~LayoutReceive() {
 };
 
-void LayoutWifi::initMenu() {
+void LayoutReceive::initMenu() {
     menuRoot = new MenuBackend(nullptr, menuChangeEventStatic, this);
     
     menuRoot->getRoot().add(wifi_status);
@@ -22,7 +22,25 @@ void LayoutWifi::initMenu() {
     wifi_back.addAfter(wifi_status);
 }
 
-void LayoutWifi::showMenu() {
+void LayoutReceive::showMenu() {
+    // Get balances from wallet
+    // TODO: Is DynamicJsonBuffer a performance enemy?
+    // And String btw
+    DynamicJsonBuffer jsonBuffer;
+    JsonVariant balances = display->wallet->getBalances();
+    
+    for(int i = 0; i < balances.size(); i++) {
+        String params = balances[i];
+        // JsonVariant entry = jsonBuffer.parse(params);
+
+        // String name = entry["name"];
+        // String balance = entry["balance"];
+
+        Serial.println(params);
+        // Serial.println(balance);
+    }
+    
+
     menuList = new LayoutList(display->render);
     menuList->init(128, 32, 160, 80, 9, BLACK);
     menuList->add("Status");
@@ -35,12 +53,12 @@ void LayoutWifi::showMenu() {
     menuRoot->moveDown();
 }
 
-void LayoutWifi::menuChangeEventStatic(MenuChangeEvent changed, void *context) {
-    LayoutWifi *instance = (LayoutWifi *)context;
+void LayoutReceive::menuChangeEventStatic(MenuChangeEvent changed, void *context) {
+    LayoutReceive *instance = (LayoutReceive *)context;
     instance->menuChangeEvent(changed);
 }
 
-void LayoutWifi::menuChangeEvent(MenuChangeEvent changed) {
+void LayoutReceive::menuChangeEvent(MenuChangeEvent changed) {
 	Serial.print("Menu change ");
 	Serial.print(changed.from.getName());
 	Serial.print(" ");
@@ -66,17 +84,17 @@ void LayoutWifi::menuChangeEvent(MenuChangeEvent changed) {
 
 
 
-void LayoutWifi::leftButtonClicked() {
+void LayoutReceive::leftButtonClicked() {
     menuRoot->moveUp();
     Serial.println("WIFI - left button clicked");
 };
 
-void LayoutWifi::rightButtonClicked() {
+void LayoutReceive::rightButtonClicked() {
     menuRoot->moveDown();
     Serial.println("right button clicked");
 };
 
-void LayoutWifi::okButtonClicked() {
+void LayoutReceive::okButtonClicked() {
     menuRoot->moveRight();
     Serial.println("ok button clicked");
 };
