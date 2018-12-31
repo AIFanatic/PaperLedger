@@ -1,8 +1,8 @@
 #include "settings.h"
 
-#include "Render.h"
-#include "Display.h"
-#include "LayoutList.h"
+#include "./layout/Render.h"
+#include "./layout/Display.h"
+#include "./layout/helpers/LayoutList.h"
 
 #include <WiFi.h>
 // #include <AsyncTCP.h>

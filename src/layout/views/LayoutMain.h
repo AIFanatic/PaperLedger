@@ -1,9 +1,10 @@
 #ifndef LAYOUTMAIN_H
 #define LAYOUTMAIN_H
 
-#include <Render.h>
-#include <Display.h>
-#include <LayoutBase.h>
+#include "../Render.h"
+#include "../Display.h"
+#include "../helpers/LayoutBase.h"
+
 #include <MenuBackend.h>
 
 class LayoutMain: public LayoutBase {
