@@ -1,11 +1,12 @@
 #ifndef LAYOUTWIFI_H
 #define LAYOUTWIFI_H
 
-#include <Render.h>
-#include <Display.h>
-#include <LayoutBase.h>
+#include "../Render.h"
+#include "../Display.h"
+#include "../helpers/LayoutBase.h"
+#include "../helpers/LayoutList.h"
+
 #include <MenuBackend.h>
-#include <LayoutList.h>
 
 class LayoutWifi: public LayoutBase {
     public:

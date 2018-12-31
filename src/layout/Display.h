@@ -1,8 +1,8 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <Render.h>
-#include <menus.h>
+#include "./Render.h"
+#include "../menus.h"
 
 class Display {
     public:

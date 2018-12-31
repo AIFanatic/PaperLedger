@@ -1,8 +1,9 @@
 #ifndef LAYOUTBASE_H
 #define LAYOUTBASE_H
 
-#include <Render.h>
-#include <Display.h>
+#include "../Render.h"
+#include "../Display.h"
+
 #include <Pushbutton.h>
 
 class LayoutBase {
