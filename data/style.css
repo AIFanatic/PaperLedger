@@ -1,0 +1,134 @@
+@font-face {
+    font-family: 'dejavu_sansbook';
+    src: url('fonts/DVUS.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'dejavu_sansbook_extraligh';
+    src: url('fonts/DVUS-L.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: #1f3e50;
+    background: -moz-linear-gradient(45deg, #1f3e50 0%, #5a6076 100%);
+    background: -webkit-linear-gradient(45deg, #1f3e50 0%,#5a6076 100%);
+    background: linear-gradient(45deg, #1f3e50 0%,#5a6076 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f3e50', endColorstr='#5a6076',GradientType=1 );
+    color: white;
+
+    font-family: dejavu_sansbook_extraligh;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+}
+
+a:hover {
+    color: #5d5d5d !important;
+}
+
+.title {
+    text-align: center;
+}
+
+.menu {
+    display: flex;
+    background: #00000020;
+    padding: 15px;
+}
+
+.menu-box {
+    width: 100%;
+    background: #00000050;
+    padding: 30px;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.menu-bar {
+    width: 20%;
+}
+
+.menu ul {
+    list-style: none;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li {
+    background: #00000050;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px
+}
+
+.menu ul li:not(:first-child) {
+    margin-top: 15px;
+}
+
+.menu ul li a {
+    color: white;
+    font-size: 26px;
+    text-transform: uppercase;
+}
+
+.menu-content-options {
+    padding: 30px;
+}
+
+table {
+    width: 100%;
+    border-spacing: unset;
+}
+
+thead {
+    background: #ffffff29;
+}
+
+td, th {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff17;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff0f;
+}
+
+button {
+    background: #00000050;
+    border: 1px solid #00000050;
+    color: white;
+    cursor: pointer;
+    outline: none;
+}
+
+button:hover {
+    color: #5d5d5d;
+}
+
+.add-new-btn {
+    float: right;
+    margin-top: 10px;
+}

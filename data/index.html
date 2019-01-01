@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div class="title">
+            <h1>Welcome to inkTicker</h1>
+        </div>
+
+        <div class="menu">
+
+            <div class="menu-bar">
+                <ul>
+                    <li>
+                        <a onclick="showTickers()" href="#">Tickers</a>
+                    </li>
+                    <li>
+                        <a onclick="showNetwork()" class="menu-network-btn" href="#">Network</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="menu-tickers" class="menu-content menu-box">
+                <div class="menu-content-title">
+                    <h2>Manage your tickers</h2>
+                </div>
+                <div class="menu-content-options">
+                    <table class="menu-content-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Currency</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ethereum</td>
+                                <td>USD</td>
+                                <td>/\ \/</td>
+                            </tr>
+                            <tr>
+                                <td>Bitcoin</td>
+                                <td>USD</td>
+                                <td>/\ \/</td>
+                            </tr>
+                            <tr>
+                                <td>PowerLedger</td>
+                                <td>USD</td>
+                                <td><button>/\</button> <button>\/</button> <button>X</button>  </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="add-new-btn" href="#">Click here to add new ticker</a>
+                </div>
+            </div>
+
+            <div id="menu-network" class="menu-content menu-box" style="display:none;">
+                <div class="menu-content-title">
+                    <h2>Manage connectivity</h2>
+                </div>
+                <div class="menu-content-options">
+                    <table id="network-table" class="menu-content-table">
+                        <thead>
+                            <tr>
+                                <th>Network</th>
+                                <th>Signal</th>
+                                <th>Algorithm</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+
+        <script src="main.js"></script>
+    </body>
+</html>

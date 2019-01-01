@@ -1,31 +1,42 @@
 #include "FileSystem.h"
 
 FileSystem::FileSystem() {
-    isInitialised = SD.begin(SDCARD_SS);
+    isSDInitialised = SD.begin(SDCARD_SS);
 
-    if(!isInitialised) {
+    if(!isSDInitialised) {
         Serial.println("SDCard could not be initialised");
+    }
+
+    isSPIFFSInitialised = SPIFFS.begin();
+
+    if(!isSPIFFSInitialised) {
+        Serial.println("SPIFFS could not be initialised");
     }
 };
 
 FileSystem::~FileSystem() {
     SD.end();
+    SPIFFS.end();
 };
 
-void FileSystem::getFile(const char *filename, File &file) {
-    if(!isInitialised) {
+void FileSystem::getFileSD(const char *filename, File &file) {
+    if(!isSDInitialised) {
         return;
     }
 
     file = SD.open(filename);
     if (!file) {
         Serial.println(F("Failed to read file"));
-        // return nullptr;
+    }
+};
+
+void FileSystem::getFileSPIFFS(const char *filename, File &file) {
+    if(!isSPIFFSInitialised) {
+        return;
     }
 
-    // // Extract each characters by one by one
-    // while (file.available())
-    // {
-    //     Serial.print((char)file.read());
-    // }
+    file = SPIFFS.open(filename);
+    if (!file) {
+        Serial.println(F("Failed to read file"));
+    }
 };
