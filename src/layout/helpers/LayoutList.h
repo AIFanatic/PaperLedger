@@ -10,10 +10,13 @@ class LayoutList {
 
         void init(int _x, int _y, int _w, int _h, int _fontSize, int _color);
         void removeAll();
-        void add(const char *text);
-        void addFromArray(const char *arr[], int size);
+        void add(const char *text, const char *identifier);
+        void addFromArray(const char *arr[][2], int size);
         void setActive(int index);
-        int getActive();
+
+        const char *getActiveText();
+        const char *getActiveIdentifier();
+        int getActiveIndex();
         int getCount();
 
         void moveUp();
@@ -24,7 +27,7 @@ class LayoutList {
     private:
         Render *render;
 
-        String rows[20];
+        const char *rows[20][2];
         int rowLen = 0;
 
         int x;
@@ -39,6 +42,11 @@ class LayoutList {
         int textMargin = 4;
 
         int activeRow;
+
+        enum INFO {
+            TEXT,
+            IDENTIFIER
+        };
 };
 
 #endif

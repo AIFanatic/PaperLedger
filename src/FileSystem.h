@@ -2,6 +2,7 @@
 #define FILESYSTEM_H
 
 #include "SD.h"
+#include <SPIFFS.h>
 #include "board.h"
 
 class FileSystem {
@@ -9,11 +10,13 @@ class FileSystem {
         FileSystem();
         ~FileSystem(void);
 
-        void getFile(const char *filename, File &file);
+        void getFileSD(const char *filename, File &file);
+        void getFileSPIFFS(const char *filename, File &file);
 
     private:
 
-        bool isInitialised;
+        bool isSDInitialised;
+        bool isSPIFFSInitialised;
 };
 
 #endif

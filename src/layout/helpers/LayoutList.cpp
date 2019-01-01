@@ -23,20 +23,23 @@ void LayoutList::init(int _x, int _y, int _w, int _h, int _fontSize, int _color)
 
 void LayoutList::removeAll() {
     for(int i = 0; i < rowLen; i++) {
-        rows[rowLen] = "";
+        rows[rowLen][TEXT] = "";
+        rows[rowLen][IDENTIFIER] = "";
     }
 
     rowLen = 0;
 }
 
-void LayoutList::add(const char *text) {
-    rows[rowLen] = text;
+void LayoutList::add(const char *text, const char *identifier) {
+    rows[rowLen][TEXT] = text;
+    rows[rowLen][IDENTIFIER] = identifier;
     rowLen++;
 }
 
-void LayoutList::addFromArray(const char *arr[], int size) {
+void LayoutList::addFromArray(const char *arr[][2], int size) {
     for(int i = 0; i < size; i++) {
-        rows[rowLen] = arr[i];
+        rows[rowLen][TEXT] = arr[i][TEXT];
+        rows[rowLen][IDENTIFIER] = arr[i][IDENTIFIER];
         rowLen++;
     }
 }
@@ -48,8 +51,16 @@ void LayoutList::setActive(int index) {
     }
 }
 
-int LayoutList::getActive() {
+int LayoutList::getActiveIndex() {
     return activeRow;
+}
+
+const char *LayoutList::getActiveText() {
+    return rows[activeRow][TEXT];
+}
+
+const char *LayoutList::getActiveIdentifier() {
+    return rows[activeRow][IDENTIFIER];
 }
 
 int LayoutList::getCount() {
@@ -84,7 +95,7 @@ void LayoutList::draw() {
             textColor = !color;
         }
 
-        render->drawText(x + textMargin , currentHeight, rows[i].c_str(), fontSize, textColor, w);
+        render->drawText(x + textMargin , currentHeight, rows[i][TEXT], fontSize, textColor, w);
 
         currentHeight += textHeight;
     }
@@ -94,7 +105,7 @@ void LayoutList::draw() {
 }
 
 void LayoutList::moveUp() {
-    int listActiveIndex = getActive();
+    int listActiveIndex = getActiveIndex();
     listActiveIndex--;
 
     if(listActiveIndex < 0) {
@@ -105,7 +116,7 @@ void LayoutList::moveUp() {
 }
 
 void LayoutList::moveDown() {
-    int listActiveIndex = getActive();
+    int listActiveIndex = getActiveIndex();
     listActiveIndex++;
 
     if(listActiveIndex > getCount()) {
