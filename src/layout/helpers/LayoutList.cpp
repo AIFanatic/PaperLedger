@@ -21,9 +21,24 @@ void LayoutList::init(int _x, int _y, int _w, int _h, int _fontSize, int _color)
     activeRow = 0;
 }
 
+void LayoutList::removeAll() {
+    for(int i = 0; i < rowLen; i++) {
+        rows[rowLen] = "";
+    }
+
+    rowLen = 0;
+}
+
 void LayoutList::add(const char *text) {
     rows[rowLen] = text;
     rowLen++;
+}
+
+void LayoutList::addFromArray(const char *arr[], int size) {
+    for(int i = 0; i < size; i++) {
+        rows[rowLen] = arr[i];
+        rowLen++;
+    }
 }
 
 void LayoutList::setActive(int index) {
@@ -37,14 +52,15 @@ int LayoutList::getActive() {
     return activeRow;
 }
 
+int LayoutList::getCount() {
+    return rowLen - 1;
+}
+
 void LayoutList::draw() {
     // // Draw boundary
     // render->drawRectangle(x, y, w, h, !color, true);
 
     render->drawRectangle(x, y, w, h, !color, true);
-
-    Serial.println(textWidth);
-    Serial.println(textHeight);
 
     // Start where bounding box starts
     // Custom font starts at the bottom, while
@@ -77,26 +93,24 @@ void LayoutList::draw() {
     render->draw(x, y, w, h, true);
 }
 
-// void LayoutList::draw() {
-//     // // Draw boundary
-//     render->drawRectangle(x, y, w, h, !color);
+void LayoutList::moveUp() {
+    int listActiveIndex = getActive();
+    listActiveIndex--;
 
-//     // Draw rows
-//     for(int i = 0; i < rowLen; i++) {
-//         int tY = (y + (textHeight * i));
+    if(listActiveIndex < 0) {
+        listActiveIndex = getCount();
+    }
 
-//         int textColor = color;
+    setActive(listActiveIndex);
+}
 
+void LayoutList::moveDown() {
+    int listActiveIndex = getActive();
+    listActiveIndex++;
 
+    if(listActiveIndex > getCount()) {
+        listActiveIndex = 0;
+    }
 
-//         if(i == activeRow) {
-//             // render->drawRectangle(x, tY - textHeight + textMargin, w, textHeight + textMargin, color);
-//             // textColor = !color;
-//         }
-
-//         render->drawText(x + textMargin, tY + textMargin * i, rows[i].c_str(), fontSize, textColor, w);
-//     }
-
-//     // render->draw();
-//     render->draw(x, y, w, h, true);
-// }
+    setActive(listActiveIndex);
+}

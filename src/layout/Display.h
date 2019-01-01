@@ -3,7 +3,6 @@
 #define DISPLAY_H
 
 #include "./Render.h"
-#include "../Wallet.h"
 #include "../FileSystem.h"
 #include "../menus.h"
 
@@ -17,7 +16,6 @@ class Display {
         void show(int index);
         
         Render *render;
-        Wallet *wallet;
         FileSystem *filesystem;
 
     private:
