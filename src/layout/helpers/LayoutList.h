@@ -9,9 +9,15 @@ class LayoutList {
         ~LayoutList(void);
 
         void init(int _x, int _y, int _w, int _h, int _fontSize, int _color);
+        void removeAll();
         void add(const char *text);
+        void addFromArray(const char *arr[], int size);
         void setActive(int index);
         int getActive();
+        int getCount();
+
+        void moveUp();
+        void moveDown();
 
         void draw();
 
