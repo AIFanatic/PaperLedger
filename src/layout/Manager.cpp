@@ -1,8 +1,8 @@
-#include "Display.h"
+#include "Manager.h"
 #include "./views/LayoutTicker.h"
 #include "./views/LayoutSetup.h"
 
-Display::Display() {
+Manager::Manager() {
     // Init render
     render = new Render();
     render->clearScreen();
@@ -11,31 +11,31 @@ Display::Display() {
     filesystem = new FileSystem();
 };
 
-Display::~Display() {
+Manager::~Manager() {
 };
 
 // TODO: Ugly, fix
-void Display::show(int index) {
-    if(currentDisplay) {
-        currentDisplay = nullptr;
+void Manager::show(int index) {
+    if(currentLayout) {
+        currentLayout = nullptr;
     }
 
     if(index == LAYOUT_TICKER) {
-        currentDisplay = new LayoutTicker(this);
+        currentLayout = new LayoutTicker(this);
     }
     else if(index == LAYOUT_SETUP) {
-        currentDisplay = new LayoutSetup(this);
+        currentLayout = new LayoutSetup(this);
     }
 
     currentIndex = index;
 };
 
 // TODO: Ugly, fix
-void Display::update() {
+void Manager::update() {
     if(currentIndex == LAYOUT_TICKER) {
-        (reinterpret_cast<LayoutTicker *>(currentDisplay))->update();
+        (reinterpret_cast<LayoutTicker *>(currentLayout))->update();
     }
     else if(currentIndex == LAYOUT_SETUP) {
-        (reinterpret_cast<LayoutSetup *>(currentDisplay))->update();
+        (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
     }
 }

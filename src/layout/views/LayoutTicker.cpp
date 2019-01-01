@@ -1,7 +1,7 @@
 #include "LayoutTicker.h"
 
-LayoutTicker::LayoutTicker(Display *_display): LayoutBase(_display) {
-    display->render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
+LayoutTicker::LayoutTicker(Manager *_manager): LayoutBase(_manager) {
+    manager->render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
 };
 
 LayoutTicker::~LayoutTicker() {
@@ -17,5 +17,5 @@ void LayoutTicker::rightButtonClicked() {
 
 void LayoutTicker::okButtonClicked() {
     Serial.println("ok button clicked");
-    display->show(LAYOUT_SETUP);
+    manager->show(LAYOUT_SETUP);
 };

@@ -1,6 +1,6 @@
 #include "LayoutSetup.h"
 
-LayoutSetup::LayoutSetup(Display *_display): LayoutBase(_display) {
+LayoutSetup::LayoutSetup(Manager *_manager): LayoutBase(_manager) {
     initMenu();
     showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
 };
@@ -10,7 +10,7 @@ LayoutSetup::~LayoutSetup() {
 
 void LayoutSetup::initMenu() {
     // Init list
-    menuList = new LayoutList(display->render);
+    menuList = new LayoutList(manager->render);
     menuList->init(0, 0, 296, 125, 12, BLACK);
 }
 
@@ -49,7 +49,7 @@ void LayoutSetup::okButtonClicked() {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
     else if(strcmp(active, "BACK") == 0) {
-        display->show(LAYOUT_TICKER);
+        manager->show(LAYOUT_TICKER);
     }
     else if(strcmp(active, "COIN_MORE") == 0) {
         tickersCurrentPage++;

@@ -1,7 +1,7 @@
 #include "LayoutBase.h"
 
-LayoutBase::LayoutBase(Display *_display) {
-    display = _display;
+LayoutBase::LayoutBase(Manager *_manager) {
+    manager = _manager;
     initButtons();
 };
 

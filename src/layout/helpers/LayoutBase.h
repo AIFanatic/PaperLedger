@@ -2,19 +2,19 @@
 #define LAYOUTBASE_H
 
 #include "../Render.h"
-#include "../Display.h"
+#include "../Manager.h"
 
 #include <Pushbutton.h>
 
 class LayoutBase {
     public:
 
-        LayoutBase(Display *_display);
+        LayoutBase(Manager *_manager);
         // virtual ~LayoutBase() {};
 
         void update();
 
-        Display *display;
+        Manager *manager;
 
         virtual void leftButtonClicked() = 0;
         virtual void rightButtonClicked() = 0;
