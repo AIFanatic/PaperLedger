@@ -1,15 +1,15 @@
 // TODO: Rename to Manager or something
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef MANAGER_H
+#define MANAGER_H
 
 #include "./Render.h"
 #include "../FileSystem.h"
 #include "../menus.h"
 
-class Display {
+class Manager {
     public:
-        Display();
-        ~Display(void);
+        Manager();
+        ~Manager(void);
 
         void update();
 
@@ -21,7 +21,7 @@ class Display {
     private:
         int currentIndex;
 
-        void *currentDisplay;
+        void *currentLayout;
 };
 
 #endif

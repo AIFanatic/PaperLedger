@@ -1,7 +1,7 @@
 #include "settings.h"
 
 // #include "./layout/Render.h"
-#include "./layout/Display.h"
+#include "./layout/Manager.h"
 #include "./layout/helpers/LayoutList.h"
 
 #include <WiFi.h>
@@ -12,7 +12,7 @@
 #include "esp_wifi.h"
 #include "Esp.h"
 
-Display *display;
+Manager *manager;
 
 AsyncWebServer server(80);
 
@@ -132,7 +132,7 @@ void WebServerStart(void)
         String params = request->getParam(0)->value();
 
         if(name.equals("body")) {
-            display->render->drawFromJson(params);
+            manager->render->drawFromJson(params);
         }
     });
 
@@ -159,8 +159,8 @@ void setup() {
    
     // Render *render = new Render();
 
-    display = new Display();
-    display->show(0);
+    manager = new Manager();
+    manager->show(0);
 
     // LayoutList *list = new LayoutList(render);
     // list->init(128, 32, 160, 80, 18, BLACK);
@@ -183,5 +183,5 @@ void setup() {
 }
 
 void loop() {
-    display->update();
+    manager->update();
 }

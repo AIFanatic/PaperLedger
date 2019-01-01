@@ -2,7 +2,7 @@
 #define LayoutSetup_H
 
 #include "../Render.h"
-#include "../Display.h"
+#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 #include "../helpers/LayoutList.h"
 
@@ -13,7 +13,7 @@
 
 class LayoutSetup: public LayoutBase {
     public:
-        LayoutSetup(Display *_display);
+        LayoutSetup(Manager *_manager);
         ~LayoutSetup(void);
 
     private:        

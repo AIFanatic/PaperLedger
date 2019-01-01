@@ -2,12 +2,12 @@
 #define LayoutTicker_H
 
 #include "../Render.h"
-#include "../Display.h"
+#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class LayoutTicker: public LayoutBase {
     public:
-        LayoutTicker(Display *_display);
+        LayoutTicker(Manager *_manager);
         ~LayoutTicker(void);
 
     private:
