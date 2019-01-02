@@ -3,12 +3,14 @@
 #include "./views/LayoutSetup.h"
 
 Manager::Manager() {
-    // Init render
+    utils = new Utils();
     render = new Render();
-    render->clearScreen();
-
-    // Init filesystem
     filesystem = new FileSystem();
+    requestManager = new RequestManager(this);
+    settings = new Settings(this);
+
+    render->clearScreen();
+    connectNetwork();
 };
 
 Manager::~Manager() {
@@ -16,6 +18,8 @@ Manager::~Manager() {
 
 // TODO: Ugly, fix
 void Manager::show(int index) {
+    isInitializingLayout = true;
+
     if(currentLayout) {
         currentLayout = nullptr;
     }
@@ -28,14 +32,37 @@ void Manager::show(int index) {
     }
 
     currentIndex = index;
+
+    isInitializingLayout = false;
 };
 
 // TODO: Ugly, fix
 void Manager::update() {
-    if(currentIndex == LAYOUT_TICKER) {
-        (reinterpret_cast<LayoutTicker *>(currentLayout))->update();
+    if(!isInitializingLayout) {
+        if(currentIndex == LAYOUT_TICKER) {
+            (reinterpret_cast<LayoutTicker *>(currentLayout))->update();
+        }
+        else if(currentIndex == LAYOUT_SETUP) {
+            (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
+        }
     }
-    else if(currentIndex == LAYOUT_SETUP) {
-        (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
+}
+
+void Manager::connectNetwork() {
+    String ssid = settings->get("ssid");
+    String password = settings->get("password");
+
+    Serial.println(ssid);
+    Serial.println(password);
+    
+    if(!utils->connectWifi(ssid.c_str(), password.c_str())) {
+        if(!utils->connectAP("inkCrypto")) {
+            Serial.println("Unable to connect to Wifi or to create Access Point");
+            esp_restart();
+        }
     }
+}
+
+void Manager::reset() {
+    settings->reset();
 }

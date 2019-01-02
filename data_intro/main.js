@@ -1,6 +1,6 @@
 // Constants
-const INKTICKER_URL = "";
-// const INKTICKER_URL = "http://localhost:5500/mock";
+// const INKTICKER_URL = "http://192.168.8.100";
+const INKTICKER_URL = "http://localhost:5500/mock";
 
 const NETWORK_TABLE = "#network-table";
 

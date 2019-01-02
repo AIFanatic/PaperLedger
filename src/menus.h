@@ -24,3 +24,6 @@ enum DISPLAYS {
     LAYOUT_TICKER,
     LAYOUT_SETUP
 };
+
+#define FILE_SETTINGS "/settings.json"
+#define FILE_TICKERS "/tickers.json"
