@@ -20,15 +20,6 @@ html {
 body {
     height: 100%;
     margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background: #1f3e50;
-    background: -moz-linear-gradient(45deg, #1f3e50 0%, #5a6076 100%);
-    background: -webkit-linear-gradient(45deg, #1f3e50 0%,#5a6076 100%);
-    background: linear-gradient(45deg, #1f3e50 0%,#5a6076 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1f3e50', endColorstr='#5a6076',GradientType=1 );
-    color: white;
-
     font-family: dejavu_sansbook_extraligh;
 }
 
@@ -50,16 +41,16 @@ a:hover {
 
 .menu {
     display: flex;
-    background: #00000020;
     padding: 15px;
 }
 
 .menu-box {
     width: 100%;
-    background: #00000050;
+    background: black;
     padding: 30px;
     border-radius: 5px;
     margin-left: 15px;
+    color: white;
 }
 
 .menu-bar {
@@ -74,7 +65,7 @@ a:hover {
 }
 
 .menu ul li {
-    background: #00000050;
+    background: black;
     padding: 20px;
     text-align: center;
     border-radius: 5px
@@ -99,12 +90,8 @@ table {
     border-spacing: unset;
 }
 
-thead {
-    background: #ffffff29;
-}
-
 td, th {
-    text-align: left;
+    text-align: center;
     padding: 8px;
 }
 

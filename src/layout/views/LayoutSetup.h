@@ -29,11 +29,12 @@ class LayoutSetup: public LayoutBase {
         LayoutList *menuList;
 
         // {TEXT, IDENTIFIER}
-        const char *MAIN_MENU[4][2] = 
+        const char *MAIN_MENU[5][2] = 
         {
             {"Tickers", "TICKERS"}, 
             {"Customize", "CUSTOMIZE"},
             {"Network", "NETWORK"},
+            {"Reset", "RESET"},
             {"Back", "BACK"},
         };
 

@@ -48,6 +48,10 @@ void LayoutSetup::okButtonClicked() {
     else if(strcmp(active, "BACK_TICKER") == 0) {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
+    else if(strcmp(active, "RESET") == 0) {
+        Serial.print("I should reset!!");
+        manager->reset();
+    }
     else if(strcmp(active, "BACK") == 0) {
         manager->show(LAYOUT_TICKER);
     }
