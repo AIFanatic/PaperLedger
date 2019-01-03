@@ -71,6 +71,7 @@ void RequestManager::requestWifiList(AsyncWebServerRequest *request) {
 
 void RequestManager::requestWifiConnect(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
         return;
     }
 
@@ -89,73 +90,66 @@ void RequestManager::requestWifiConnect(AsyncWebServerRequest *request) {
         manager->settings->set("ssid", ssid_value.c_str());
         manager->settings->set("password", password_value.c_str());
 
-        manager->utils->disconnectWifi();
-        manager->utils->connectWifi(ssid_value.c_str(), password_value.c_str());
+        request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"reconnecting\"}");
+
+        manager->needNetworkReconnect = true;
     }
+
+    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
 };
 
 void RequestManager::requestWifiDisconnect(AsyncWebServerRequest *request) {
     manager->utils->disconnectWifi();
 };
 
-
-void RequestManager::setServer(AsyncWebServer *_server) {
-    server = server;
-
+void RequestManager::reset() {
+    server.reset();
 }
 
-// void RequestManager::WebServerStart()
-// {
-//     // if(!connectWifi()) {
-//     //     if(!connectAP()) {
-//     //         Serial.println("Unable to connect to Wifi or to create Access Point");
-//     //         esp_restart();
-//     //     }
-//     // }
+void RequestManager::begin() {
+    if (MDNS.begin("ttgo"))
+    {
+        Serial.println("MDNS responder started");
+    }
 
-//     if (MDNS.begin("ttgo"))
-//     {
-//         Serial.println("MDNS responder started");
-//     }
+    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
 
-//     server->serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+    server.on("/display/draw", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        request->send(200, "text/plain", "");
 
-//     server->on("/display/draw", HTTP_POST, [this](AsyncWebServerRequest *request) {
-//         request->send(200, "text/plain", "");
+        if(request->params() == 0) {
+            return;
+        }
 
-//         if(request->params() == 0) {
-//             return;
-//         }
+        String name = request->getParam(0)->name();
+        String params = request->getParam(0)->value();
 
-//         String name = request->getParam(0)->name();
-//         String params = request->getParam(0)->value();
+        if(name.equals("body")) {
+            manager->render->drawFromJson(params);
+        }
+    });
 
-//         if(name.equals("body")) {
-//             manager->render->drawFromJson(params);
-//         }
-//     });
+    server.on("/data/wifi/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        requestWifiList(request);
+    });
 
-//     server->on("/data/wifi/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
-//         manager->requestManager->requestWifiList(request);
-//     });
+    server.on("/data/wifi/status", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        requestWifiStatus(request);
+    });
 
-//     server->on("/data/wifi/status", HTTP_GET, [this](AsyncWebServerRequest *request) {
-//         manager->requestManager->requestWifiStatus(request);
-//     });
+    server.on("/data/wifi/connect", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestWifiConnect(request);
+    });
 
-//     server->on("/data/wifi/connect", HTTP_POST, [this](AsyncWebServerRequest *request) {
-//         manager->requestManager->requestWifiConnect(request);
-//     });
+    server.on("/data/wifi/disconnect", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestWifiDisconnect(request);
+    });
 
-//     server->on("/data/wifi/disconnect", HTTP_POST, [this](AsyncWebServerRequest *request) {
-//         manager->requestManager->requestWifiDisconnect(request);
-//     });
+    server.onNotFound([this](AsyncWebServerRequest *request) {
+        requestNotFound(request);
+    });
 
-//     server->onNotFound([this](AsyncWebServerRequest *request) {
-//         manager->requestManager->requestNotFound(request);
-//     });
+    MDNS.addService("http", "tcp", 80);
 
-//     MDNS.addService("http", "tcp", 80);
-
-//     server->begin();
-// }
+    server.begin();
+}

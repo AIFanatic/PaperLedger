@@ -30,6 +30,10 @@ bool Utils::connectAP(const char *apName) {
 }
 
 bool Utils::connectWifi(const char *ssid, const char *password) {
+    if(!ssid || strlen(ssid) == 0) {
+        return false;
+    }
+
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
 

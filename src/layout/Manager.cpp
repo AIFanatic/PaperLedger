@@ -10,7 +10,8 @@ Manager::Manager() {
     settings = new Settings(this);
 
     render->clearScreen();
-    connectNetwork();
+
+    needNetworkReconnect = true;
 };
 
 Manager::~Manager() {
@@ -46,6 +47,16 @@ void Manager::update() {
             (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
         }
     }
+
+    // Its better to handle network reconnects in a loop instead of a request
+    if(needNetworkReconnect) {
+        requestManager->reset();
+        utils->disconnectWifi();
+        connectNetwork();
+        requestManager->begin();
+
+        needNetworkReconnect = false;
+    }
 }
 
 void Manager::connectNetwork() {
@@ -56,6 +67,7 @@ void Manager::connectNetwork() {
     Serial.println(password);
     
     if(!utils->connectWifi(ssid.c_str(), password.c_str())) {
+        Serial.println("Unable to connect to wifi, creating AP");
         if(!utils->connectAP("inkCrypto")) {
             Serial.println("Unable to connect to Wifi or to create Access Point");
             esp_restart();

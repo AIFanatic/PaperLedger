@@ -28,6 +28,8 @@ class Manager {
         RequestManager *requestManager;
         Settings *settings;
 
+        bool needNetworkReconnect = false;
+
     private:
         int currentIndex;
 

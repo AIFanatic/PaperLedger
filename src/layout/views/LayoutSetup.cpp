@@ -40,7 +40,8 @@ void LayoutSetup::okButtonClicked() {
     Serial.println(" clicked");
 
     if(strcmp(active, "TICKERS") == 0) {
-        showMenu(TICKERS_MENU, SIZEOFARRAY(TICKERS_MENU));
+        // showMenu(TICKERS_MENU, SIZEOFARRAY(TICKERS_MENU));
+        manager->connectNetwork();
     }
     else if(strcmp(active, "ADD_TICKER") == 0) {
         getTickers();

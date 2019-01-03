@@ -9,8 +9,39 @@
         <div class="title">Welcome to ink Ticker</div>
 
         <div class="content">
-            <p>It seems that your device cannot reach the Internet.</p>
-            <a href="#">Setup Network</a>
+            <div class="content-no-network">
+                <p>It seems that your device cannot reach the Internet.</p>
+                <p>Searching for networks...</p>
+            </div>
+
+            <div class="content-networks">
+                <table class="menu-content-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Currency</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ethereum</td>
+                            <td>USD</td>
+                            <td>/\ \/</td>
+                        </tr>
+                        <tr>
+                            <td>Bitcoin</td>
+                            <td>USD</td>
+                            <td>/\ \/</td>
+                        </tr>
+                        <tr>
+                            <td>PowerLedger</td>
+                            <td>USD</td>
+                            <td><button>/\</button> <button>\/</button> <button>X</button>  </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="footer">
@@ -24,6 +55,7 @@
             </div>
         </div>
         <script src="jquery.min.js"></script>
+
         <script src="main.js"></script>
     </body>
 </html>
