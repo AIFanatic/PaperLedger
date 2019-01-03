@@ -75,3 +75,26 @@ a:hover {
         margin-top: 2em;
     }
 }
+
+.content-networks {
+    font-size: 0.5em;
+}
+
+
+table {
+    width: 100%;
+    border-spacing: unset;
+}
+
+td, th {
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff17;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff0f;
+}

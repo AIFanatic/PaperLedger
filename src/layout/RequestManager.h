@@ -1,3 +1,17 @@
+/**
+ * TODO
+ * 
+ * Handling responses properly (instead of a String):
+ * https://github.com/me-no-dev/ESPAsyncWebServer#arduinojson-basic-response
+ * https://github.com/me-no-dev/ESPAsyncWebServer#arduinojson-advanced-response
+ * 
+ * OTA Updates:
+ * https://github.com/me-no-dev/ESPAsyncWebServer#setting-up-the-server
+ * 
+ * AsyncWebServer in class:
+ * https://github.com/me-no-dev/ESPAsyncWebServer#setup-global-and-class-functions-as-request-handlers
+ */
+
 #ifndef RequestManager_h
 #define RequestManager_h
 
@@ -19,14 +33,13 @@ class RequestManager {
         
         void requestNotFound(AsyncWebServerRequest *request);
 
-        void setServer(AsyncWebServer *server);
-
-        void WebServerStart();
+        void begin();
+        void reset();
 
     private:
         Manager *manager;
 
-        AsyncWebServer *server;
+        AsyncWebServer server = AsyncWebServer(80);
 };
 
 #endif
