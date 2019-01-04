@@ -2,6 +2,7 @@
 
 LayoutSetup::LayoutSetup(Manager *_manager): LayoutBase(_manager) {
     initMenu();
+    
     showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
 };
 
@@ -41,7 +42,7 @@ void LayoutSetup::okButtonClicked() {
 
     if(strcmp(active, "TICKERS") == 0) {
         // showMenu(TICKERS_MENU, SIZEOFARRAY(TICKERS_MENU));
-        manager->connectNetwork();
+        manager->networkManager->connectNetwork();
     }
     else if(strcmp(active, "ADD_TICKER") == 0) {
         getTickers();
