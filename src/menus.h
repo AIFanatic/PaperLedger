@@ -27,3 +27,8 @@ enum DISPLAYS {
 
 #define FILE_SETTINGS "/settings.json"
 #define FILE_TICKERS "/tickers.json"
+
+#define AP_NAME "inkCrypto"
+#define AP_IP "192.168.1.1"
+
+#define URL_IM_ALIVE "https://api.ipify.org/"

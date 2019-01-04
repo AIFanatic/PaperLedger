@@ -1,0 +1,100 @@
+@font-face {
+    font-family: 'dejavu_sansbook';
+    src: url('fonts/DVUS.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'dejavu_sansbook_extraligh';
+    src: url('fonts/DVUS-L.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body {
+    margin: 0;
+    font-family: dejavu_sansbook_extraligh;
+
+    background: black;
+    color: white;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:visited {
+    color: inherit;
+}
+
+a:active {
+    color: inherit;
+  }
+
+a:hover {
+    color: #5d5d5d !important;
+}
+
+.title {
+    text-align: center;
+    font-size: 3em;
+    margin-top: 3em;
+}
+
+.content {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 3em;
+}
+
+.footer {
+    position: absolute;
+    bottom: 1em;
+    display: flex;
+    width: 100%;
+}
+
+.footer-version {
+    margin-left: 1em;
+    display: grid;
+}
+
+.footer-social {
+    right: 1em;
+    bottom: 1em;
+    position: fixed;
+}
+
+@media only screen and (max-width: 600px) {
+    .title {
+        font-size: 2em;
+        margin-top: 2em;
+    }
+}
+
+.content-networks {
+    font-size: 0.5em;
+}
+
+
+table {
+    width: 100%;
+    border-spacing: unset;
+}
+
+td, th {
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff17;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff0f;
+}

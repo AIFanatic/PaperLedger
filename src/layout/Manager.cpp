@@ -3,15 +3,14 @@
 #include "./views/LayoutSetup.h"
 
 Manager::Manager() {
-    utils = new Utils();
     render = new Render();
     filesystem = new FileSystem();
-    requestManager = new RequestManager(this);
+    networkManager = new NetworkManager(this);
     settings = new Settings(this);
 
     render->clearScreen();
 
-    needNetworkReconnect = true;
+    networkManager->needNetworkReconnect = true;
 };
 
 Manager::~Manager() {
@@ -48,31 +47,7 @@ void Manager::update() {
         }
     }
 
-    // Its better to handle network reconnects in a loop instead of a request
-    if(needNetworkReconnect) {
-        requestManager->reset();
-        utils->disconnectWifi();
-        connectNetwork();
-        requestManager->begin();
-
-        needNetworkReconnect = false;
-    }
-}
-
-void Manager::connectNetwork() {
-    String ssid = settings->get("ssid");
-    String password = settings->get("password");
-
-    Serial.println(ssid);
-    Serial.println(password);
-    
-    if(!utils->connectWifi(ssid.c_str(), password.c_str())) {
-        Serial.println("Unable to connect to wifi, creating AP");
-        if(!utils->connectAP("inkCrypto")) {
-            Serial.println("Unable to connect to Wifi or to create Access Point");
-            esp_restart();
-        }
-    }
+    networkManager->update();
 }
 
 void Manager::reset() {

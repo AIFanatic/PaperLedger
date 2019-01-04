@@ -3,8 +3,7 @@
 
 #include "./Render.h"
 #include "../FileSystem.h"
-#include "./RequestManager.h"
-#include "./Utils.h"
+#include "./NetworkManager.h"
 #include "./Settings.h"
 
 #include "../menus.h"
@@ -14,22 +13,17 @@ class Manager {
         Manager();
         ~Manager(void);
 
-        void connectNetwork();
-
         void update();
 
         void show(int index);
 
         void reset();
 
-        Utils *utils;
         Render *render;
         FileSystem *filesystem;
-        RequestManager *requestManager;
+        NetworkManager *networkManager;
         Settings *settings;
-
-        bool needNetworkReconnect = false;
-
+        
     private:
         int currentIndex;
 

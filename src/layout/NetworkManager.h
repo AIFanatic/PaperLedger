@@ -12,34 +12,53 @@
  * https://github.com/me-no-dev/ESPAsyncWebServer#setup-global-and-class-functions-as-request-handlers
  */
 
-#ifndef RequestManager_h
-#define RequestManager_h
+#ifndef NetworkManager_h
+#define NetworkManager_h
 
+#include <HTTPClient.h>
 #include <ESPAsyncWebServer.h>
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
 
 class Manager;
 
-class RequestManager {
+class NetworkManager {
     public:
-        RequestManager(Manager *_manager);
-        ~RequestManager(void);
+        NetworkManager(Manager *_manager);
+        ~NetworkManager(void);
+
+        void update();
+
+        String get(String url);
+        String post(String url, String params);
 
         void requestWifiStatus(AsyncWebServerRequest *request);
         void requestWifiList(AsyncWebServerRequest *request);
         void requestWifiConnect(AsyncWebServerRequest *request);
         void requestWifiDisconnect(AsyncWebServerRequest *request);
-        
         void requestNotFound(AsyncWebServerRequest *request);
 
         void begin();
         void reset();
 
+        void connectNetwork();
+        void checkInternetAccess();
+
+        bool disconnectWifi();
+        bool reconnectWifi();
+        bool connectAP(const char *apName);
+        bool connectWifi(const char *ssid, const char *password);
+        String getWifiIP();
+
+        bool needNetworkReconnect = false;
+        bool hasInternetAccess = false;
+
     private:
         Manager *manager;
 
+        IPAddress apIP = IPAddress(192, 168, 1, 1);
         AsyncWebServer server = AsyncWebServer(80);
+        HTTPClient http;
 };
 
 #endif
