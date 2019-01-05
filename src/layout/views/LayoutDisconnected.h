@@ -1,14 +1,14 @@
-#ifndef LayoutTicker_H
-#define LayoutTicker_H
+#ifndef LayoutDisconnected_H
+#define LayoutDisconnected_H
 
 #include "../Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
-class LayoutTicker: public LayoutBase {
+class LayoutDisconnected: public LayoutBase {
     public:
-        LayoutTicker(Manager *_manager);
-        ~LayoutTicker(void);
+        LayoutDisconnected(Manager *_manager);
+        ~LayoutDisconnected(void);
 
         void update();
 

@@ -242,25 +242,6 @@ void NetworkManager::checkInternetAccess() {
         return;
     }
 
-    // if(response.length() == 0) {
-    //     // PORT THIS TO LAYOUTSETUP
-    //     render->fillScreen(WHITE);
-    //     render->drawText(35, 40, "No Internet", 18, BLACK);
-
-    //     String networkName = "Network name: ";
-    //     String networkIP = "Network IP: ";
-
-    //     networkName.concat(AP_NAME);
-    //     networkIP.concat(AP_IP);
-
-    //     render->drawText(35, 40, "No Internet", 18, BLACK);
-    //     render->drawText(15, 75, networkName.c_str(), 9, BLACK);
-    //     render->drawText(15, 100, networkIP.c_str(), 9, BLACK);
-    //     render->draw();
-        
-    //     return;
-    // }
-
     hasInternetAccess = true;
     Serial.println("Im alive!!!");
 }
