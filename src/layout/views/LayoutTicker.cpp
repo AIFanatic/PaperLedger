@@ -19,3 +19,7 @@ void LayoutTicker::okButtonClicked() {
     Serial.println("ok button clicked");
     manager->show(LAYOUT_SETUP);
 };
+
+void LayoutTicker::update() {
+    LayoutBase::update();
+}

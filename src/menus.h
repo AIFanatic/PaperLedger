@@ -22,7 +22,8 @@ const unsigned char _MENU_SETUP[] PROGMEM = "[{\"type\": \"fill\", \"color\": 1}
 
 enum DISPLAYS {
     LAYOUT_TICKER,
-    LAYOUT_SETUP
+    LAYOUT_SETUP,
+    LAYOUT_DISCONNECTED
 };
 
 #define FILE_SETTINGS "/settings.json"

@@ -3,98 +3,31 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" href="icons.css">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <div class="title">
-            <h1>Welcome to ink<span>Crypto</span></h1>
-        </div>
-
-        <div class="menu">
-
-            <div class="menu-bar">
-                <ul>
-                    <li>
-                        <a id="btn-menu-intro" href="#">Intro</a>
-                    </li>
-                    <li>
-                        <a id="btn-menu-tickers" href="#">Tickers</a>
-                    </li>
-                    <li>
-                        <a id="btn-menu-network" href="#">Network</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div id="menu-intro" class="menu-content menu-box">
-                <div class="title">
-                    <h2><b>Thank you</b> for buying inkCrypto!</h2>
+            <div class="grid-container">
+                <div class="nav">
+                    <ul>
+                        <li><a href="#" class="nav-button" data-menu="menu"><i class="fas fa-bars"></i></a></li>
+                        <li><a href="#" class="nav-button" data-menu="tickers"><i class="fas fa-chart-line"></i></a></li>
+                        <li><a href="#" class="nav-button" data-menu="network"><i class="fas fa-wifi"></i></a></li>
+                    </ul>
                 </div>
-                <div class="menu-content-options">
-                    <p>Thank <b>you</b>you for buying inkCrypto</p>
-                    <p>Thank you for buying inkCrypto</p>
-                    <a class="add-new-btn" href="#">GitHub</a>
-                    <a class="add-new-btn" href="#">BitcoinTalk</a>
+                <div class="main">
+                    <div class="header">
+                        <h2 class="title">Tickers</h2>
+                        <h2 class="right">Searching <i class="fas fa-circle-notch fa-spin"></i></h2>
+                    </div>
+                    <div class="content">
+                        <div class="tickers">
+                        </div>
+                        <div class="network" style="display: none">
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div id="menu-tickers" class="menu-content menu-box" style="display: none;">
-                <div class="title">
-                    <h2>Manage your tickers</h2>
-                </div>
-                <div class="menu-content-options">
-                    <table class="menu-content-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Currency</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Ethereum</td>
-                                <td>USD</td>
-                                <td>/\ \/</td>
-                            </tr>
-                            <tr>
-                                <td>Bitcoin</td>
-                                <td>USD</td>
-                                <td>/\ \/</td>
-                            </tr>
-                            <tr>
-                                <td>PowerLedger</td>
-                                <td>USD</td>
-                                <td><button>/\</button> <button>\/</button> <button>X</button>  </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <a class="add-new-btn" href="#">Click here to add new ticker</a>
-                </div>
-            </div>
-
-            <div id="menu-network" class="menu-content menu-box" style="display:none;">
-                <div class="title">
-                    <h2>Manage connectivity</h2>
-                </div>
-                <div class="menu-content-options">
-                    <table id="network-table" class="menu-content-table">
-                        <thead>
-                            <tr>
-                                <th>Network</th>
-                                <th>Signal</th>
-                                <th>Algorithm</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-        </div>
-
         <script src="jquery.min.js"></script>
         <script src="main.js"></script>
     </body>

@@ -1,6 +1,7 @@
 #include "Manager.h"
 #include "./views/LayoutTicker.h"
 #include "./views/LayoutSetup.h"
+#include "./views/LayoutDisconnected.h"
 
 Manager::Manager() {
     render = new Render();
@@ -30,6 +31,9 @@ void Manager::show(int index) {
     else if(index == LAYOUT_SETUP) {
         currentLayout = new LayoutSetup(this);
     }
+    else if(index == LAYOUT_DISCONNECTED) {
+        currentLayout = new LayoutDisconnected(this);
+    }
 
     currentIndex = index;
 
@@ -45,9 +49,16 @@ void Manager::update() {
         else if(currentIndex == LAYOUT_SETUP) {
             (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
         }
+        else if(currentIndex == LAYOUT_DISCONNECTED) {
+            (reinterpret_cast<LayoutDisconnected *>(currentLayout))->update();
+        }
     }
 
     networkManager->update();
+
+    if(!networkManager->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED) {
+        show(LAYOUT_DISCONNECTED);
+    }
 }
 
 void Manager::reset() {
