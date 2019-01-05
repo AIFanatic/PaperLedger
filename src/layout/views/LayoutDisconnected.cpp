@@ -16,9 +16,6 @@ LayoutDisconnected::LayoutDisconnected(Manager *_manager): LayoutBase(_manager) 
     manager->render->drawText(15, 75, networkName.c_str(), 9, BLACK);
     manager->render->drawText(15, 100, networkIP.c_str(), 9, BLACK);
     manager->render->draw();
-
-    Serial.println("Showing");
-
 };
 
 LayoutDisconnected::~LayoutDisconnected() {

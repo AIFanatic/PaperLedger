@@ -12,26 +12,20 @@ Settings::Settings(Manager *_manager) {
     JsonObject& settingsJson = jsonBuffer.parse(settings);
     settings.close();
 
-    bool needsUpdate = false;
-
     bool validSSID = settingsJson["ssid"].is<const char *>();
     bool validPassword = settingsJson["password"].is<const char *>();
     
     if(!validSSID || !validPassword) {
-        Serial.print("Settings.json does not container valid network credentials");
+        Serial.print("Settings.json is not valid");
 
         settingsJson["ssid"] = "";
         settingsJson["password"] = "";
 
-        needsUpdate = true;
-    }
-
-    if(needsUpdate) {
-        Serial.print("Updated settings.json");
-
         String settingsStr;
         settingsJson.printTo(settingsStr);
         manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, settingsStr.c_str());
+
+        Serial.print("Created settings.json");
     }
 };
 

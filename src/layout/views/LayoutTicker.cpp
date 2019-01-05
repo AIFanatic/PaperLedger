@@ -1,7 +1,10 @@
 #include "LayoutTicker.h"
 
 LayoutTicker::LayoutTicker(Manager *_manager): LayoutBase(_manager) {
-    manager->render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
+    showTicker();
+    lastScreenUpdate = millis();
+    // TODO: Remove as it will be stored in settings
+    lastTickersUpdate = millis();
 };
 
 LayoutTicker::~LayoutTicker() {
@@ -20,6 +23,44 @@ void LayoutTicker::okButtonClicked() {
     manager->show(LAYOUT_SETUP);
 };
 
+void LayoutTicker::showTicker() {
+    JsonArray& tickers = manager->tickers->get();
+
+    if(currentTicker > tickers.size() - 1) {
+        currentTicker = 0;
+    }
+
+    String tickerStr = tickers[currentTicker];
+
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& ticker = jsonBuffer.parse(tickerStr);
+
+    String coin = ticker["coin"];
+    String price = ticker["price"];
+    String currency = ticker["currency"];
+
+    String pricePretty = price + " " + currency;
+
+    manager->render->fillScreen(1);
+    manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
+    manager->render->drawText(0, 35, coin.c_str(), 18, WHITE, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 100, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->draw();
+}
+
 void LayoutTicker::update() {
     LayoutBase::update();
+
+    unsigned long currentTime = millis();
+
+    if((currentTime - lastScreenUpdate) / 1000 > TICKER_UPDATE_FREQUENCY) {
+        currentTicker++;
+        lastScreenUpdate = currentTime;
+        showTicker();
+    }
+
+    if((currentTime - lastTickersUpdate) / 1000 > 60) {
+        manager->tickers->updatePrices();
+        lastTickersUpdate = currentTime;
+    }
 }

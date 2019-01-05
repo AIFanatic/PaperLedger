@@ -19,7 +19,8 @@
         "limits": "cpp",
         "typeinfo": "cpp",
         "istream": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "sstream": "cpp"
     },
     "terminal.integrated.env.osx": {
         "PATH": "/Users/mac/.platformio/penv/bin:/Users/mac/.platformio/penv:/usr/local/php5-5.6.36-20180703-123509/bin:/usr/local/opt/php@5.6/bin:/usr/local/opt/mysql@5.7/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands",

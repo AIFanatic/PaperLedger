@@ -11,10 +11,14 @@
 #include <GxGDEH029A1/GxGDEH029A1.h>      // 2.9" b/w
 
 // FreeFonts from Adafruit_GFX
-#include <Fonts/FreeMonoBold9pt7b.h>
-#include <Fonts/FreeMonoBold12pt7b.h>
-#include <Fonts/FreeMonoBold18pt7b.h>
-#include <Fonts/FreeMonoBold24pt7b.h>
+// #include <Fonts/FreeMonoBold9pt7b.h>
+// #include <Fonts/FreeMonoBold12pt7b.h>
+// #include <Fonts/FreeMonoBold18pt7b.h>
+// #include <Fonts/FreeMonoBold24pt7b.h>
+#include <fonts/DejaVu_9.h>
+#include <fonts/DejaVu_12.h>
+#include <fonts/DejaVu_18.h>
+#include <fonts/DejaVu_24.h>
 
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
@@ -40,6 +44,11 @@
 #define BLACK 0
 #define WHITE 1
 
+#define NO_ALIGNMENT 0
+#define LEFT_ALIGNMENT 1
+#define RIGHT_ALIGNMENT 2
+#define CENTER_ALIGNMENT 3
+
 class Render {
     public:
         Render(void);
@@ -53,7 +62,7 @@ class Render {
         void drawRectangle(int x, int y, int w, int h, int color, bool filled = false);
         void drawCircle(int x, int y, int r, int color, bool filled = false);
         void drawImage(int index, int x, int y, int w, int h, int color, int mode);
-        void drawText(int x, int y, const char *text, int size, int color, int w = 0);
+        void drawText(int x, int y, const char *text, int size, int color, int alignment = 0);
         void setFont(int size);
 
         void getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1);

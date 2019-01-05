@@ -5,6 +5,7 @@
 #include "../FileSystem.h"
 #include "./NetworkManager.h"
 #include "./Settings.h"
+#include "./Tickers.h"
 
 #include "../menus.h"
 
@@ -22,7 +23,9 @@ class Manager {
         Render *render;
         FileSystem *filesystem;
         NetworkManager *networkManager;
+        
         Settings *settings;
+        Tickers *tickers;
         
     private:
         int currentIndex;

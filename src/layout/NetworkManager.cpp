@@ -77,25 +77,90 @@ void NetworkManager::requestWifiConnect(AsyncWebServerRequest *request) {
     String password_name = request->getParam(1)->name();
     String password_value = request->getParam(1)->value();
 
-    if(ssid_name.equals("ssid") && password_name.equals("password")) {
-        Serial.print("Connect to ");
-        Serial.print(ssid_value);
-        Serial.print(" with password ");
-        Serial.println(password_value);
-
-        manager->settings->set("ssid", ssid_value.c_str());
-        manager->settings->set("password", password_value.c_str());
-
-        request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"reconnecting\"}");
-
-        needNetworkReconnect = true;
+    if(!ssid_name.equals("ssid") || !password_name.equals("password")) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        return;
     }
 
-    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+    Serial.print("Connect to ");
+    Serial.print(ssid_value);
+    Serial.print(" with password ");
+    Serial.println(password_value);
+
+    manager->settings->set("ssid", ssid_value.c_str());
+    manager->settings->set("password", password_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"reconnecting\"}");
+
+    needNetworkReconnect = true;
 };
 
 void NetworkManager::requestWifiDisconnect(AsyncWebServerRequest *request) {
     disconnectWifi();
+};
+
+void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& response = jsonBuffer.createObject();
+
+    response["status"] = "ok";
+
+    response["message"] = manager->tickers->get();
+
+    String str;
+    response.printTo(str);
+    request->send(200, "application/json", str);
+};
+
+void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        return;
+    }
+
+    String coin_name = request->getParam(0)->name();
+    String coin_value = request->getParam(0)->value();
+
+    String currency_name = request->getParam(1)->name();
+    String currency_value = request->getParam(1)->value();
+
+    if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        return;
+    }
+
+    int index = manager->tickers->getIndexOf(coin_value.c_str(), currency_value.c_str());
+
+    if(index != -1) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Coin already exists\"}");
+        return;
+    }
+
+    manager->tickers->add(coin_value.c_str(), currency_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"added\"}");
+};
+
+void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        return;
+    }
+
+    String coin_name = request->getParam(0)->name();
+    String coin_value = request->getParam(0)->value();
+
+    String currency_name = request->getParam(1)->name();
+    String currency_value = request->getParam(1)->value();
+
+    if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        return;
+    }
+
+    manager->tickers->remove(coin_value.c_str(), currency_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
 };
 
 void NetworkManager::reset() {
@@ -139,6 +204,18 @@ void NetworkManager::begin() {
 
     server.on("/data/wifi/disconnect", HTTP_POST, [this](AsyncWebServerRequest *request) {
         requestWifiDisconnect(request);
+    });
+
+    server.on("/data/tickers/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        requestTickers(request);
+    });
+
+    server.on("/data/tickers/add", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestAddTickers(request);
+    });
+
+    server.on("/data/tickers/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestRemoveTickers(request);
     });
 
     server.onNotFound([this](AsyncWebServerRequest *request) {

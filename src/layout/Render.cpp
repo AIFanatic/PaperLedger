@@ -23,7 +23,7 @@ void Render::initDisplay() {
     display->setRotation(1);
     display->eraseDisplay();
     display->setTextColor(GxEPD_BLACK);
-    display->setFont(&FreeMonoBold9pt7b);
+    display->setFont(&DVUS9pt7b);
     display->setTextSize(0);
 }
 
@@ -58,8 +58,8 @@ void Render::drawFromJson(String json) {
         else if(type.equals("text")) {
             const char *text = obj["text"];
             int size = obj["size"];
-            int w = obj["w"];
-            drawText(x, y, text, size, color, w);
+            int align = obj["align"];
+            drawText(x, y, text, size, color, align);
         }
         else if(type.equals("image")) {
             int index = obj["index"];
@@ -102,21 +102,43 @@ void Render::drawCircle(int x, int y, int r, int color, bool filled) {
     display->drawCircle(x, y, r, color);
 }
 
-void Render::drawText(int x, int y, const char *text, int size, int color, int w) {
+void Render::drawText(int x, int y, const char *text, int size, int color, int alignment) {
+    int16_t x1, y1;
+    uint16_t w, h;
+
     setFont(size);
     display->setTextColor(color);
-    display->setCursor(x, y);
+    display->getTextBounds(text, x, y, &x1, &y1, &w, &h);
+
+    switch (alignment)
+    {
+        case NO_ALIGNMENT:
+            display->setCursor(x, y);
+            break;
+        case LEFT_ALIGNMENT:
+            display->setCursor(0, y);
+            break;
+        case RIGHT_ALIGNMENT:
+            display->setCursor(display->width() - w - x1, y);
+            break;
+        case CENTER_ALIGNMENT:
+            display->setCursor(display->width() / 2 - ((w + x1) / 2), y);
+            break;
+        default:
+            break;
+    }
+
     display->print(text);
 }
 
 void Render::setFont(int size) {
     if(currentFontSize != size) {
-        const GFXfont *font = &FreeMonoBold24pt7b;
+        const GFXfont *font = &DVUS24pt7b;
 
-        if(size == 9) { font = &FreeMonoBold9pt7b; }
-        else if(size == 12) { font = &FreeMonoBold12pt7b; }
-        else if(size == 18) { font = &FreeMonoBold18pt7b; }
-        else if(size == 24) { font = &FreeMonoBold24pt7b; }
+        if(size == 9) { font = &DVUS9pt7b; }
+        else if(size == 12) { font = &DVUS12pt7b; }
+        else if(size == 18) { font = &DVUS18pt7b; }
+        else if(size == 24) { font = &DVUS24pt7b; }
 
         display->setFont(font);
 

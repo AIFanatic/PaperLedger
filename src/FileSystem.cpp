@@ -113,3 +113,12 @@ bool FileSystem::deleteFile(fs::FS &fs, const char * path) {
     
     return false;
 }
+
+// There is a bug with fs.exists so it needs to be handled like this
+// https://github.com/espressif/arduino-esp32/issues/1264
+bool FileSystem::exists(fs::FS &fs, const char * path) {
+    File f = fs.open(path, "r");
+    return (f == true) && !f.isDirectory();
+    
+    //return fs.exists(path);
+}

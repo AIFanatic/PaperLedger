@@ -3,6 +3,7 @@
 const ENDPOINT_URL = "http://192.168.8.100";
 
 const CONTENT_NETWORK = ".main > .content > .network";
+const CONTENT_TICKERS = ".main > .content > .tickers";
 
 const NAV_BUTTON = ".nav-button";
 const HEADER_TITLE = ".main > .header > .title";
@@ -10,6 +11,11 @@ const HEADER_TITLE_RIGHT = ".main > .header > .right";
 
 const BTN_NETWORK_DISCONNECT = ".btn-network-disconnect";
 const BTN_NETWORK_CONNECT = ".btn-network-connect";
+
+const BTN_TICKER_ADD = ".btn-ticker-add";
+const BTN_TICKER_REMOVE = ".btn-ticker-remove";
+const BTN_TICKER_UP = ".btn-ticker-up";
+const BTN_TICKER_DOWN = ".btn-ticker-down";
 
 const EVENTS = {
     MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
@@ -110,10 +116,8 @@ $(document).ready(function() {
             return;
         }
 
-        console.log(password);
-
         $.post(ENDPOINT_URL + "/data/wifi/connect", {ssid: ssid, password: password}, (response) => {
-            // showWifiNetworks();
+            showWifiNetworks();
         });
     });
 
@@ -130,6 +134,85 @@ $(document).ready(function() {
             $(HEADER_TITLE).html("Network");
             $(HEADER_TITLE_RIGHT).html('Searching <i class="fas fa-circle-notch fa-spin"></i>');
             showWifiNetworks();
+        }
+    });
+});
+
+
+// function boxButton(classes, data, icon) {
+//     return $('<a class="button ' + classes + '" ' + data + '" href="#"><i class="' + icon + '"></i></a>');
+// }
+
+$(document).ready(function() {
+    function showTickers() {
+        $(CONTENT_TICKERS).html("");
+
+        $.getJSON(ENDPOINT_URL + "/data/tickers/list", (response) => {
+            if(response["status"] == "ok") {
+                const tickers = response["message"];
+            
+                for(ticker of tickers) {
+                    console.log(ticker);
+
+                    var newBox = $('<div class="box"></div>');
+                    newBox.text(ticker["coin"] + " - " + ticker["currency"]);
+
+                    const deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-trash"></i></a>');
+                    const moveUpButton = $('<a class="button light-blue btn-ticker-up" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-arrow-up"></i></a>');
+                    const moveDownButton = $('<a class="button light-blue btn-ticker-down" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-arrow-down"></i></a>');
+
+                    newBox.append(deleteButton);
+                    newBox.append(moveUpButton);
+                    newBox.append(moveDownButton);
+
+                    $(CONTENT_TICKERS).append(newBox);
+                }
+
+                var addNewBox = $('<div class="box"></div>');
+                // addNewBox.html('<select class="dropdown dark-blue-bg"><option value="volvo">Volvo</option><option value="audi">Audi</option></select>');
+                const addNewButton = $('<a class="button dark-blue green-bg btn-ticker-add" href="#"><i class="fas fa-plus"></i></a>');
+
+                addNewBox.append(addNewButton);
+
+                $(CONTENT_TICKERS).append(addNewBox);
+
+                $(HEADER_TITLE_RIGHT).html('You have ' + tickers.length + " ticker(s)");
+            }
+        });
+    }
+
+    $(document).on("click", BTN_TICKER_REMOVE, function() {
+        const coin = $(this).attr("data-coin");
+        const currency = $(this).attr("data-currency");
+
+        $.post(ENDPOINT_URL + "/data/tickers/remove", {coin: coin, currency: currency}, (response) => {
+            showTickers();
+        });
+    });
+
+    $(document).on("click", BTN_TICKER_ADD, function() {
+        const coin = prompt("Please enter the name of the coin (eg: Bitcoin)", "");
+        if (coin == null || coin == "") {
+            alert("Invalid coin name");
+            return;
+        }
+
+        const currency = prompt("Please enter the name of the currency (eg: USD)", "");
+        if (currency == null || currency == "") {
+            alert("Invalid currency");
+            return;
+        }
+
+        $.post(ENDPOINT_URL + "/data/tickers/add", {coin: coin, currency: currency}, (response) => {
+            showTickers();
+        });
+    });
+
+    document.addEventListener('MENU_CHANGED', (event) => {
+        if(event.detail.menu == "tickers") {
+            $(HEADER_TITLE).html("Tickers");
+            $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+            showTickers();
         }
     });
 });

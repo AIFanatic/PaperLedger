@@ -1,0 +1,103 @@
+[
+  {
+    "type": "fill",
+    "color": 1
+  },
+
+  
+
+  
+    {
+    "type": "circle",
+    "x": 90,
+    "y": 64,
+    "r": 120,
+    "filled": 1,
+    "color": 0
+  },
+  
+    {
+    "type": "text",
+    "x": 10,
+    "y": 60,
+    "text": "Ethereum",
+    "size": 18,
+    "align": 0,
+    "color": 1
+  },
+  
+  
+   {
+    "type": "text",
+    "x": 10,
+    "y": 110,
+    "text": "3800.29 AUD",
+    "size": 12,
+    "align": 0,
+    "color": 1
+  },
+  
+  
+     {
+    "type": "text",
+    "x": 15,
+    "y": 30,
+    "text": "$1.34B",
+    "size": 9,
+    "align": 2,
+    "color": 0
+  },
+  
+ 
+]
+
+
+
+
+
+
+
+
+
+
+[
+  {
+    "type": "fill",
+    "color": 1
+  },
+
+  
+
+  
+    {
+    "type": "rectangle",
+    "x": 0,
+    "y": 0,
+    "w": 296,
+    "h": 50,
+    "filled": 1,
+    "color": 0
+  },
+  
+    {
+    "type": "text",
+    "x": 10,
+    "y": 35,
+    "text": "Ethereum",
+    "size": 18,
+    "align": 3,
+    "color": 1
+  },
+  
+  
+   {
+    "type": "text",
+    "x": 10,
+    "y": 100,
+    "text": "3800.29 AUD",
+    "size": 18,
+    "align": 3,
+    "color": 0
+  }
+ 
+]

@@ -33,3 +33,6 @@ enum DISPLAYS {
 #define AP_IP "192.168.1.1"
 
 #define URL_IM_ALIVE "https://api.ipify.org/"
+#define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true"
+
+#define TICKER_UPDATE_FREQUENCY 10
