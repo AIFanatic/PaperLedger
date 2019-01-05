@@ -42,7 +42,13 @@ void LayoutSetup::okButtonClicked() {
 
     if(strcmp(active, "TICKERS") == 0) {
         // showMenu(TICKERS_MENU, SIZEOFARRAY(TICKERS_MENU));
-        manager->networkManager->connectNetwork();
+        manager->tickers->reset();
+    }
+    else if(strcmp(active, "CUSTOMIZE") == 0) {
+        // manager->tickers->reset();
+        manager->tickers->updatePrices();
+
+        // Serial.println(ret);
     }
     else if(strcmp(active, "ADD_TICKER") == 0) {
         getTickers();

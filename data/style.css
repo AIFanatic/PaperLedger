@@ -120,10 +120,23 @@ li {
     margin-left: 10px;
 }
 
+.box > .dropdown {
+    color: white;
+    border: none;
+    height: 60px;
+    font-size: 20px;
+    outline: none;
+    font-family: dejavu_sansbook_extraligh;
+}
+
 /* COLORS */
 
 .dark-blue-bg {
     background: #18344d;
+}
+
+.light-blue-bg {
+    background: #52c6f6;
 }
 
 .green-bg {
@@ -140,6 +153,10 @@ li {
 
 .dark-blue {
     color: #18344d;
+}
+
+.light-blue {
+    color: #52c6f6;
 }
 
 .green {

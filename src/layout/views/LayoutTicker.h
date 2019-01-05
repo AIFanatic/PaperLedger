@@ -16,6 +16,15 @@ class LayoutTicker: public LayoutBase {
         void leftButtonClicked();
         void rightButtonClicked();
         void okButtonClicked();
+
+        void showTicker();
+
+        long lastScreenUpdate = 0;
+
+        // TODO: Should be in settings
+        long lastTickersUpdate = 0;
+
+        int currentTicker = 0;
 };
 
 #endif

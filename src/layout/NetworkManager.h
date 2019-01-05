@@ -36,6 +36,9 @@ class NetworkManager {
         void requestWifiList(AsyncWebServerRequest *request);
         void requestWifiConnect(AsyncWebServerRequest *request);
         void requestWifiDisconnect(AsyncWebServerRequest *request);
+        void requestTickers(AsyncWebServerRequest *request);
+        void requestAddTickers(AsyncWebServerRequest *request);
+        void requestRemoveTickers(AsyncWebServerRequest *request);
         void requestNotFound(AsyncWebServerRequest *request);
 
         void begin();

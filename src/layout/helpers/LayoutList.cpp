@@ -95,7 +95,7 @@ void LayoutList::draw() {
             textColor = !color;
         }
 
-        render->drawText(x + textMargin , currentHeight, rows[i][TEXT], fontSize, textColor, w);
+        render->drawText(x + textMargin , currentHeight, rows[i][TEXT], fontSize, textColor);
 
         currentHeight += textHeight;
     }

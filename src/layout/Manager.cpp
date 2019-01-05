@@ -8,6 +8,7 @@ Manager::Manager() {
     filesystem = new FileSystem();
     networkManager = new NetworkManager(this);
     settings = new Settings(this);
+    tickers = new Tickers(this);
 
     render->clearScreen();
 
@@ -63,4 +64,5 @@ void Manager::update() {
 
 void Manager::reset() {
     settings->reset();
+    tickers->reset();
 }
