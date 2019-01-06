@@ -1,28 +1,11 @@
-#include "settings.h"
-
 #include "./layout/Manager.h"
-// #include "./RequestManager.h"
-
-// #include "./layout/helpers/LayoutList.h"
-
-// #include <WiFi.h>
-// #include <AsyncTCP.h>
-// #include <ESPAsyncWebServer.h>
-// #include <ESPmDNS.h>
-
-// #include "esp_wifi.h"
-// #include "Esp.h"
 
 Manager *manager;
 
 void setup() {
     // put your setup code here, to run once:
     Serial.begin(115200);
-
-    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
    
-    // Render *render = new Render();
-
     manager = new Manager();
     manager->show(0);
 

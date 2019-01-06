@@ -24,29 +24,22 @@ class LayoutSetup: public LayoutBase {
         void rightButtonClicked();
         void okButtonClicked();
 
-        void getTickers();
-
         LayoutList *menuList;
 
-        // {TEXT, IDENTIFIER}
-        const char *MAIN_MENU[5][2] = 
+        const char *MAIN_MENU[3][2] = 
         {
-            {"Tickers", "TICKERS"}, 
-            {"Customize", "CUSTOMIZE"},
             {"Network", "NETWORK"},
             {"Reset", "RESET"},
             {"Back", "BACK"},
         };
 
-        const char *TICKERS_MENU[3][2] = 
+        const char *RESET_MENU[4][2] = 
         {
-            {"Add ticker", "ADD_TICKER"}, 
-            {"Remove ticker", "REMOVE_TICKER"},
-            {"Back", "BACK_TICKER"}    
+            {"Reset tickers", "RESET_TICKERS"},
+            {"Reset settings", "RESET_SETTINGS"}, 
+            {"Factory reset", "RESET_FACTORY"},
+            {"Back", "RESET_BACK"}    
         };
-
-        int tickersCurrentPage = 1;
-
 };
 
 #endif

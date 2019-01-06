@@ -5,27 +5,17 @@
 Settings::Settings(Manager *_manager) {
     manager = _manager;
 
-    File settings;
-    manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
+    bool settingsExist = manager->filesystem->exists(SPIFFS, FILE_SETTINGS);
 
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& settingsJson = jsonBuffer.parse(settings);
-    settings.close();
+    if(!settingsExist) {
+        bool wroteSettings = manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, DEFAULT_SETTINGS);
 
-    bool validSSID = settingsJson["ssid"].is<const char *>();
-    bool validPassword = settingsJson["password"].is<const char *>();
-    
-    if(!validSSID || !validPassword) {
-        Serial.print("Settings.json is not valid");
-
-        settingsJson["ssid"] = "";
-        settingsJson["password"] = "";
-
-        String settingsStr;
-        settingsJson.printTo(settingsStr);
-        manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, settingsStr.c_str());
-
-        Serial.print("Created settings.json");
+        if(!wroteSettings) {
+            Serial.println("Unable to create settings.json");    
+        }
+        else {
+            Serial.println("Created settings.json");
+        }
     }
 };
 
@@ -62,4 +52,5 @@ bool Settings::set(const char *name, const char *value) {
 
 void Settings::reset() {
     manager->filesystem->deleteFile(SPIFFS, FILE_SETTINGS);
+    manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, DEFAULT_SETTINGS);
 }

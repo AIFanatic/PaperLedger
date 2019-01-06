@@ -2,8 +2,12 @@
 
 LayoutTicker::LayoutTicker(Manager *_manager): LayoutBase(_manager) {
     showTicker();
+
+    // Init
+    updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+    scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
+
     lastScreenUpdate = millis();
-    // TODO: Remove as it will be stored in settings
     lastTickersUpdate = millis();
 };
 
@@ -53,13 +57,13 @@ void LayoutTicker::update() {
 
     unsigned long currentTime = millis();
 
-    if((currentTime - lastScreenUpdate) / 1000 > TICKER_UPDATE_FREQUENCY) {
+    if((currentTime - lastScreenUpdate) / 1000 > scrollFrequency) {
         currentTicker++;
         lastScreenUpdate = currentTime;
         showTicker();
     }
 
-    if((currentTime - lastTickersUpdate) / 1000 > 60) {
+    if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {
         manager->tickers->updatePrices();
         lastTickersUpdate = currentTime;
     }

@@ -5,6 +5,8 @@
 
 NetworkManager::NetworkManager(Manager *_manager) {
     manager = _manager;
+
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
 };
 
 NetworkManager::~NetworkManager() {

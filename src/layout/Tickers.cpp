@@ -10,12 +10,7 @@ Tickers::Tickers(Manager *_manager) {
     if(!tickersFileExists) {
         Serial.print("Tickers.json is not valid, creating...");
 
-        DynamicJsonBuffer jsonBuffer;
-        JsonArray& tickersArray = jsonBuffer.parse(FILE_TICKERS);
-
-        String str;
-        tickersArray.printTo(str);
-        manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
+        manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, "[]");
     }
 };
 
@@ -111,6 +106,7 @@ bool Tickers::remove(int index) {
 
 void Tickers::reset() {
     manager->filesystem->deleteFile(SPIFFS, FILE_TICKERS);
+    manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, "[]");
 }
 
 String Tickers::getTickerData(const char *coins, const char *currencies) {
