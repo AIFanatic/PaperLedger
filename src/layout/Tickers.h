@@ -17,6 +17,7 @@ class Tickers {
         bool remove(const char *coin, const char *currency);
         bool remove(int index);
         int getIndexOf(const char *coin, const char *currency);
+        bool changeOrder(int from, int to);
 
         String getTickerData(const char *coins, const char *currencies);
 
