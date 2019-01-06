@@ -40,65 +40,25 @@ void LayoutSetup::okButtonClicked() {
     Serial.print(active);
     Serial.println(" clicked");
 
-    if(strcmp(active, "TICKERS") == 0) {
-        // showMenu(TICKERS_MENU, SIZEOFARRAY(TICKERS_MENU));
-        manager->tickers->reset();
-    }
-    else if(strcmp(active, "CUSTOMIZE") == 0) {
-        // manager->tickers->reset();
-        manager->tickers->updatePrices();
-
-        // Serial.println(ret);
-    }
-    else if(strcmp(active, "ADD_TICKER") == 0) {
-        getTickers();
-    }
-    else if(strcmp(active, "BACK_TICKER") == 0) {
-        showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
+    if(strcmp(active, "NETWORK") == 0) {
     }
     else if(strcmp(active, "RESET") == 0) {
-        Serial.print("I should reset!!");
-        manager->reset();
+        showMenu(RESET_MENU, SIZEOFARRAY(RESET_MENU));
+    }
+    else if(strcmp(active, "RESET_TICKERS") == 0) {
+        manager->tickers->reset();
+    }
+    else if(strcmp(active, "RESET_SETTINGS") == 0) {
+        manager->settings->reset();
+    }
+    else if(strcmp(active, "RESET_FACTORY") == 0) {
+        manager->tickers->reset();
+        manager->settings->reset();
+    }
+    else if(strcmp(active, "RESET_BACK") == 0) {
+        showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
     else if(strcmp(active, "BACK") == 0) {
         manager->show(LAYOUT_TICKER);
-    }
-    else if(strcmp(active, "COIN_MORE") == 0) {
-        tickersCurrentPage++;
-        getTickers();
-    }
-};
-
-void LayoutSetup::getTickers() {
-    HTTPClient http;
-    String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=5&page=";
-    url.concat(tickersCurrentPage);
-
-    http.begin(url); //Specify the URL
-    int httpCode = http.GET();
-
-    if (httpCode > 0) { //Check for the returning code
-        String payload = http.getString();
-
-        DynamicJsonBuffer jsonBuffer;
-        JsonArray& tickers = jsonBuffer.parseArray(payload);
-
-        const char *coinsList[tickers.size() + 1][2];
-
-        for(int i = 0; i < tickers.size(); i++) {
-            String params = tickers[i];
-            JsonObject& obj = jsonBuffer.parseObject( params );
-
-            coinsList[i][0] = obj["name"];
-            coinsList[i][1] = "COIN";
-        }
-
-        coinsList[tickers.size()][0] = "More";
-        coinsList[tickers.size()][1] = "COIN_MORE";
-
-        showMenu(coinsList, SIZEOFARRAY(coinsList));
-    }
-    else {
-        Serial.println("Error on HTTP request");
     }
 };

@@ -7,7 +7,7 @@
 #include "./Settings.h"
 #include "./Tickers.h"
 
-#include "../menus.h"
+#include "../variables.h"
 
 class Manager {
     public:
@@ -17,8 +17,6 @@ class Manager {
         void update();
 
         void show(int index);
-
-        void reset();
 
         Render *render;
         FileSystem *filesystem;

@@ -57,12 +57,7 @@ void Manager::update() {
 
     networkManager->update();
 
-    if(!networkManager->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED) {
+    if(!networkManager->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED && currentIndex != LAYOUT_SETUP) {
         show(LAYOUT_DISCONNECTED);
     }
-}
-
-void Manager::reset() {
-    settings->reset();
-    tickers->reset();
 }

@@ -19,12 +19,13 @@ class LayoutTicker: public LayoutBase {
 
         void showTicker();
 
-        long lastScreenUpdate = 0;
+        int currentTicker = 0;
 
-        // TODO: Should be in settings
+        long lastScreenUpdate = 0;
         long lastTickersUpdate = 0;
 
-        int currentTicker = 0;
+        int updateFrequency = 0;
+        int scrollFrequency = 0;
 };
 
 #endif
