@@ -6,6 +6,8 @@ const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
 
 const NAV_BUTTON = ".nav-button";
+const NAV_OPEN_BUTTON = ".nav-open-button";
+
 const HEADER_TITLE = ".main > .header > .title";
 const HEADER_TITLE_RIGHT = ".main > .header > .right";
 
@@ -14,8 +16,6 @@ const BTN_NETWORK_CONNECT = ".btn-network-connect";
 
 const BTN_TICKER_ADD = ".btn-ticker-add";
 const BTN_TICKER_REMOVE = ".btn-ticker-remove";
-const BTN_TICKER_UP = ".btn-ticker-up";
-const BTN_TICKER_DOWN = ".btn-ticker-down";
 
 const EVENTS = {
     MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
@@ -45,9 +45,20 @@ $(document).ready(function() {
     $(document).on("click", NAV_BUTTON, function() {
         const menu = $(this).attr("data-menu");
 
-        console.log(menu)
-
         showMenu(menu);
+    });
+
+    var menuIsOpen = false;
+
+    $(document).on("click", NAV_OPEN_BUTTON, function() {
+        if(menuIsOpen) {
+            $(".grid-container").css("grid-template-columns", "0px 1.8fr");
+        }
+        else {
+            $(".grid-container").css("grid-template-columns", "100px 1.8fr");
+        }
+
+        menuIsOpen = !menuIsOpen;
     });
 });
 
@@ -77,8 +88,6 @@ $(document).ready(function() {
                         const networks = response["message"];
             
                         for(network of networks) {
-                            console.log(network);
-
                             var newNetwork = $('<div class="box"></div>');
                             newNetwork.text(network["ssid"]);
 
@@ -152,23 +161,17 @@ $(document).ready(function() {
                 const tickers = response["message"];
             
                 for(ticker of tickers) {
-                    console.log(ticker);
-
                     var newBox = $('<div class="box"></div>');
                     newBox.text(ticker["coin"] + " - " + ticker["currency"]);
 
                     const deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-trash"></i></a>');
-                    const moveUpButton = $('<a class="button light-blue btn-ticker-up" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-arrow-up"></i></a>');
-                    const moveDownButton = $('<a class="button light-blue btn-ticker-down" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-arrow-down"></i></a>');
 
                     newBox.append(deleteButton);
-                    newBox.append(moveUpButton);
-                    newBox.append(moveDownButton);
 
                     $(CONTENT_TICKERS).append(newBox);
                 }
 
-                var addNewBox = $('<div class="box"></div>');
+                var addNewBox = $('<div class="box non-sortable"></div>');
                 // addNewBox.html('<select class="dropdown dark-blue-bg"><option value="volvo">Volvo</option><option value="audi">Audi</option></select>');
                 const addNewButton = $('<a class="button dark-blue green-bg btn-ticker-add" href="#"><i class="fas fa-plus"></i></a>');
 
@@ -215,4 +218,23 @@ $(document).ready(function() {
             showTickers();
         }
     });
+
+    $('.tickers').sortable({
+        items: ".box:not(.non-sortable)",
+        start: function(event, ui) {
+            $(this).attr('data-previndex', ui.item.index());
+        },
+        update: function(event, ui) {
+            var from = $(this).attr('data-previndex');
+            var to = ui.item.index();
+
+            $(this).removeAttr('data-previndex');
+                       
+            $.post(ENDPOINT_URL + "/data/tickers/order", {from: from, to: to}, (response) => {
+                console.log(response);
+            });
+        }
+    });
+
+    $(".tickers" ).disableSelection();
 });

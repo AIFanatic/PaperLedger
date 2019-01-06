@@ -160,3 +160,30 @@ bool Tickers::updatePrices() {
     tickersArray.printTo(str);
     manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
 }
+
+bool Tickers::changeOrder(int from, int to) {
+    File tickersFile;
+    DynamicJsonBuffer jsonBuffer;
+
+    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
+    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
+
+    tickersFile.close();
+
+    if(!tickersArray[from].is<JsonObject>() || !tickersArray[to].is<JsonObject>()) {
+        return false;
+    }
+
+    DynamicJsonBuffer tempBuffer;
+    String fromTempStr = tickersArray[from];
+    JsonObject& fromTemp = tempBuffer.parse(fromTempStr);
+
+    tickersArray[from] = tickersArray[to];
+    tickersArray[to] = fromTemp;
+
+    String str;
+    tickersArray.printTo(str);
+    manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
+
+    return true;
+}

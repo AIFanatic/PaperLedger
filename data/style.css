@@ -19,6 +19,7 @@ html, body, .grid-container {
     margin: 0;
     color: white;
     font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
 }
 
 .grid-container {
@@ -88,8 +89,8 @@ li {
     color: #52c6f6;
     width: 100%;
     display: block;
-    font-size: 25px;
-
+    font-size: 1.6em;
+    
     transition: background 0.2s linear,
     color 0.2s linear;
 
@@ -98,6 +99,16 @@ li {
 .nav li a:hover {
     color: #222;
     background-color: #52c6f6;
+}
+
+.nav-open-button {
+    color: white;
+    vertical-align: middle;
+    display: table-cell;
+    padding-left: 20px;
+    font-size: 1.6em;
+
+    display: none;
 }
 
 .box {
@@ -109,13 +120,13 @@ li {
 
     margin-bottom: 20px;
 
-    font-size: 20px;
+    font-size: 1.2em;
 }
 
 .box > .button {
     width: 60px;
     text-align: center;
-    font-size: 35px;
+    font-size: 1.6em;
     float: right;
     margin-left: 10px;
 }
@@ -169,4 +180,23 @@ li {
 
 .yellow {
     color: #f4aa4d;
+}
+
+
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+    
+    .grid-container {
+        display: grid;
+        grid-template-columns: 0px 1.8fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "nav main";
+    }
+
+    .nav-open-button {
+        display: table-cell;
+    }
 }

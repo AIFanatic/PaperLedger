@@ -13,15 +13,11 @@ NetworkManager::~NetworkManager() {
 };
 
 void NetworkManager::requestNotFound(AsyncWebServerRequest *request) {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& response = jsonBuffer.createObject();
+    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Endpoint not found\"}");
+};
 
-    response["status"] = "error";
-    response["message"] = "Endpoint not found";
-    
-    String jsonStr;
-    response.printTo(jsonStr);
-    request->send(200, "application/json", jsonStr);
+void NetworkManager::requestInvalid(AsyncWebServerRequest *request) {
+    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
 };
 
 void NetworkManager::requestWifiStatus(AsyncWebServerRequest *request) {
@@ -69,7 +65,7 @@ void NetworkManager::requestWifiList(AsyncWebServerRequest *request) {
 
 void NetworkManager::requestWifiConnect(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
@@ -80,7 +76,7 @@ void NetworkManager::requestWifiConnect(AsyncWebServerRequest *request) {
     String password_value = request->getParam(1)->value();
 
     if(!ssid_name.equals("ssid") || !password_name.equals("password")) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
@@ -116,7 +112,7 @@ void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
 
 void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
@@ -127,7 +123,7 @@ void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
     String currency_value = request->getParam(1)->value();
 
     if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
@@ -145,7 +141,7 @@ void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
 
 void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
@@ -156,13 +152,40 @@ void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
     String currency_value = request->getParam(1)->value();
 
     if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+        requestInvalid(request);
         return;
     }
 
     manager->tickers->remove(coin_value.c_str(), currency_value.c_str());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
+};
+
+void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        requestInvalid(request);
+        return;
+    }
+
+    String from_name = request->getParam(0)->name();
+    String from_value = request->getParam(0)->value();
+
+    String to_name = request->getParam(1)->name();
+    String to_value = request->getParam(1)->value();
+
+    if(!from_name.equals("from") || !to_name.equals("to")) {
+        requestInvalid(request);
+        return;
+    }
+
+    bool changedOrder = manager->tickers->changeOrder(from_value.toInt(), to_value.toInt());
+
+    if(!changedOrder) {
+        requestInvalid(request);
+        return;
+    }
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
 };
 
 void NetworkManager::reset() {
@@ -179,7 +202,7 @@ void NetworkManager::begin() {
 
     server.on("/display/draw", HTTP_POST, [this](AsyncWebServerRequest *request) {
         if(request->params() == 0) {
-            request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+            requestInvalid(request);
             return;
         }
 
@@ -214,6 +237,10 @@ void NetworkManager::begin() {
 
     server.on("/data/tickers/add", HTTP_POST, [this](AsyncWebServerRequest *request) {
         requestAddTickers(request);
+    });
+    
+    server.on("/data/tickers/order", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestOrderTickers(request);
     });
 
     server.on("/data/tickers/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
