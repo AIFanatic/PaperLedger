@@ -39,7 +39,7 @@ html, body, .grid-container {
   background: #214263;
 }
 
-.main .content {
+.main > .content {
     padding: 20px;
 }
 
@@ -93,12 +93,17 @@ li {
     
     transition: background 0.2s linear,
     color 0.2s linear;
-
 }
 
 .nav li a:hover {
     color: #222;
     background-color: #52c6f6;
+}
+
+.nav li a.disabled {
+    cursor: inherit;
+    color: #222 !important;
+    background: transparent !important;
 }
 
 .nav-open-button {
@@ -183,7 +188,7 @@ li {
 }
 
 
-
+/* RESPONSIVE */
 @media (max-width: 768px) {
     body {
         font-size: 0.9em;
@@ -199,4 +204,94 @@ li {
     .nav-open-button {
         display: table-cell;
     }
+}
+
+
+
+
+  /* DASHBOARD */
+
+  .dashboard > .grid {
+    /* Grid Fallback */
+    display: flex;
+    flex-wrap: wrap;
+    
+    /* Supports Grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+    grid-gap: 1em;
+  }
+  
+  .dashboard > .grid > .col {
+    background: #18344d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex: 280px;
+  }
+
+  .dashboard > .grid > .col > i {
+    font-size: 5em;
+    margin-right: 1em;
+    margin-left: 1em;
+  }
+  
+  /* If Grid is supported, remove the margin we set for the fallback */
+  @supports (display: grid) {
+    .module {
+      margin: 0;
+    }
+  }
+
+/* CUSTOMIZE */
+.customize {
+    width: 100%;
+    min-height: 100%;
+    background: #18344d;
+}
+
+.customize > .drawer {
+    display: block;
+    /* width: 500px;
+    min-height: 500px; */
+    background: white;
+}
+
+.rectangle {
+    border: 1px solid #FF0000;
+    position: absolute;
+}
+
+/* WELCOME */
+.dashboard {
+    min-height: 250px;
+    background: #18344d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 20px;
+}
+
+.dashboard > .content a {
+    text-decoration: none;
+    color: #52c6f6;
+    display: block;
+    font-size: 1.5em;
+    
+    transition: background 0.2s linear,
+    color 0.2s linear;
+}
+
+.dashboard > .content a:hover {
+    color: #969696;
+}
+
+.dashboard > .content .title {
+    padding-bottom: 30px;
 }

@@ -11,9 +11,10 @@
                 <div class="nav">
                     <ul>
                         <li><a href="#" class="nav-button" data-menu="dashboard"><i class="fas fa-tachometer-alt"></i></a></li>
+                        <li><a href="#" class="nav-button" data-menu="customize"><i class="fas fa-paint-brush"></i></a></li>
+                        <li><a href="#" class="nav-button" data-menu="tickers"><i class="fas fa-chart-line"></i></a></li>
                         <li><a href="#" class="nav-button" data-menu="network"><i class="fas fa-wifi"></i></a></li>
-                        <li><a href="#" class="nav-button disabled" data-menu="tickers"><i class="fas fa-chart-line"></i></a></li>
-                        <li><a href="#" class="nav-button disabled" data-menu="setup"><i class="fas fa-cogs"></i></a></li>
+                        <li><a href="#" class="nav-button" data-menu="settings"><i class="fas fa-cogs"></i></a></li>
                     </ul>
                 </div>
                 <div class="main">
@@ -24,23 +25,36 @@
                         <h2 class="right"></h2>
                     </div>
                     <div class="content">
+                        
                         <div class="dashboard">
-                            <div class="content">
-                                <h1 class="title">Welcome to inkCrypto</h1>
-                                <div class="sub-content" style="display: none;">
-                                    <h2>It seems that your device cannot reach the Internet.</h2>
-                                    <a class="nav-button" data-menu="network" href="#">Setup Network</a>
+                            <div class="grid">
+                                <div class="col network">
+                                    <h1>Network</h1>
+                                </div>
+                                <div class="col stats">
+                                    <h1>Stats</h1>
+                                </div>
+                                <div class="col configs">
+                                    <h1>Configs</h1>
+                                </div>
+                                <div class="col layout">
+                                    <h1>Layout</h1>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="customize" style="display: none">
+                            <canvas width="592" height="256" class="drawer"></canvas>
+                        </div>
                         <div class="tickers" style="display: none"></div>
                         <div class="network" style="display: none"></div>
-                        <div class="setup" style="display: none"></div>
                     </div>
                 </div>
             </div>
         <script src="jquery.min.js"></script>
         <script src="main.js"></script>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 
         <script src="jquery-ui.min.js"></script>
 
