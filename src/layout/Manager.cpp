@@ -22,9 +22,9 @@ Manager::~Manager() {
 void Manager::show(int index) {
     isInitializingLayout = true;
 
-    if(currentLayout) {
-        currentLayout = nullptr;
-    }
+    // if(currentLayout) {
+    //     currentLayout = nullptr;
+    // }
 
     if(index == LAYOUT_TICKER) {
         currentLayout = new LayoutTicker(this);
@@ -33,7 +33,7 @@ void Manager::show(int index) {
         currentLayout = new LayoutSetup(this);
     }
     else if(index == LAYOUT_DISCONNECTED) {
-        currentLayout = new LayoutDisconnected(this);
+        currentLayout = new LayoutDisconnected(this, currentIndex);
     }
 
     currentIndex = index;

@@ -119,8 +119,8 @@ String Tickers::getTickerData(const char *coins, const char *currencies) {
     return manager->networkManager->get(url);
 }
 
-bool Tickers::updatePrices() {
-    Serial.println("Updating prices");
+bool Tickers::updateTickers() {
+    Serial.println("Updating tickers");
 
     File tickersFile;
     DynamicJsonBuffer jsonBuffer;

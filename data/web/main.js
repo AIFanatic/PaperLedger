@@ -1,12 +1,15 @@
-const ENDPOINT_URL = "";
+// const ENDPOINT_URL = "";
 // const ENDPOINT_URL = "http://192.168.1.1";
-// const ENDPOINT_URL = "http://192.168.8.100";
+const ENDPOINT_URL = "http://192.168.8.100";
+const ENDPOINT_TICKERS = "https://api.coingecko.com/api/v3";
 
+const CONTENT_DASHBOARD = ".main > .content > .dashboard";
 const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
 const CONTENT_SETUP = ".main > .content > .setup";
 
-const DASHBOARD_SUBCONTENT = ".dashboard > .content > .sub-content";
+const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .sub-content";
+const SUBCONTENT_TICKERS = CONTENT_TICKERS + " > .sub-content";
 
 const NAV_BUTTON = ".nav-button";
 const NAV_OPEN_BUTTON = ".nav-open-button";
@@ -19,6 +22,12 @@ const BTN_NETWORK_CONNECT = ".btn-network-connect";
 
 const BTN_TICKER_ADD = ".btn-ticker-add";
 const BTN_TICKER_REMOVE = ".btn-ticker-remove";
+
+const INPUT_TICKERS_COIN = ".tickers .input-coin";
+const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
+
+const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: []});
+const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: []});
 
 const EVENTS = {
     MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
@@ -156,8 +165,27 @@ $(document).ready(function() {
 
 /* TICKERS */
 $(document).ready(function() {
+    function getTickers() {
+        if(LIST_TICKERS_COINS[0].options.choices.length == 0) {
+            console.log("loaded")
+            $.getJSON(ENDPOINT_TICKERS + "/coins/list", (response) => {
+                for(coin of response) {
+                    LIST_TICKERS_COINS[0].options.choices.push({text: coin["name"], value: coin["id"]});
+                }
+            });
+        }
+
+        if(LIST_TICKERS_CURRENCIES[0].options.choices.length == 0) {
+            $.getJSON(ENDPOINT_TICKERS + "/simple/supported_vs_currencies", (response) => {
+                for(currency of response) {
+                    LIST_TICKERS_CURRENCIES[0].options.choices.push({text: currency.toUpperCase(), value: currency.toUpperCase()});
+                }
+            });
+        }
+    }
+
     function showTickers() {
-        $(CONTENT_TICKERS).html("");
+        $(SUBCONTENT_TICKERS).html("");
 
         $.getJSON(ENDPOINT_URL + "/data/tickers/list", (response) => {
             if(response["status"] == "ok") {
@@ -171,16 +199,8 @@ $(document).ready(function() {
 
                     newBox.append(deleteButton);
 
-                    $(CONTENT_TICKERS).append(newBox);
+                    $(SUBCONTENT_TICKERS).append(newBox);
                 }
-
-                var addNewBox = $('<div class="box non-sortable"></div>');
-                // addNewBox.html('<select class="dropdown dark-blue-bg"><option value="volvo">Volvo</option><option value="audi">Audi</option></select>');
-                const addNewButton = $('<a class="button dark-blue green-bg btn-ticker-add" href="#"><i class="fas fa-plus"></i></a>');
-
-                addNewBox.append(addNewButton);
-
-                $(CONTENT_TICKERS).append(addNewBox);
 
                 $(HEADER_TITLE_RIGHT).html('You have ' + tickers.length + " ticker(s)");
             }
@@ -197,17 +217,13 @@ $(document).ready(function() {
     });
 
     $(document).on("click", BTN_TICKER_ADD, function() {
-        const coin = prompt("Please enter the name of the coin (eg: Bitcoin)", "");
-        if (coin == null || coin == "") {
-            alert("Invalid coin name");
+        if(coinsList[0].selectedChoice === null || currenciesList[0].selectedChoice === null) {
+            alert("Please select a coin and currency");
             return;
         }
 
-        const currency = prompt("Please enter the name of the currency (eg: USD)", "");
-        if (currency == null || currency == "") {
-            alert("Invalid currency");
-            return;
-        }
+        const coin = coinsList[0].selectedChoice.value;
+        const currency = currenciesList[0].selectedChoice.value
 
         $.post(ENDPOINT_URL + "/data/tickers/add", {coin: coin, currency: currency}, (response) => {
             showTickers();
@@ -218,6 +234,8 @@ $(document).ready(function() {
         if(event.detail.menu == "tickers") {
             $(HEADER_TITLE).html("Tickers");
             $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+
+            getTickers();
             showTickers();
         }
     });
@@ -272,10 +290,31 @@ $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
     if(response["status"] == "ok") {
         const message = response["message"];
         if(!message["internet"]) {
-            $(DASHBOARD_SUBCONTENT).slideDown();
+            $(SUBCONTENT_DASHBOARD).slideDown();
             return;
         }
         
         $( ".nav-button" ).removeClass("disabled");
     }
 });
+
+
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  
+function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}

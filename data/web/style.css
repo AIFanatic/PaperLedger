@@ -70,15 +70,12 @@ html, body, .grid-container {
 
 .nav ul {
     text-align: center;
-}
-
-ul {
     list-style: none;
     float: right;
     margin: 0;
 }
 
-li {
+.nav ul > li {
     margin-bottom: 10px;
     width: 100px;
     line-height: 100px;
@@ -294,4 +291,19 @@ li {
 
 .dashboard > .content .title {
     padding-bottom: 30px;
+}
+
+/* TICKERS */
+.tickers input {
+    font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    /* caret-color: transparent; */
+}
+
+.tickers input:focus {
+    outline: none;
 }

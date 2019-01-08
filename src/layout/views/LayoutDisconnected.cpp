@@ -1,8 +1,6 @@
 #include "LayoutDisconnected.h"
 
-LayoutDisconnected::LayoutDisconnected(Manager *_manager): LayoutBase(_manager) {
-    // manager->render->drawFromJson(reinterpret_cast<const char*>(MENU_MAIN));
-
+LayoutDisconnected::LayoutDisconnected(Manager *_manager, int _prevLayoutIndex): LayoutBase(_manager) {
     manager->render->fillScreen(WHITE);
     manager->render->drawText(35, 40, "No Internet", 18, BLACK);
 
@@ -12,10 +10,14 @@ LayoutDisconnected::LayoutDisconnected(Manager *_manager): LayoutBase(_manager) 
     networkName.concat(AP_NAME);
     networkIP.concat(AP_IP);
 
-    manager->render->drawText(35, 40, "No Internet", 18, BLACK);
-    manager->render->drawText(15, 75, networkName.c_str(), 9, BLACK);
-    manager->render->drawText(15, 100, networkIP.c_str(), 9, BLACK);
+    manager->render->fillScreen(1);
+    manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
+    manager->render->drawText(0, 35, "No Internet", 18, WHITE, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 85, networkName.c_str(), 9, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 110, networkIP.c_str() , 9, BLACK, CENTER_ALIGNMENT);
     manager->render->draw();
+
+    prevLayoutIndex = _prevLayoutIndex;
 };
 
 LayoutDisconnected::~LayoutDisconnected() {
@@ -36,4 +38,8 @@ void LayoutDisconnected::okButtonClicked() {
 
 void LayoutDisconnected::update() {
     LayoutBase::update();
+
+    if(manager->networkManager->hasInternetAccess) {
+        manager->show(prevLayoutIndex);
+    }
 }
