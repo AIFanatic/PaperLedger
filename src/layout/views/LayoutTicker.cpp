@@ -27,8 +27,22 @@ void LayoutTicker::okButtonClicked() {
     manager->show(LAYOUT_SETUP);
 };
 
+void LayoutTicker::showNoTickers() {
+    manager->render->fillScreen(1);
+    manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
+    manager->render->drawText(0, 35, "No tickers", 18, WHITE, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 85, "Manage your tickers in the", 9, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 110, "Web Portal" , 9, BLACK, CENTER_ALIGNMENT);
+    manager->render->draw();
+}
+
 void LayoutTicker::showTicker() {
     JsonArray& tickers = manager->tickers->get();
+
+    if(tickers.size() == 0) {
+        showNoTickers();
+        return;
+    }
 
     if(currentTicker > tickers.size() - 1) {
         currentTicker = 0;
@@ -64,7 +78,7 @@ void LayoutTicker::update() {
     }
 
     if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {
-        manager->tickers->updatePrices();
+        manager->tickers->updateTickers();
         lastTickersUpdate = currentTime;
     }
 }

@@ -7,7 +7,7 @@
 
 class LayoutDisconnected: public LayoutBase {
     public:
-        LayoutDisconnected(Manager *_manager);
+        LayoutDisconnected(Manager *_manager, int _prevLayoutIndex);
         ~LayoutDisconnected(void);
 
         void update();
@@ -16,6 +16,8 @@ class LayoutDisconnected: public LayoutBase {
         void leftButtonClicked();
         void rightButtonClicked();
         void okButtonClicked();
+
+        int prevLayoutIndex;
 };
 
 #endif

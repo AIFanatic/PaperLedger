@@ -18,6 +18,7 @@ class LayoutTicker: public LayoutBase {
         void okButtonClicked();
 
         void showTicker();
+        void showNoTickers();
 
         int currentTicker = 0;
 

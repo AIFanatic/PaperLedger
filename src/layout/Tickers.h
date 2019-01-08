@@ -21,7 +21,7 @@ class Tickers {
 
         String getTickerData(const char *coins, const char *currencies);
 
-        bool updatePrices();
+        bool updateTickers();
 
         void reset();
 

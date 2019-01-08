@@ -341,6 +341,10 @@ String NetworkManager::getWifiIP() {
     return WiFi.localIP().toString();
 }
 
+wifi_mode_t NetworkManager::getWifiMode() {
+    return WiFi.getMode();
+}
+
 
 void NetworkManager::checkInternetAccess() {
     String response = get(URL_IM_ALIVE);

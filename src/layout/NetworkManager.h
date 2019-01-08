@@ -54,6 +54,7 @@ class NetworkManager {
         bool connectAP(const char *apName);
         bool connectWifi(const char *ssid, const char *password);
         String getWifiIP();
+        wifi_mode_t getWifiMode();
 
         bool needNetworkReconnect = false;
         bool hasInternetAccess = false;
