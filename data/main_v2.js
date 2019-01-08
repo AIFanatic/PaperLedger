@@ -4,9 +4,12 @@ const ENDPOINT_URL = "http://192.168.8.100";
 
 const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
-const CONTENT_SETUP = ".main > .content > .setup";
+const CONTENT_CUSTOMIZE = ".main > .content > .customize";
 
-const DASHBOARD_SUBCONTENT = ".dashboard > .content > .sub-content";
+const DASHBOARD_NETWORK = ".dashboard > .grid > .network";
+const DASHBOARD_STATS = ".dashboard > .grid > .stats";
+const DASHBOARD_CONFIGS = ".dashboard > .grid > .configs";
+const DASHBOARD_LAYOUT = ".dashboard > .grid > .layout";
 
 const NAV_BUTTON = ".nav-button";
 const NAV_OPEN_BUTTON = ".nav-open-button";
@@ -35,6 +38,9 @@ $(document).ready(function() {
     var currentMenu = "dashboard";
 
     function showMenu(menu) {
+        console.log(EVENTS.MENU_CHANGED.detail.menu != menu)
+        console.log(EVENTS.MENU_CHANGED.detail.menu, menu)
+        
         if(EVENTS.MENU_CHANGED.detail.menu !== menu) {
             $(".main > .content ." + currentMenu).hide();
             $(".main > .content ." + menu).show();
@@ -47,11 +53,9 @@ $(document).ready(function() {
     }
 
     $(document).on("click", NAV_BUTTON, function() {
-        if(!$(this).hasClass("disabled")) {
-            const menu = $(this).attr("data-menu");
+        const menu = $(this).attr("data-menu");
 
-            showMenu(menu);
-        }
+        showMenu(menu);
     });
 
     var menuIsOpen = false;
@@ -66,6 +70,9 @@ $(document).ready(function() {
 
         menuIsOpen = !menuIsOpen;
     });
+
+    // Initial load
+    showMenu(currentMenu);
 });
 
 /* NETWORK */
@@ -242,40 +249,112 @@ $(document).ready(function() {
     $(".tickers" ).disableSelection();
 });
 
-/* SETUP */
-$(document).ready(function() {
-    function showSetup() {
-        $(CONTENT_SETUP).html("");
-    }
-
-    document.addEventListener('MENU_CHANGED', (event) => {
-        if(event.detail.menu == "setup") {
-            $(HEADER_TITLE).html("Setup");
-            $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
-            showSetup();
-        }
-    });
-});
-
 /* DASHBOARD */
 $(document).ready(function() {
+    function showDashboard() {
+        $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
+            if(response["status"] == "ok") {
+                $(DASHBOARD_NETWORK).html("");
+
+                const network = response["message"];
+
+                var icon = $('<i class="fas fa-wifi"></i>');
+
+                if(network["ssid"].length > 0) {
+                    icon.addClass("green");
+                }
+
+                var textBox = $("<div></div>");
+                var textName = $("<h2>Name: " + network["ssid"] + "</h2>");
+                var textSignal = $("<h2>Signal: " + network["rssi"] + "</h2>");
+                $(textBox).append(textName);
+                $(textBox).append(textSignal);
+
+                $(DASHBOARD_NETWORK).append(icon);
+                $(DASHBOARD_NETWORK).append(textBox);
+
+            }
+        });
+    }
+
     document.addEventListener('MENU_CHANGED', (event) => {
         if(event.detail.menu == "dashboard") {
             $(HEADER_TITLE).html("Dashboard");
-            $(HEADER_TITLE_RIGHT).html('');
+            // $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+            showDashboard();
         }
     });
 });
 
-/* INIT */
-$.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
-    if(response["status"] == "ok") {
-        const message = response["message"];
-        if(!message["internet"]) {
-            $(DASHBOARD_SUBCONTENT).slideDown();
-            return;
-        }
-        
-        $( ".nav-button" ).removeClass("disabled");
+/* CUSTOMIZE */
+$(document).ready(function() {
+
+    var canvas = $(CONTENT_CUSTOMIZE + " > .drawer")[0];
+
+    //Canvas
+var ctx = canvas.getContext('2d');
+//Variables
+var canvasx = $(canvas).offset().left;
+var canvasy = $(canvas).offset().top;
+var last_mousex = last_mousey = 0;
+var mousex = mousey = 0;
+var mousedown = false;
+
+//Mousedown
+$(canvas).on('mousedown', function(e) {
+    last_mousex = parseInt(e.clientX-canvasx);
+	last_mousey = parseInt(e.clientY-canvasy);
+    mousedown = true;
+});
+
+//Mouseup
+$(canvas).on('mouseup', function(e) {
+    mousedown = false;
+});
+
+//Mousemove
+$(canvas).on('mousemove', function(e) {
+    mousex = parseInt(e.clientX-canvasx);
+	mousey = parseInt(e.clientY-canvasy);
+    if(mousedown) {
+        ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
+        ctx.beginPath();
+        var width = mousex-last_mousex;
+        var height = mousey-last_mousey;
+        // ctx.rect(last_mousex,last_mousey,width,height);
+        ctx.fillRect(last_mousex,last_mousey,width,height);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // console.log(last_mousex, last_mousey, width, height);
     }
+});
+
+    function showCustomize() {
+        canvasx = $(canvas).offset().left;
+        canvasy = $(canvas).offset().top;
+
+        ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
+        ctx.beginPath();
+        var width = mousex-last_mousex;
+        var height = mousey-last_mousey;
+        // ctx.rect(last_mousex,last_mousey,width,height);
+        ctx.fillRect(0,0,20,20);
+        ctx.rect(30,0,20,20);
+        ctx.moveTo(75, 75);
+        ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+
+        // initDraw($(CONTENT_CUSTOMIZE + " > .drawer")[0]);
+    }
+
+    document.addEventListener('MENU_CHANGED', (event) => {
+        if(event.detail.menu == "customize") {
+            $(HEADER_TITLE).html("Customize");
+            // $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+            showCustomize();
+        }
+    });
 });

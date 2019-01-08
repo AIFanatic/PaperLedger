@@ -29,6 +29,7 @@ void NetworkManager::requestWifiStatus(AsyncWebServerRequest *request) {
 
     message["ssid"] = WiFi.SSID();
     message["rssi"] = WiFi.RSSI();
+    message["internet"] = hasInternetAccess;
     
     String jsonStr;
     response.printTo(jsonStr);
