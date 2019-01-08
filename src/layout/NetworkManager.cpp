@@ -199,7 +199,7 @@ void NetworkManager::begin() {
         Serial.println("MDNS responder started");
     }
 
-    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+    server.serveStatic("/", SPIFFS, "/web").setDefaultFile("index.html");
 
     server.on("/display/draw", HTTP_POST, [this](AsyncWebServerRequest *request) {
         if(request->params() == 0) {

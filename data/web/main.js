@@ -1,6 +1,6 @@
-// const ENDPOINT_URL = "";
+const ENDPOINT_URL = "";
 // const ENDPOINT_URL = "http://192.168.1.1";
-const ENDPOINT_URL = "http://192.168.8.100";
+// const ENDPOINT_URL = "http://192.168.8.100";
 
 const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
