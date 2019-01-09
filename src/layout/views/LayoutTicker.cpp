@@ -15,17 +15,28 @@ LayoutTicker::~LayoutTicker() {
 };
 
 void LayoutTicker::leftButtonClicked() {
-    Serial.println("MAIN - left button clicked");
+    gotoPreviousTicker();
 };
 
 void LayoutTicker::rightButtonClicked() {
-    Serial.println("right button clicked");
+    gotoNextTicker();
 };
 
 void LayoutTicker::okButtonClicked() {
-    Serial.println("ok button clicked");
     manager->show(LAYOUT_SETUP);
 };
+
+void LayoutTicker::gotoPreviousTicker() {
+    currentTicker--;
+    lastScreenUpdate = millis();
+    showTicker();
+}
+
+void LayoutTicker::gotoNextTicker() {
+    currentTicker++;
+    lastScreenUpdate = millis();
+    showTicker();
+}
 
 void LayoutTicker::showNoTickers() {
     manager->render->fillScreen(1);
@@ -44,8 +55,14 @@ void LayoutTicker::showTicker() {
         return;
     }
 
-    if(currentTicker > tickers.size() - 1) {
+    int tickersSize = tickers.size() - 1;
+
+    if(currentTicker > tickersSize) {
         currentTicker = 0;
+    }
+
+    if(currentTicker < 0) {
+        currentTicker = tickersSize;
     }
 
     String tickerStr = tickers[currentTicker];
@@ -72,9 +89,7 @@ void LayoutTicker::update() {
     unsigned long currentTime = millis();
 
     if((currentTime - lastScreenUpdate) / 1000 > scrollFrequency) {
-        currentTicker++;
-        lastScreenUpdate = currentTime;
-        showTicker();
+        gotoNextTicker();
     }
 
     if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {

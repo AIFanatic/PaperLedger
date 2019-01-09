@@ -17,6 +17,8 @@ class LayoutTicker: public LayoutBase {
         void rightButtonClicked();
         void okButtonClicked();
 
+        void gotoPreviousTicker();
+        void gotoNextTicker();
         void showTicker();
         void showNoTickers();
 

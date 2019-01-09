@@ -26,8 +26,8 @@ const BTN_TICKER_REMOVE = ".btn-ticker-remove";
 const INPUT_TICKERS_COIN = ".tickers .input-coin";
 const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
 
-const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: []});
-const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: []});
+const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: [],showArrow: false});
+const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [],showArrow: false});
 
 const EVENTS = {
     MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
