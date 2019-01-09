@@ -13,13 +13,13 @@ class Tickers {
         ~Tickers(void);
 
         JsonArray& get();
-        bool add(const char *coin, const char *currency);
-        bool remove(const char *coin, const char *currency);
+        bool add(const char *id, const char *coin, const char *currency);
+        bool remove(const char *id, const char *currency);
         bool remove(int index);
-        int getIndexOf(const char *coin, const char *currency);
+        int getIndexOf(const char *id, const char *currency);
         bool changeOrder(int from, int to);
 
-        String getTickerData(const char *coins, const char *currencies);
+        String getTickerData(const char *ids, const char *currencies);
 
         bool updateTickers();
 

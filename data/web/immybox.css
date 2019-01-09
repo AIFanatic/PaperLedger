@@ -35,7 +35,7 @@
     cursor:pointer
 }
 .immybox_results ul li.immybox_choice.active{
-    background-color:#52c6f6
+    background-color:#214263
 }
 .immybox_results ul li.immybox_choice .highlight{
     text-decoration:underline

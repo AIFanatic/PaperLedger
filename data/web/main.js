@@ -195,7 +195,10 @@ $(document).ready(function() {
                     var newBox = $('<div class="box"></div>');
                     newBox.text(ticker["coin"] + " - " + ticker["currency"]);
 
-                    const deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" data-coin="' + ticker["coin"] + '" data-currency="' + ticker["currency"] + '" href="#"><i class="fas fa-trash"></i></a>');
+                    var deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" href="#"><i class="fas fa-trash"></i></a>');
+                    deleteButton.attr("data-id", ticker["id"]);
+                    deleteButton.attr("data-coin", ticker["coin"]);
+                    deleteButton.attr("data-currency", ticker["currency"]);
 
                     newBox.append(deleteButton);
 
@@ -208,24 +211,27 @@ $(document).ready(function() {
     }
 
     $(document).on("click", BTN_TICKER_REMOVE, function() {
-        const coin = $(this).attr("data-coin");
+        const id = $(this).attr("data-id");
         const currency = $(this).attr("data-currency");
 
-        $.post(ENDPOINT_URL + "/data/tickers/remove", {coin: coin, currency: currency}, (response) => {
+        $.post(ENDPOINT_URL + "/data/tickers/remove", {id: id, currency: currency}, (response) => {
             showTickers();
         });
     });
 
     $(document).on("click", BTN_TICKER_ADD, function() {
-        if(coinsList[0].selectedChoice === null || currenciesList[0].selectedChoice === null) {
+        if(LIST_TICKERS_COINS[0].selectedChoice === null || LIST_TICKERS_CURRENCIES[0].selectedChoice === null) {
             alert("Please select a coin and currency");
             return;
         }
 
-        const coin = coinsList[0].selectedChoice.value;
-        const currency = currenciesList[0].selectedChoice.value
+        const id = LIST_TICKERS_COINS[0].selectedChoice.value;
+        const coin = LIST_TICKERS_COINS[0].selectedChoice.text;
+        const currency = LIST_TICKERS_CURRENCIES[0].selectedChoice.value
 
-        $.post(ENDPOINT_URL + "/data/tickers/add", {coin: coin, currency: currency}, (response) => {
+        $.post(ENDPOINT_URL + "/data/tickers/add", {id: id, coin: coin, currency: currency}, (response) => {
+            $(INPUT_TICKERS_COIN).val("");
+            $(INPUT_TICKERS_CURRENCY).val("");
             showTickers();
         });
     });

@@ -112,30 +112,33 @@ void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
 };
 
 void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
+    if(request->params() != 3) {
         requestInvalid(request);
         return;
     }
 
-    String coin_name = request->getParam(0)->name();
-    String coin_value = request->getParam(0)->value();
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
 
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
+    String coin_name = request->getParam(1)->name();
+    String coin_value = request->getParam(1)->value();
 
-    if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
+    String currency_name = request->getParam(2)->name();
+    String currency_value = request->getParam(2)->value();
+
+    if(!id_name.equals("id") || !coin_name.equals("coin") || !currency_name.equals("currency")) {
         requestInvalid(request);
         return;
     }
 
-    int index = manager->tickers->getIndexOf(coin_value.c_str(), currency_value.c_str());
+    int index = manager->tickers->getIndexOf(id_value.c_str(), currency_value.c_str());
 
     if(index != -1) {
         request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Coin already exists\"}");
         return;
     }
 
-    manager->tickers->add(coin_value.c_str(), currency_value.c_str());
+    manager->tickers->add(id_value.c_str(), coin_value.c_str(), currency_value.c_str());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"added\"}");
 };
@@ -146,18 +149,18 @@ void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
         return;
     }
 
-    String coin_name = request->getParam(0)->name();
-    String coin_value = request->getParam(0)->value();
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
 
     String currency_name = request->getParam(1)->name();
     String currency_value = request->getParam(1)->value();
 
-    if(!coin_name.equals("coin") || !currency_name.equals("currency")) {
+    if(!id_name.equals("id") || !currency_name.equals("currency")) {
         requestInvalid(request);
         return;
     }
 
-    manager->tickers->remove(coin_value.c_str(), currency_value.c_str());
+    manager->tickers->remove(id_value.c_str(), currency_value.c_str());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
 };

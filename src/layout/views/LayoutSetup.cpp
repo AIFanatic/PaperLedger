@@ -41,7 +41,7 @@ void LayoutSetup::okButtonClicked() {
     Serial.println(" clicked");
 
     if(strcmp(active, "NETWORK") == 0) {
-        manager->tickers->changeOrder(0, 1);
+        manager->tickers->updateTickers();
     }
     else if(strcmp(active, "RESET") == 0) {
         showMenu(RESET_MENU, SIZEOFARRAY(RESET_MENU));
