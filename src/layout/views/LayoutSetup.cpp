@@ -12,14 +12,34 @@ LayoutSetup::~LayoutSetup() {
 void LayoutSetup::initMenu() {
     // Init list
     menuList = new LayoutList(manager->render);
-    menuList->init(0, 0, 296, 125, 12, BLACK);
+    menuList->init(0, 0, 296, 125, 9, BLACK);
 }
 
-void LayoutSetup::showMenu(const char *menu[][2], int size) {
+void LayoutSetup::showMenu(String menu[][2], int size) {
     menuList->removeAll();
     menuList->addFromArray(menu, size);
 
     menuList->setActive(0);
+}
+
+void LayoutSetup::showStatusMenu() {
+    String internet = "Internet: ";
+    String networkName = "Network name: " + manager->networkManager->getWifiSSID();
+    String networkSignal = "Network signal: " + String(manager->networkManager->getWifiSignal()) + " dBm";
+    String networkIP = "Network IP: " + manager->networkManager->getWifiIP();
+
+    internet += (manager->networkManager->hasInternetAccess) ? "Yes" : "No";
+
+    String STATUS_MENU[5][2] = 
+    {
+        {internet.c_str(), "1"},
+        {networkName.c_str(), ""},
+        {networkSignal.c_str(), ""},
+        {networkIP.c_str(), ""},
+        {"Back", "STATUS_BACK"},
+    };
+
+    showMenu(STATUS_MENU, SIZEOFARRAY(STATUS_MENU));
 }
 
 void LayoutSetup::leftButtonClicked() {
@@ -35,31 +55,34 @@ void LayoutSetup::rightButtonClicked() {
 };
 
 void LayoutSetup::okButtonClicked() {
-    const char *active = menuList->getActiveIdentifier();
+    String active = menuList->getActiveIdentifier();
 
     Serial.print(active);
     Serial.println(" clicked");
 
-    if(strcmp(active, "NETWORK") == 0) {
-        manager->tickers->updateTickers();
+    if(active.equals("STATUS")) {
+        showStatusMenu();
     }
-    else if(strcmp(active, "RESET") == 0) {
+    else if(active.equals("RESET")) {
         showMenu(RESET_MENU, SIZEOFARRAY(RESET_MENU));
     }
-    else if(strcmp(active, "RESET_TICKERS") == 0) {
+    else if(active.equals("RESET_TICKERS")) {
         manager->tickers->reset();
     }
-    else if(strcmp(active, "RESET_SETTINGS") == 0) {
+    else if(active.equals("RESET_SETTINGS")) {
         manager->settings->reset();
     }
-    else if(strcmp(active, "RESET_FACTORY") == 0) {
+    else if(active.equals("RESET_FACTORY")) {
         manager->tickers->reset();
         manager->settings->reset();
     }
-    else if(strcmp(active, "RESET_BACK") == 0) {
+    else if(active.equals("RESET_BACK")) {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
-    else if(strcmp(active, "BACK") == 0) {
+    else if(active.equals("STATUS_BACK")) {
+        showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
+    }
+    else if(active.equals("BACK")) {
         manager->show(LAYOUT_TICKER);
     }
 };

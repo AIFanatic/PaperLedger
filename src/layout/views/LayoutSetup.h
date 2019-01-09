@@ -18,7 +18,8 @@ class LayoutSetup: public LayoutBase {
 
     private:        
         void initMenu();
-        void showMenu(const char *menu[][2], int size);
+        void showMenu(String menu[][2], int size);
+        void showStatusMenu();
 
         void leftButtonClicked();
         void rightButtonClicked();
@@ -26,14 +27,14 @@ class LayoutSetup: public LayoutBase {
 
         LayoutList *menuList;
 
-        const char *MAIN_MENU[3][2] = 
+        String MAIN_MENU[3][2] = 
         {
-            {"Network", "NETWORK"},
+            {"Status", "STATUS"},
             {"Reset", "RESET"},
             {"Back", "BACK"},
         };
 
-        const char *RESET_MENU[4][2] = 
+        String RESET_MENU[4][2] = 
         {
             {"Reset tickers", "RESET_TICKERS"},
             {"Reset settings", "RESET_SETTINGS"}, 
