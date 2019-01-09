@@ -28,7 +28,7 @@ JsonArray& Tickers::get() {
     return tickersArray;
 }
 
-bool Tickers::add(const char *coin, const char *currency) {
+bool Tickers::add(const char *id, const char *coin, const char *currency) {
     File tickersFile;
     DynamicJsonBuffer jsonBuffer;
 
@@ -39,6 +39,7 @@ bool Tickers::add(const char *coin, const char *currency) {
 
     DynamicJsonBuffer objBuffer;
     JsonObject& obj = objBuffer.createObject();
+    obj["id"] = id;
     obj["coin"] = coin;
     obj["currency"] = currency;
     obj["price"] = "0";
@@ -52,7 +53,7 @@ bool Tickers::add(const char *coin, const char *currency) {
     manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
 }
 
-int Tickers::getIndexOf(const char *coin, const char *currency) {
+int Tickers::getIndexOf(const char *id, const char *currency) {
     File tickersFile;
     DynamicJsonBuffer jsonBuffer;
 
@@ -66,7 +67,7 @@ int Tickers::getIndexOf(const char *coin, const char *currency) {
         DynamicJsonBuffer objBuffer;
         JsonObject& obj = objBuffer.parse(str);
 
-        if(strcmp(obj["coin"], coin) == 0 && strcmp(obj["currency"], currency) == 0) {
+        if(strcmp(obj["id"], id) == 0 && strcmp(obj["currency"], currency) == 0) {
             return i;
         }
     }
@@ -74,8 +75,8 @@ int Tickers::getIndexOf(const char *coin, const char *currency) {
     return -1;
 }
 
-bool Tickers::remove(const char *coin, const char *currency) {
-    int index = getIndexOf(coin, currency);
+bool Tickers::remove(const char *id, const char *currency) {
+    int index = getIndexOf(id, currency);
 
     if(index == -1) {
         return false;
@@ -109,10 +110,10 @@ void Tickers::reset() {
     manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, "[]");
 }
 
-String Tickers::getTickerData(const char *coins, const char *currencies) {
+String Tickers::getTickerData(const char *ids, const char *currencies) {
     String url = URL_TICKER_DATA;
     url.concat("&ids=");
-    url.concat(coins);
+    url.concat(ids);
     url.concat("&vs_currencies=");
     url.concat(currencies);
 
@@ -135,21 +136,24 @@ bool Tickers::updateTickers() {
         DynamicJsonBuffer objBuffer;
         JsonObject& obj = objBuffer.parse(str);
 
-        String coin = obj["coin"];
+        String id = obj["id"];
         String currency = obj["currency"];
 
-        String response = getTickerData(coin.c_str(), currency.c_str());
+        String response = getTickerData(id.c_str(), currency.c_str());
+
+        Serial.println(id);
+        Serial.println(response);
 
         DynamicJsonBuffer responseJsonBuffer;
         JsonObject& responseJson = responseJsonBuffer.parse(response);
 
         // CoinGecko responses are in lowercase
-        coin.toLowerCase();
+        id.toLowerCase();
         currency.toLowerCase();
 
-        String price = responseJson[coin][currency];
-        String last_update = responseJson[coin]["last_updated_at"];
-        String change_24h = responseJson[coin][currency + "_24h_change"];
+        String price = responseJson[id][currency];
+        String last_update = responseJson[id]["last_updated_at"];
+        String change_24h = responseJson[id][currency + "_24h_change"];
 
         tickersArray[i]["price"] = price;
         tickersArray[i]["last_update"] = last_update;
