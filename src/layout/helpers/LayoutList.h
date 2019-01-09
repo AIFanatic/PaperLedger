@@ -10,12 +10,12 @@ class LayoutList {
 
         void init(int _x, int _y, int _w, int _h, int _fontSize, int _color);
         void removeAll();
-        void add(const char *text, const char *identifier);
-        void addFromArray(const char *arr[][2], int size);
+        void add(String text, String identifier);
+        void addFromArray(String arr[][2], int size);
         void setActive(int index);
 
-        const char *getActiveText();
-        const char *getActiveIdentifier();
+        String getActiveText();
+        String getActiveIdentifier();
         int getActiveIndex();
         int getCount();
 
@@ -27,7 +27,7 @@ class LayoutList {
     private:
         Render *render;
 
-        const char *rows[20][2];
+        String rows[20][2];
         int rowLen = 0;
 
         int x;

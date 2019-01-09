@@ -30,13 +30,13 @@ void LayoutList::removeAll() {
     rowLen = 0;
 }
 
-void LayoutList::add(const char *text, const char *identifier) {
+void LayoutList::add(String text, String identifier) {
     rows[rowLen][TEXT] = text;
     rows[rowLen][IDENTIFIER] = identifier;
     rowLen++;
 }
 
-void LayoutList::addFromArray(const char *arr[][2], int size) {
+void LayoutList::addFromArray(String arr[][2], int size) {
     for(int i = 0; i < size; i++) {
         rows[rowLen][TEXT] = arr[i][TEXT];
         rows[rowLen][IDENTIFIER] = arr[i][IDENTIFIER];
@@ -55,11 +55,11 @@ int LayoutList::getActiveIndex() {
     return activeRow;
 }
 
-const char *LayoutList::getActiveText() {
+String LayoutList::getActiveText() {
     return rows[activeRow][TEXT];
 }
 
-const char *LayoutList::getActiveIdentifier() {
+String LayoutList::getActiveIdentifier() {
     return rows[activeRow][IDENTIFIER];
 }
 
@@ -95,7 +95,7 @@ void LayoutList::draw() {
             textColor = !color;
         }
 
-        render->drawText(x + textMargin , currentHeight, rows[i][TEXT], fontSize, textColor);
+        render->drawText(x + textMargin , currentHeight, rows[i][TEXT].c_str(), fontSize, textColor);
 
         currentHeight += textHeight;
     }

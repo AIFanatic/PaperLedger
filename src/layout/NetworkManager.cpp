@@ -344,6 +344,14 @@ String NetworkManager::getWifiIP() {
     return WiFi.localIP().toString();
 }
 
+String NetworkManager::getWifiSSID() {
+    return WiFi.SSID();
+}
+
+int NetworkManager::getWifiSignal() {
+    return WiFi.RSSI();
+}
+
 wifi_mode_t NetworkManager::getWifiMode() {
     return WiFi.getMode();
 }
