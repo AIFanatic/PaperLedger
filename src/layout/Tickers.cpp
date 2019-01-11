@@ -141,9 +141,6 @@ bool Tickers::updateTickers() {
 
         String response = getTickerData(id.c_str(), currency.c_str());
 
-        Serial.println(id);
-        Serial.println(response);
-
         DynamicJsonBuffer responseJsonBuffer;
         JsonObject& responseJson = responseJsonBuffer.parse(response);
 

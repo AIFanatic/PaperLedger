@@ -8,7 +8,8 @@ const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
 const CONTENT_SETUP = ".main > .content > .setup";
 
-const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .sub-content";
+// TODO: Clean
+const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .content .sub-content";
 const SUBCONTENT_TICKERS = CONTENT_TICKERS + " > .sub-content";
 
 const NAV_BUTTON = ".nav-button";
@@ -295,7 +296,8 @@ $(document).ready(function() {
 $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
     if(response["status"] == "ok") {
         const message = response["message"];
-        if(!message["internet"]) {
+        if(message["internet"] == false) {
+            console.log(message["internet"] == false)
             $(SUBCONTENT_DASHBOARD).slideDown();
             return;
         }

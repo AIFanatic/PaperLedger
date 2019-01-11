@@ -310,6 +310,10 @@ bool NetworkManager::connectAP(const char *apName) {
         return false;
     }
 
+    Serial.println(F("AP connected"));
+    Serial.println("");
+    Serial.println(WiFi.softAPIP());
+
     return true;
 }
 
@@ -341,6 +345,10 @@ bool NetworkManager::connectWifi(const char *ssid, const char *password) {
 }
 
 String NetworkManager::getWifiIP() {
+    if(getWifiMode() == WIFI_MODE_AP) {
+        return WiFi.softAPIP().toString();
+    }
+
     return WiFi.localIP().toString();
 }
 

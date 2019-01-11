@@ -8,7 +8,7 @@ LayoutDisconnected::LayoutDisconnected(Manager *_manager, int _prevLayoutIndex):
     String networkIP = "Network IP: ";
 
     networkName.concat(AP_NAME);
-    networkIP.concat(AP_IP);
+    networkIP.concat(manager->networkManager->getWifiIP());
 
     manager->render->fillScreen(1);
     manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
