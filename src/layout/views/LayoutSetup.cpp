@@ -27,15 +27,24 @@ void LayoutSetup::showStatusMenu() {
     String networkName = "Network name: " + manager->networkManager->getWifiSSID();
     String networkSignal = "Network signal: " + String(manager->networkManager->getWifiSignal()) + " dBm";
     String networkIP = "Network IP: " + manager->networkManager->getWifiIP();
+    String networkMode = "Network mode: Station";
+    String freeHeap = "Free ram: " + String(ESP.getFreeHeap()/1000) + " KB";
+
+    if(manager->networkManager->getWifiMode() == WIFI_AP) {
+        networkName = "Network name: " + String(AP_NAME);
+        networkMode = "Network mode: Access point";
+    }
 
     internet += (manager->networkManager->hasInternetAccess) ? "Yes" : "No";
 
-    String STATUS_MENU[5][2] = 
+    String STATUS_MENU[7][2] = 
     {
         {internet.c_str(), "1"},
         {networkName.c_str(), ""},
         {networkSignal.c_str(), ""},
         {networkIP.c_str(), ""},
+        {networkMode.c_str(), ""},
+        {freeHeap.c_str(), ""},
         {"Back", "STATUS_BACK"},
     };
 
@@ -68,13 +77,16 @@ void LayoutSetup::okButtonClicked() {
     }
     else if(active.equals("RESET_TICKERS")) {
         manager->tickers->reset();
+        ESP.restart();
     }
     else if(active.equals("RESET_SETTINGS")) {
         manager->settings->reset();
+        ESP.restart();
     }
     else if(active.equals("RESET_FACTORY")) {
         manager->tickers->reset();
         manager->settings->reset();
+        ESP.restart();
     }
     else if(active.equals("RESET_BACK")) {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
