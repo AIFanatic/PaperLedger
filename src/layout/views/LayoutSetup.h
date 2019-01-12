@@ -29,7 +29,7 @@ class LayoutSetup: public LayoutBase {
 
         String MAIN_MENU[3][2] = 
         {
-            {"Status1", "STATUS"},
+            {"Status", "STATUS"},
             {"Reset", "RESET"},
             {"Back", "BACK"},
         };
