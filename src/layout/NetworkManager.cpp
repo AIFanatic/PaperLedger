@@ -238,9 +238,15 @@ void NetworkManager::requestUpdate(AsyncWebServerRequest *request, String filena
         Serial.printf("UploadStart: %s\n", filename.c_str());
         Serial.setDebugOutput(true);
         
+        int command = U_FLASH;
+        if(filename.equals("spiffs.bin")) {
+            command = U_SPIFFS;
+            SPIFFS.end();
+        }
+
         // calculate sketch space required for the update
         // uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
-        if(!Update.begin()){//start with max available size
+        if(!Update.begin(UPDATE_SIZE_UNKNOWN, command)){//start with max available size
             Update.printError(Serial);
         }
         // Update.runAsync(true); // tell the updaterClass to run in async mode
