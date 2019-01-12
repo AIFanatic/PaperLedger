@@ -33,6 +33,8 @@ const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
 const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: [],showArrow: false});
 const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [],showArrow: false});
 
+const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
+
 const EVENTS = {
     MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
         {
@@ -317,6 +319,52 @@ $(document).ready(function() {
 
         $.post(ENDPOINT_URL + "/data/settings/change", {name: name, value: newValue}, (response) => {
             showSettings();
+        });
+    });
+
+    $(document).on("change", INPUT_UPDATE_FILE, function() {
+        $(HEADER_TITLE_RIGHT).html('Updating: <span>0</span>% <i class="fas fa-circle-notch fa-spin"></i>');
+
+        var headerPercentage = $(HEADER_TITLE_RIGHT).children("span");
+
+        const file = $(this).get(0).files[0], formData = new FormData();
+        
+        formData.append('file', file);
+
+        $.ajax({
+            url: ENDPOINT_URL + "/update",
+            type: 'POST',
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData,
+            xhr: function () {
+                var jqXHR = null;
+                if ( window.ActiveXObject ) {
+                    jqXHR = new window.ActiveXObject( "Microsoft.XMLHTTP" );
+                }
+                else {
+                    jqXHR = new window.XMLHttpRequest();
+                }
+                //Upload progress
+                jqXHR.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = Math.round((evt.loaded * 100) / evt.total);
+                        $(headerPercentage).text(percentComplete);
+                    }
+                }, false );
+                return jqXHR;
+            },
+            success: function(data) {
+                if(data["message"] == 0) {
+                    $(HEADER_TITLE_RIGHT).html("Updated successfully");
+                    return;
+                }
+                $(HEADER_TITLE_RIGHT).html("Update failed: " + data["message"]);
+            },
+            error: function(data) {
+                $(HEADER_TITLE_RIGHT).html("Update failed: " + data);
+            }
         });
     });
 

@@ -20,6 +20,8 @@
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
 
+#include <Update.h>
+
 class Manager;
 
 class NetworkManager {
@@ -43,6 +45,8 @@ class NetworkManager {
 
         void requestSettings(AsyncWebServerRequest *request);
         void requestChangeSettings(AsyncWebServerRequest *request);
+
+        void requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
 
         void requestNotFound(AsyncWebServerRequest *request);
         void requestInvalid(AsyncWebServerRequest *request);
