@@ -70,7 +70,9 @@ void LayoutSetup::okButtonClicked() {
     Serial.println(" clicked");
 
     if(active.equals("STATUS")) {
-        showStatusMenu();
+        // showStatusMenu();
+
+        manager->updater->list();
     }
     else if(active.equals("RESET")) {
         showMenu(RESET_MENU, SIZEOFARRAY(RESET_MENU));

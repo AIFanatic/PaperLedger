@@ -120,18 +120,6 @@
                     var textnode = document.createTextNode(drawType);
                     selectedNode.appendChild(textnode);
                 }
-
-                if(drawType == "text") {
-                    const text = prompt("Please enter the text");
-                    const size = prompt("Please enter the font size (9, 12, 18, 24");
-
-                    if (text == null || size == null || text == "" || size == "") {
-                        alert("Invalid text");
-                    }
-
-                    selectedNode.setAttribute("data-text", text);
-                    selectedNode.setAttribute("data-size", size);
-                }
                 
                 selectedNode.setAttribute("data-x", last_mousex);
                 selectedNode.setAttribute("data-y", last_mousey);

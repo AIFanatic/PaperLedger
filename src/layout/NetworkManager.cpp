@@ -192,6 +192,45 @@ void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
 };
 
+void NetworkManager::requestSettings(AsyncWebServerRequest *request) {
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& response = jsonBuffer.createObject();
+
+    response["status"] = "ok";
+    response["message"] = manager->settings->get();
+
+    String str;
+    response.printTo(str);
+    request->send(200, "application/json", str);
+}
+
+void NetworkManager::requestChangeSettings(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        requestInvalid(request);
+        return;
+    }
+
+    String setting_name = request->getParam(0)->name();
+    String setting_value = request->getParam(0)->value();
+
+    String value_name = request->getParam(1)->name();
+    String value_value = request->getParam(1)->value();
+
+    if(!setting_name.equals("name") || !value_name.equals("value")) {
+        requestInvalid(request);
+        return;
+    }
+
+    bool changed = manager->settings->set(setting_value.c_str(), value_value.c_str());
+
+    if(!changed) {
+        requestInvalid(request);
+        return;
+    }
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"updated setting\"}");
+}
+
 void NetworkManager::reset() {
     server.reset();
 }
@@ -249,6 +288,14 @@ void NetworkManager::begin() {
 
     server.on("/data/tickers/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
         requestRemoveTickers(request);
+    });
+
+    server.on("/data/settings/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        requestSettings(request);
+    });
+
+    server.on("/data/settings/change", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestChangeSettings(request);
     });
 
     server.onNotFound([this](AsyncWebServerRequest *request) {

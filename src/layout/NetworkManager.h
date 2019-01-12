@@ -40,6 +40,10 @@ class NetworkManager {
         void requestAddTickers(AsyncWebServerRequest *request);
         void requestOrderTickers(AsyncWebServerRequest *request);
         void requestRemoveTickers(AsyncWebServerRequest *request);
+
+        void requestSettings(AsyncWebServerRequest *request);
+        void requestChangeSettings(AsyncWebServerRequest *request);
+
         void requestNotFound(AsyncWebServerRequest *request);
         void requestInvalid(AsyncWebServerRequest *request);
 
