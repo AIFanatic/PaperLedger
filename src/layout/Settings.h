@@ -2,6 +2,7 @@
 #define Settings_h
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 
 class Manager;
 
@@ -11,6 +12,7 @@ class Settings {
         ~Settings(void);
 
         String get(const char *name);
+        JsonObject& get();
         bool set(const char *name, const char *value);
 
         void reset();

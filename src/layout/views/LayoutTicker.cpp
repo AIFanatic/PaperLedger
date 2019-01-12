@@ -90,10 +90,12 @@ void LayoutTicker::update() {
 
     if((currentTime - lastScreenUpdate) / 1000 > scrollFrequency) {
         gotoNextTicker();
+        scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
     }
 
     if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {
         manager->tickers->updateTickers();
         lastTickersUpdate = currentTime;
+        updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     }
 }

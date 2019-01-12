@@ -11,6 +11,7 @@ const CONTENT_SETUP = ".main > .content > .setup";
 // TODO: Clean
 const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .content .sub-content";
 const SUBCONTENT_TICKERS = CONTENT_TICKERS + " > .sub-content";
+const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
 
 const NAV_BUTTON = ".nav-button";
 const NAV_OPEN_BUTTON = ".nav-open-button";
@@ -23,6 +24,8 @@ const BTN_NETWORK_CONNECT = ".btn-network-connect";
 
 const BTN_TICKER_ADD = ".btn-ticker-add";
 const BTN_TICKER_REMOVE = ".btn-ticker-remove";
+
+const BTN_SETTINGS_UPDATE = ".btn-settings-update";
 
 const INPUT_TICKERS_COIN = ".tickers .input-coin";
 const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
@@ -269,15 +272,59 @@ $(document).ready(function() {
 
 /* SETUP */
 $(document).ready(function() {
-    function showSetup() {
-        $(CONTENT_SETUP).html("");
+    function showSettings() {
+        $(SUBCONTENT_SETUP).html("");
+
+        $.getJSON(ENDPOINT_URL + "/data/settings/list", (response) => {
+            if(response["status"] == "ok") {
+                const settings = response["message"];
+
+                console.log(settings)
+
+                for (var key in settings) {
+                    if (settings.hasOwnProperty(key)) {
+                        var settingParsed = key.replace(/_/g, " ");
+                        settingParsed = settingParsed.charAt(0).toUpperCase() + settingParsed.slice(1);
+
+                        var newBox = $('<div class="box"></div>');
+                        newBox.text(settingParsed + ": " + settings[key]);
+
+                        var button = $('<a class="button dark-blue yellow-bg btn-settings-update" href="#"><i class="fas fa-edit"></i></a>');
+                        button.attr("data-name", key);
+                        button.attr("data-value", settings[key]);
+
+                        newBox.append(button);
+
+                        $(SUBCONTENT_SETUP).append(newBox);
+                    }
+                }
+
+                $(HEADER_TITLE_RIGHT).html("");
+            }
+        });
     }
+
+    $(document).on("click", BTN_SETTINGS_UPDATE, function() {
+        const name = $(this).attr("data-name");
+        const value = $(this).attr("data-value");
+
+        var newValue = prompt("Please enter the new value", value);
+
+        if(newValue == null || isNaN(newValue) || newValue == 0) {
+            alert("Invalid value entered");
+            return;
+        }
+
+        $.post(ENDPOINT_URL + "/data/settings/change", {name: name, value: newValue}, (response) => {
+            showSettings();
+        });
+    });
 
     document.addEventListener('MENU_CHANGED', (event) => {
         if(event.detail.menu == "setup") {
             $(HEADER_TITLE).html("Setup");
             $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
-            showSetup();
+            showSettings();
         }
     });
 });

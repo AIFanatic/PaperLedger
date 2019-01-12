@@ -22,6 +22,21 @@ Settings::Settings(Manager *_manager) {
 Settings::~Settings() {
 };
 
+JsonObject& Settings::get() {
+    File settings;
+    manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
+
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& settingsJson = jsonBuffer.parse(settings);
+    settings.close();
+
+    // Remove wifi credentials
+    settingsJson.remove("ssid");
+    settingsJson.remove("password");
+
+    return settingsJson;
+}
+
 String Settings::get(const char *name) {
     File settings;
     manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
@@ -43,11 +58,15 @@ bool Settings::set(const char *name, const char *value) {
     JsonObject& settingsJson = jsonBuffer.parse(settings);
     settings.close();
 
+    if(!settingsJson.containsKey(name)) {
+        return false;
+    }
+    
     settingsJson[name] = value;
 
     String settingsStr;
     settingsJson.printTo(settingsStr);
-    manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, settingsStr.c_str());
+    return manager->filesystem->writeFile(SPIFFS, FILE_SETTINGS, settingsStr.c_str());
 }
 
 void Settings::reset() {
