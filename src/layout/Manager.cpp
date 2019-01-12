@@ -9,7 +9,6 @@ Manager::Manager() {
     networkManager = new NetworkManager(this);
     settings = new Settings(this);
     tickers = new Tickers(this);
-    updater = new Updater(this);
 
     render->clearScreen();
 

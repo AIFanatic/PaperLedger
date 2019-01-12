@@ -231,6 +231,36 @@ void NetworkManager::requestChangeSettings(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"updated setting\"}");
 }
 
+void NetworkManager::requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
+    //Upload handler chunks in data
+    
+    if(!index){ // if index == 0 then this is the first frame of data
+        Serial.printf("UploadStart: %s\n", filename.c_str());
+        Serial.setDebugOutput(true);
+        
+        // calculate sketch space required for the update
+        // uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
+        if(!Update.begin()){//start with max available size
+            Update.printError(Serial);
+        }
+        // Update.runAsync(true); // tell the updaterClass to run in async mode
+    }
+
+    //Write chunked data to the free sketch space
+    if(Update.write(data, len) != len){
+        Update.printError(Serial);
+    }
+    
+    if(final) { // if the final flag is set then this is the last frame of data
+        if(Update.end(true)) { //true to set the size to the current progress
+            Serial.printf("Update Success: %u B\nRebooting...\n", index+len);
+        } else {
+            Update.printError(Serial);
+        }
+        Serial.setDebugOutput(false);
+    }
+}
+
 void NetworkManager::reset() {
     server.reset();
 }
@@ -296,6 +326,25 @@ void NetworkManager::begin() {
 
     server.on("/data/settings/change", HTTP_POST, [this](AsyncWebServerRequest *request) {
         requestChangeSettings(request);
+    });
+
+    server.on("/update", HTTP_POST, [this](AsyncWebServerRequest *request){
+        DynamicJsonBuffer jsonBuffer;
+        JsonObject& response = jsonBuffer.createObject();
+
+        response["status"] = "ok";
+        response["message"] = Update.getError();
+
+        String str;
+        response.printTo(str);
+        request->send(200, "application/json", str);
+
+        if(!Update.hasError()) {
+            esp_restart();
+        }
+        
+    },[this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
+        requestUpdate(request, filename, index, data, len, final);
     });
 
     server.onNotFound([this](AsyncWebServerRequest *request) {

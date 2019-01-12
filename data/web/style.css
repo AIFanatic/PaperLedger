@@ -307,3 +307,35 @@ html, body, .grid-container {
 .tickers input:focus {
     outline: none;
 }
+
+
+
+.input-update-file {
+    height: 60px;
+    width: 60px;
+    float: right;
+    font-size: 1.6em;
+}
+
+.input-update-file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.input-update-file::before {
+    content: "\f093";
+    display: block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    text-align: center;
+    line-height: 60px;
+}
+
+.input-update-file:active {
+    outline: 0;
+}
+
+.input-update-file:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}

@@ -9,50 +9,55 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-            <div class="grid-container">
-                <div class="nav">
-                    <ul>
-                        <li><a href="#" class="nav-button" data-menu="dashboard"><i class="fas fa-tachometer-alt"></i></a></li>
-                        <li><a href="#" class="nav-button" data-menu="network"><i class="fas fa-wifi"></i></a></li>
-                        <li><a href="#" class="nav-button disabled" data-menu="tickers"><i class="fas fa-chart-line"></i></a></li>
-                        <li><a href="#" class="nav-button disabled" data-menu="setup"><i class="fas fa-cogs"></i></a></li>
-                    </ul>
+        <div class="grid-container">
+            <div class="nav">
+                <ul>
+                    <li><a href="#" class="nav-button" data-menu="dashboard"><i class="fas fa-tachometer-alt"></i></a></li>
+                    <li><a href="#" class="nav-button" data-menu="network"><i class="fas fa-wifi"></i></a></li>
+                    <li><a href="#" class="nav-button disabled" data-menu="tickers"><i class="fas fa-chart-line"></i></a></li>
+                    <li><a href="#" class="nav-button disabled" data-menu="setup"><i class="fas fa-cogs"></i></a></li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="header">
+                    <a href="#" class="nav-open-button"><i class="fas fa-bars"></i></a>
+
+                    <h2 class="title">Dashboard-1</h2>
+                    <h2 class="right"></h2>
                 </div>
-                <div class="main">
-                    <div class="header">
-                        <a href="#" class="nav-open-button"><i class="fas fa-bars"></i></a>
-
-                        <h2 class="title">Dashboard</h2>
-                        <h2 class="right"></h2>
+                <div class="content">
+                    <div class="dashboard">
+                        <div class="content">
+                            <h1 class="title">Welcome to inkCrypto</h1>
+                            <div class="sub-content" style="display: none;">
+                                <h2>It seems that your device cannot reach the Internet.</h2>
+                                <a class="nav-button" data-menu="network" href="#">Setup Network</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="content">
-                        <div class="dashboard">
-                            <div class="content">
-                                <h1 class="title">Welcome to inkCrypto</h1>
-                                <div class="sub-content" style="display: none;">
-                                    <h2>It seems that your device cannot reach the Internet.</h2>
-                                    <a class="nav-button" data-menu="network" href="#">Setup Network</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tickers" style="display: none">
-                            <div class="sub-content">
+                    <div class="tickers" style="display: none">
+                        <div class="sub-content">
 
-                            </div>
-                            <div class="box">
-                                <input class="input-coin" type="text" placeholder="Select a coin">
-                                <input class="input-currency" type="text" placeholder="Select a currency">
-
-                                <a class="button dark-blue green-bg btn-ticker-add" href="#"><i class="fas fa-plus"></i></a>
-                            </div>
                         </div>
-                        <div class="network" style="display: none"></div>
-                        <div class="setup" style="display: none">
-                            <div class="sub-content"></div>
+                        <div class="box">
+                            <input class="input-coin" type="text" placeholder="Select a coin">
+                            <input class="input-currency" type="text" placeholder="Select a currency">
+
+                            <a class="button dark-blue green-bg btn-ticker-add" href="#"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="network" style="display: none"></div>
+                    <div class="setup" style="display: none">
+                        <div class="sub-content"></div>
+                        <div class="box">
+                            Update firmware
+                            <input class="input-update-file dark-blue light-blue-bg" type='file' name='update'>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
         <script src="jquery.min.js"></script>
         <script src="jquery-ui.min.js"></script>
         <script src="immybox.min.js"></script>
