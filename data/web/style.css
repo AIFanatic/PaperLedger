@@ -43,6 +43,16 @@ html, body, .grid-container {
     padding: 20px;
 }
 
+.main-filter {
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+    filter: brightness(0.6);
+
+    z-index: -1;
+}
+
 .header {
     grid-area: header;
     background: #18344d;
@@ -111,6 +121,12 @@ html, body, .grid-container {
     font-size: 1.6em;
 
     display: none;
+}
+
+.nav-mobile {
+    position: absolute;
+    width: 100px;
+    height: 100%;
 }
 
 .box {

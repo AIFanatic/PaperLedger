@@ -13,6 +13,9 @@ const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .content .sub-content";
 const SUBCONTENT_TICKERS = CONTENT_TICKERS + " > .sub-content";
 const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
 
+const MAIN = ".main";
+
+const NAV = ".nav";
 const NAV_BUTTON = ".nav-button";
 const NAV_OPEN_BUTTON = ".nav-open-button";
 
@@ -66,20 +69,15 @@ $(document).ready(function() {
             const menu = $(this).attr("data-menu");
 
             showMenu(menu);
+
+            $(NAV).removeClass("nav-mobile");
+            $(MAIN).removeClass("main-filter");
         }
     });
 
-    var menuIsOpen = false;
-
     $(document).on("click", NAV_OPEN_BUTTON, function() {
-        if(menuIsOpen) {
-            $(".grid-container").css("grid-template-columns", "0px 1.8fr");
-        }
-        else {
-            $(".grid-container").css("grid-template-columns", "100px 1.8fr");
-        }
-
-        menuIsOpen = !menuIsOpen;
+        $(NAV).toggleClass("nav-mobile");
+        $(MAIN).toggleClass("main-filter");
     });
 });
 
