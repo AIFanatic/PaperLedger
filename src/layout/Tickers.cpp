@@ -45,6 +45,7 @@ bool Tickers::add(const char *id, const char *coin, const char *currency) {
     obj["price"] = "0";
     obj["last_update"] = "0";
     obj["change_24h"] = "0";
+    obj["vol_24h"] = "0";
 
     tickersArray.add(obj);
 

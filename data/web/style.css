@@ -359,3 +359,7 @@ html, body, .grid-container {
 .ui-sortable-helper {
     border:1px dashed #52c6f6;
 }
+
+.input-coin, .input-currency {
+    width: 33%;
+}
