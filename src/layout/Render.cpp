@@ -23,7 +23,7 @@ void Render::initDisplay() {
     display->setRotation(1);
     display->eraseDisplay();
     display->setTextColor(GxEPD_BLACK);
-    display->setFont(&DVUS9pt7b);
+    display->setFont(&FreeSans9pt7b);
     display->setTextSize(0);
 }
 
@@ -132,13 +132,28 @@ void Render::drawText(int x, int y, const char *text, int size, int color, int a
 }
 
 void Render::setFont(int size) {
-    if(currentFontSize != size) {
-        const GFXfont *font = &DVUS24pt7b;
+    // if(currentFontSize != size) {
+    //     const GFXfont *font = &DVUS24pt7b;
 
-        if(size == 9) { font = &DVUS9pt7b; }
-        else if(size == 12) { font = &DVUS12pt7b; }
-        else if(size == 18) { font = &DVUS18pt7b; }
-        else if(size == 24) { font = &DVUS24pt7b; }
+    //     if(size == 9) { font = &DVUS9pt7b; }
+    //     else if(size == 12) { font = &DVUS12pt7b; }
+    //     else if(size == 18) { font = &DVUS18pt7b; }
+    //     else if(size == 24) { font = &DVUS24pt7b; }
+
+    //     display->setFont(font);
+
+    //     currentFontSize = size;
+    // }
+    if(currentFontSize != size) {
+        const GFXfont *font = &FreeSans24pt7b;
+
+        if(size == 9) { font = &FreeSans9pt7b; }
+        else if(size == 12) { font = &FreeSans12pt7b; }
+        else if(size == 18) { font = &FreeSans18pt7b; }
+        else if(size == 24) { font = &FreeSans24pt7b; }
+        
+        else if(size == 7) { font = &FreeSans7pt7b; }
+        else if(size == 8) { font = &FreeSans8pt7b; }
 
         display->setFont(font);
 

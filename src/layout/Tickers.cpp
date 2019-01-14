@@ -150,11 +150,13 @@ bool Tickers::updateTickers() {
 
         String price = responseJson[id][currency];
         String last_update = responseJson[id]["last_updated_at"];
-        String change_24h = responseJson[id][currency + "_24h_change"];
+        String change_24h = String(Util::roundDecimals(responseJson[id][currency + "_24h_change"], 2));
+        String vol_24h = Util::numToHuman(responseJson[id][currency + "_24h_vol"], 2);
 
         tickersArray[i]["price"] = price;
         tickersArray[i]["last_update"] = last_update;
         tickersArray[i]["change_24h"] = change_24h;
+        tickersArray[i]["vol_24h"] = vol_24h;
     }
 
     String str;
