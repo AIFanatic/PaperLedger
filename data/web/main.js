@@ -250,7 +250,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.tickers').sortable({
+    $(SUBCONTENT_TICKERS).sortable({
         items: ".box:not(.non-sortable)",
         start: function(event, ui) {
             $(this).attr('data-previndex', ui.item.index());

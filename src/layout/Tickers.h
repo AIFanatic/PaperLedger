@@ -5,6 +5,8 @@
 
 #include <ArduinoJson.h>
 
+#include "../Util.h"
+
 class Manager;
 
 class Tickers {

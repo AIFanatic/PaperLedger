@@ -11,14 +11,17 @@
 #include <GxGDEH029A1/GxGDEH029A1.h>      // 2.9" b/w
 
 // FreeFonts from Adafruit_GFX
-// #include <Fonts/FreeMonoBold9pt7b.h>
-// #include <Fonts/FreeMonoBold12pt7b.h>
-// #include <Fonts/FreeMonoBold18pt7b.h>
-// #include <Fonts/FreeMonoBold24pt7b.h>
-#include <fonts/DejaVu_9.h>
-#include <fonts/DejaVu_12.h>
-#include <fonts/DejaVu_18.h>
-#include <fonts/DejaVu_24.h>
+#include <fonts/FreeSans7.h>
+#include <Fonts/FreeSans8.h>
+
+#include <Fonts/FreeSans9pt7b.h>
+#include <Fonts/FreeSans12pt7b.h>
+#include <Fonts/FreeSans18pt7b.h>
+#include <Fonts/FreeSans24pt7b.h>
+// #include <fonts/DejaVu_9.h>
+// #include <fonts/DejaVu_12.h>
+// #include <fonts/DejaVu_18.h>
+// #include <fonts/DejaVu_24.h>
 
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
