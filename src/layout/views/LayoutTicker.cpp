@@ -15,11 +15,11 @@ LayoutTicker::~LayoutTicker() {
 };
 
 void LayoutTicker::leftButtonClicked() {
-    gotoPreviousTicker();
+    gotoNextTicker();
 };
 
 void LayoutTicker::rightButtonClicked() {
-    gotoNextTicker();
+    gotoPreviousTicker();
 };
 
 void LayoutTicker::okButtonClicked() {

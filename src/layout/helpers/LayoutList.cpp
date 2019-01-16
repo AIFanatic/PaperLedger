@@ -85,8 +85,6 @@ void LayoutList::draw() {
 
         int textColor = color;
 
-
-
         if(i == activeRow) {
             // Custom font starts at the bottom, thus need to
             // subtract by textHeight
@@ -100,8 +98,9 @@ void LayoutList::draw() {
         currentHeight += textHeight;
     }
 
-    // render->draw();
-    render->draw(x, y, w, h, true);
+    render->draw();
+    // Does not work when rotation is 3
+    // render->draw(x, y, w, h, true);
 }
 
 void LayoutList::moveUp() {
