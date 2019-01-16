@@ -272,7 +272,7 @@ void NetworkManager::reset() {
 }
 
 void NetworkManager::begin() {
-    if (MDNS.begin("ttgo"))
+    if (MDNS.begin(AP_NAME))
     {
         Serial.println("MDNS responder started");
     }
