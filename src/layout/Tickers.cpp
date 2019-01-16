@@ -132,6 +132,9 @@ bool Tickers::updateTickers() {
 
     tickersFile.close();
 
+    String coins;
+    String currencies;
+
     for(int i = 0; i < tickersArray.size(); i++) {
         String str = tickersArray[i];
         DynamicJsonBuffer objBuffer;
@@ -140,10 +143,22 @@ bool Tickers::updateTickers() {
         String id = obj["id"];
         String currency = obj["currency"];
 
-        String response = getTickerData(id.c_str(), currency.c_str());
+        coins += id + ",";
+        currencies += currency + ",";
+    }
 
-        DynamicJsonBuffer responseJsonBuffer;
-        JsonObject& responseJson = responseJsonBuffer.parse(response);
+    String response = getTickerData(coins.c_str(), currencies.c_str());
+
+    DynamicJsonBuffer responseJsonBuffer;
+    JsonObject& responseJson = responseJsonBuffer.parse(response);
+
+    for(int i = 0; i < tickersArray.size(); i++) {
+        String str = tickersArray[i];
+        DynamicJsonBuffer objBuffer;
+        JsonObject& obj = objBuffer.parse(str);
+
+        String id = obj["id"];
+        String currency = obj["currency"];
 
         // CoinGecko responses are in lowercase
         id.toLowerCase();

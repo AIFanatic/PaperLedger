@@ -76,15 +76,10 @@ void LayoutTicker::showTicker() {
 
     String pricePretty = price + " " + currency;
 
-
-
     String last_update = ticker["last_update"];
     String change_24h = ticker["change_24h"];
     String vol_24h = ticker["vol_24h"];
-
     String status = "24h: " + change_24h + " | Vol: $" + vol_24h;
-
-
 
     manager->render->fillScreen(1);
     manager->render->drawRectangle(0, 0, 296, 70, BLACK, 1);
