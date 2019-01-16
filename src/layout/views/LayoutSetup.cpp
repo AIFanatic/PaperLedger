@@ -54,13 +54,13 @@ void LayoutSetup::showStatusMenu() {
 void LayoutSetup::leftButtonClicked() {
     Serial.println("left button clicked");
 
-    menuList->moveUp();
+    menuList->moveDown();
 };
 
 void LayoutSetup::rightButtonClicked() {
     Serial.println("right button clicked");
 
-    menuList->moveDown();
+    menuList->moveUp();
 };
 
 void LayoutSetup::okButtonClicked() {
