@@ -15,15 +15,15 @@ LayoutTicker::~LayoutTicker() {
 };
 
 void LayoutTicker::leftButtonClicked() {
-    gotoNextTicker();
-};
-
-void LayoutTicker::rightButtonClicked() {
     gotoPreviousTicker();
 };
 
+void LayoutTicker::rightButtonClicked() {
+    gotoNextTicker();
+};
+
 void LayoutTicker::okButtonClicked() {
-    manager->show(LAYOUT_SETUP);
+    manager->show(LAYOUT_MAIN);
 };
 
 void LayoutTicker::gotoPreviousTicker() {

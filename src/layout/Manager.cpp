@@ -1,4 +1,5 @@
 #include "Manager.h"
+#include "./views/LayoutMain.h"
 #include "./views/LayoutTicker.h"
 #include "./views/LayoutSetup.h"
 #include "./views/LayoutDisconnected.h"
@@ -26,7 +27,10 @@ void Manager::show(int index) {
     //     currentLayout = nullptr;
     // }
 
-    if(index == LAYOUT_TICKER) {
+    if(index == LAYOUT_MAIN) {
+        currentLayout = new LayoutMain(this);
+    }
+    else if(index == LAYOUT_TICKER) {
         currentLayout = new LayoutTicker(this);
     }
     else if(index == LAYOUT_SETUP) {
@@ -44,7 +48,10 @@ void Manager::show(int index) {
 // TODO: Ugly, fix
 void Manager::update() {
     if(!isInitializingLayout) {
-        if(currentIndex == LAYOUT_TICKER) {
+        if(currentIndex == LAYOUT_MAIN) {
+            (reinterpret_cast<LayoutMain *>(currentLayout))->update();
+        }
+        else if(currentIndex == LAYOUT_TICKER) {
             (reinterpret_cast<LayoutTicker *>(currentLayout))->update();
         }
         else if(currentIndex == LAYOUT_SETUP) {

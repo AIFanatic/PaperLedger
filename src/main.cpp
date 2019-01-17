@@ -7,7 +7,7 @@ void setup() {
     Serial.begin(115200);
    
     manager = new Manager();
-    manager->show(0);
+    manager->show(LAYOUT_MAIN);
 
     // LayoutList *list = new LayoutList(render);
     // list->init(128, 32, 160, 80, 18, BLACK);
