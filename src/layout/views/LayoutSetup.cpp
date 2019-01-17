@@ -52,15 +52,11 @@ void LayoutSetup::showStatusMenu() {
 }
 
 void LayoutSetup::leftButtonClicked() {
-    Serial.println("left button clicked");
-
-    menuList->moveDown();
+    menuList->moveUp();
 };
 
 void LayoutSetup::rightButtonClicked() {
-    Serial.println("right button clicked");
-
-    menuList->moveUp();
+    menuList->moveDown();
 };
 
 void LayoutSetup::okButtonClicked() {
@@ -95,6 +91,6 @@ void LayoutSetup::okButtonClicked() {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
     else if(active.equals("BACK")) {
-        manager->show(LAYOUT_TICKER);
+        manager->show(LAYOUT_MAIN);
     }
 };
