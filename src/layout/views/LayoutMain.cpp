@@ -33,6 +33,15 @@ void LayoutMain::showMenu() {
     }
 
     manager->render->draw();
+
+    // for(int i = 35; i < 255; i++) {
+    //     manager->render->fillScreen(1);
+    //     manager->render->drawText(0, 115, "A", (char)i, 18, BLACK, CENTER_ALIGNMENT);
+    //     Serial.printf("%c %i\n", (char)i, i);
+
+    //     manager->render->draw();
+    //     delay(1000);
+    // }
 };
 
 void LayoutMain::leftButtonClicked() {
