@@ -23,9 +23,11 @@ class Util {
             else if(num >= 1000000) {
                 return String(Util::roundDecimals(num / 1000000, precision)) + " M";
             }
-            if(num >= 1000) {
+            else if(num >= 1000) {
                 return String(Util::roundDecimals(num / 1000, precision)) + " K";
             }
+
+            return String(Util::roundDecimals(num, precision));
         }
 };
 

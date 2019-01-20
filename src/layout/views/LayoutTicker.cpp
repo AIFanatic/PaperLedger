@@ -79,13 +79,12 @@ void LayoutTicker::showTicker() {
     String last_update = ticker["last_update"];
     String change_24h = ticker["change_24h"];
     String vol_24h = ticker["vol_24h"];
-    String status = "24h: " + change_24h + " | Vol: $" + vol_24h;
+    String status = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
 
     manager->render->fillScreen(1);
-    manager->render->drawRectangle(0, 0, 296, 70, BLACK, 1);
-    manager->render->drawText(0, 15, status.c_str(), 9, WHITE, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 55, coin.c_str(), 18, WHITE, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 110, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 35, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 80, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 115, status.c_str(), 9, BLACK, CENTER_ALIGNMENT);
     manager->render->draw();
 }
 
