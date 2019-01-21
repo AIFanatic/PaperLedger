@@ -36,6 +36,8 @@
 #define BUTTON_2 37
 #define BUTTON_3 39
 
+#define SPEAKER_PIN_PIN 25
+
 #elif TTGO_T5_2_3
 
 #define ELINK_BUSY 4

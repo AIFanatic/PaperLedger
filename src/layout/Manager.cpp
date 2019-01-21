@@ -11,6 +11,9 @@ Manager::Manager() {
     settings = new Settings(this);
     tickers = new Tickers(this);
 
+    speaker = new SPEAKER();
+    speaker->begin(SPEAKER_PIN_PIN, 0);
+
     render->clearScreen();
 
     networkManager->needNetworkReconnect = true;
@@ -67,4 +70,6 @@ void Manager::update() {
     if(!networkManager->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED && currentIndex != LAYOUT_SETUP) {
         show(LAYOUT_DISCONNECTED);
     }
+
+    speaker->update();
 }
