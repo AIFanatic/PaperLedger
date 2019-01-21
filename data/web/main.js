@@ -1,16 +1,19 @@
 // const ENDPOINT_URL = "";
 // const ENDPOINT_URL = "http://192.168.1.1";
-const ENDPOINT_URL = "http://192.168.8.100";
+const ENDPOINT_URL = "http://192.168.8.108";
+// const ENDPOINT_URL = "/mock";
 const ENDPOINT_TICKERS = "https://api.coingecko.com/api/v3";
 
 const CONTENT_DASHBOARD = ".main > .content > .dashboard";
 const CONTENT_NETWORK = ".main > .content > .network";
 const CONTENT_TICKERS = ".main > .content > .tickers";
+const CONTENT_ALARMS = ".main > .content > .alarms";
 const CONTENT_SETUP = ".main > .content > .setup";
 
 // TODO: Clean
 const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .content .sub-content";
 const SUBCONTENT_TICKERS = CONTENT_TICKERS + " > .sub-content";
+const SUBCONTENT_ALARMS = CONTENT_ALARMS + " > .sub-content";
 const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
 
 const MAIN = ".main";
@@ -27,6 +30,9 @@ const BTN_NETWORK_CONNECT = ".btn-network-connect";
 
 const BTN_TICKER_ADD = ".btn-ticker-add";
 const BTN_TICKER_REMOVE = ".btn-ticker-remove";
+const BTN_ALARMS = ".btn-alarms";
+const BTN_ALARMS_ADD = ".btn-alarms-add";
+const BTN_ALARMS_REMOVE = ".btn-alarms-remove";
 
 const BTN_SETTINGS_UPDATE = ".btn-settings-update";
 
@@ -39,7 +45,7 @@ const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [],s
 const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
 
 const EVENTS = {
-    MENU_CHANGED: new CustomEvent("MENU_CHANGED", 
+    MENU_CHANGED: new CustomEvent("MENU_CHANGED",
         {
             'detail': {
                 menu: null
@@ -58,7 +64,7 @@ $(document).ready(function() {
             $(".main > .content ." + menu).show();
 
             currentMenu = menu;
-            
+
             EVENTS.MENU_CHANGED.detail.menu = menu;
             document.dispatchEvent(EVENTS.MENU_CHANGED);
         }
@@ -101,12 +107,12 @@ $(document).ready(function() {
         $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
             if(response["status"] == "ok") {
                 currentNetwork = response["message"]["ssid"];
-    
+
                 $.getJSON(ENDPOINT_URL + "/data/wifi/list", (response) => {
                     if(response["status"] == "ok") {
-            
+
                         const networks = response["message"];
-            
+
                         for(network of networks) {
                             var newNetwork = $('<div class="box"></div>');
                             newNetwork.text(network["ssid"]);
@@ -194,17 +200,42 @@ $(document).ready(function() {
         $.getJSON(ENDPOINT_URL + "/data/tickers/list", (response) => {
             if(response["status"] == "ok") {
                 const tickers = response["message"];
-            
+
                 for(ticker of tickers) {
                     var newBox = $('<div class="box"></div>');
                     newBox.text(ticker["coin"] + " - " + ticker["currency"]);
+                    newBox.attr("data-id", ticker["id"]);
+                    newBox.attr("data-coin", ticker["coin"]);
+                    newBox.attr("data-currency", ticker["currency"]);
 
                     var deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" href="#"><i class="fas fa-trash"></i></a>');
-                    deleteButton.attr("data-id", ticker["id"]);
-                    deleteButton.attr("data-coin", ticker["coin"]);
-                    deleteButton.attr("data-currency", ticker["currency"]);
+                    var alarmsButton = $('<a class="button dark-blue yellow-bg btn-alarms" href="#"><i class="fas fa-clock"></i></a>');
 
                     newBox.append(deleteButton);
+                    newBox.append(alarmsButton);
+
+                    // Alarms
+                    const alarms = ticker["alarms"];
+                    var alarmCount = 0;
+                    for(alarm of alarms) {
+                        var alarmBox = $('<div class="alarms-box">Price: ' + alarm["price"] + " - Duration: " + alarm["duration"] + 's</div>');
+                        alarmBox.attr("data-index", alarmCount);
+
+                        var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
+                        
+                        alarmBox.append(alarmDeleteButton);
+                        newBox.append(alarmBox);
+
+                        alarmCount++;
+                    }
+
+                    // Add new alarm box
+                    var newAlarmBox = $('<div class="alarms-box"></div>');
+                    newAlarmBox.append( $('<input class="input-price col-4" type="number" placeholder="Price">') );
+                    newAlarmBox.append( $('<input class="input-duration col-4" type="number" placeholder="Duration">') );
+                    newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
+
+                    newBox.append(newAlarmBox);
 
                     $(SUBCONTENT_TICKERS).append(newBox);
                 }
@@ -215,8 +246,9 @@ $(document).ready(function() {
     }
 
     $(document).on("click", BTN_TICKER_REMOVE, function() {
-        const id = $(this).attr("data-id");
-        const currency = $(this).attr("data-currency");
+        const parent = $(this).parent(".box");
+        const id = parent.attr("data-id");
+        const currency = parent.attr("data-currency");
 
         $.post(ENDPOINT_URL + "/data/tickers/remove", {id: id, currency: currency}, (response) => {
             showTickers();
@@ -236,6 +268,55 @@ $(document).ready(function() {
         $.post(ENDPOINT_URL + "/data/tickers/add", {id: id, coin: coin, currency: currency}, (response) => {
             $(INPUT_TICKERS_COIN).val("");
             $(INPUT_TICKERS_CURRENCY).val("");
+            showTickers();
+        });
+    });
+
+    $(document).on("click", BTN_ALARMS, function() {
+        const parent = $(this).parent(".box");
+
+        if(parent.css("height") != "60px") {
+            parent.css("height", "60px");
+            return;
+        }
+
+        parent.css("height", "initial");
+    });
+
+    $(document).on("click", BTN_ALARMS_REMOVE, function() {
+        const parentAlarmsBox = $(this).parent(".alarms-box");
+        const parentBox = parentAlarmsBox.parent(".box");
+        
+        const id = parentBox.attr("data-id");
+        const currency = parentBox.attr("data-currency");
+        const index = parentAlarmsBox.attr("data-index");
+
+        $.post(ENDPOINT_URL + "/data/alarms/remove", {id: id, currency: currency, index: index}, (response) => {
+            showTickers();
+        });
+    });
+
+    $(document).on("click", BTN_ALARMS_ADD, function() {
+        const parentAlarmsBox = $(this).parent(".alarms-box");
+        const parentBox = parentAlarmsBox.parent(".box");
+
+        const id = parentBox.attr("data-id");
+        const currency = parentBox.attr("data-currency");
+        const price = $(this).siblings(".input-price").val();
+        const duration = $(this).siblings(".input-duration").val();
+
+        console.log(price)
+        console.log(duration)
+
+        console.log(isNaN(price))
+        console.log(isNaN(duration))
+
+        if(isNaN(price) || isNaN(duration) || price == 0 || duration == 0) {
+            alert("Please enter a valid price and duration");
+            return;
+        }
+        // http://192.168.8.108/data/alarms/add?id=bitcoin&currency=USD&price=2000&duration=3
+        $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration}, (response) => {
             showTickers();
         });
     });
@@ -260,7 +341,7 @@ $(document).ready(function() {
             var to = ui.item.index();
 
             $(this).removeAttr('data-previndex');
-                       
+
             $.post(ENDPOINT_URL + "/data/tickers/order", {from: from, to: to}, (response) => {
                 console.log(response);
             });
@@ -326,7 +407,7 @@ $(document).ready(function() {
         var headerPercentage = $(HEADER_TITLE_RIGHT).children("span");
 
         const file = $(this).get(0).files[0], formData = new FormData();
-        
+
         formData.append('file', file);
 
         $.ajax({
@@ -394,7 +475,7 @@ $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
             $(SUBCONTENT_DASHBOARD).slideDown();
             return;
         }
-        
+
         $( ".nav-button" ).removeClass("disabled");
     }
 });
@@ -403,7 +484,7 @@ $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
   }
-  
+
 function filterFunction() {
     var input, filter, ul, li, a, i;
     input = document.getElementById("myInput");

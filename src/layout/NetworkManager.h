@@ -38,10 +38,13 @@ class NetworkManager {
         void requestWifiList(AsyncWebServerRequest *request);
         void requestWifiConnect(AsyncWebServerRequest *request);
         void requestWifiDisconnect(AsyncWebServerRequest *request);
+
         void requestTickers(AsyncWebServerRequest *request);
         void requestAddTickers(AsyncWebServerRequest *request);
         void requestOrderTickers(AsyncWebServerRequest *request);
         void requestRemoveTickers(AsyncWebServerRequest *request);
+        void requestAddAlarms(AsyncWebServerRequest *request);
+        void requestRemoveAlarms(AsyncWebServerRequest *request);
 
         void requestSettings(AsyncWebServerRequest *request);
         void requestChangeSettings(AsyncWebServerRequest *request);

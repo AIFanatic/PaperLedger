@@ -139,9 +139,11 @@ html, body, .grid-container {
     margin-bottom: 20px;
 
     font-size: 1.2em;
+
+    overflow-y: hidden;
 }
 
-.box > .button {
+.button {
     width: 60px;
     text-align: center;
     font-size: 1.6em;
@@ -318,6 +320,7 @@ html, body, .grid-container {
     color: white;
     cursor: pointer;
     /* caret-color: transparent; */
+    width: 33%;
 }
 
 .tickers input:focus {
@@ -360,6 +363,66 @@ html, body, .grid-container {
     border:1px dashed #52c6f6;
 }
 
-.input-coin, .input-currency {
-    width: 33%;
+/* ALARMS */
+.alarms input {
+    font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    /* caret-color: transparent; */
+    width: 20%;
 }
+
+.alarms input:focus {
+    outline: none;
+}
+/* 
+.col-1 {
+    width: 8.3%;
+}
+
+.col-2 {
+    width: 16.6%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-4 {
+    width: 33.3%;
+}
+
+.col-5 {
+    width: 41.6%
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.3%;
+}
+
+.col-8 {
+    width: 66.6%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-10 {
+    width: 93.3%;
+}
+
+.col-11 {
+    width: 91.6%;
+}
+
+.col-12 {
+    width: 100%;
+} */

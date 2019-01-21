@@ -15,12 +15,21 @@ void LayoutBase::initButtons() {
 
 void LayoutBase::updateButtons() {
     if (leftButton->getSingleDebouncedPress()) {
+        manager->speaker->tone(2240);
+        delay(100);
+        manager->speaker->mute();
         leftButtonClicked();
     }
     if (rightButton->getSingleDebouncedPress()) {
+        manager->speaker->tone(2240);
+        delay(100);
+        manager->speaker->mute();
         rightButtonClicked();
     }
     if (okButton->getSingleDebouncedPress()) {
+        manager->speaker->tone(2240);
+        delay(100);
+        manager->speaker->mute();
         okButtonClicked();
     }
 }

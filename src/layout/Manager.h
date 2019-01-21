@@ -6,6 +6,7 @@
 #include "./NetworkManager.h"
 #include "./Settings.h"
 #include "./Tickers.h"
+#include "../Speaker.h"
 
 #include "../variables.h"
 
@@ -24,6 +25,8 @@ class Manager {
         
         Settings *settings;
         Tickers *tickers;
+
+        SPEAKER *speaker;
         
     private:
         int currentIndex;

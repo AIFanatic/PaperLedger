@@ -192,6 +192,59 @@ void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
 };
 
+void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
+    if(request->params() != 4) {
+        requestInvalid(request);
+        return;
+    }
+
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
+
+    String currency_name = request->getParam(1)->name();
+    String currency_value = request->getParam(1)->value();
+
+    String price_name = request->getParam(2)->name();
+    String price_value = request->getParam(2)->value();
+
+    String duration_name = request->getParam(3)->name();
+    String duration_value = request->getParam(3)->value();
+
+    if(!id_name.equals("id") || !currency_name.equals("currency") || !price_name.equals("price") || !duration_name.equals("duration")) {
+        requestInvalid(request);
+        return;
+    }
+
+    bool ret = manager->tickers->addAlarm(id_value.c_str(), currency_value.c_str(), price_value.c_str(), duration_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
+};
+
+void NetworkManager::requestRemoveAlarms(AsyncWebServerRequest *request) {
+    if(request->params() != 3) {
+        requestInvalid(request);
+        return;
+    }
+
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
+
+    String currency_name = request->getParam(1)->name();
+    String currency_value = request->getParam(1)->value();
+
+    String index_name = request->getParam(2)->name();
+    String index_value = request->getParam(2)->value();
+
+    if(!id_name.equals("id") || !currency_name.equals("currency") || !index_name.equals("index")) {
+        requestInvalid(request);
+        return;
+    }
+
+    bool ret = manager->tickers->removeAlarm(id_value.c_str(), currency_value.c_str(), index_value.toInt());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
+};
+
 void NetworkManager::requestSettings(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
@@ -324,6 +377,14 @@ void NetworkManager::begin() {
 
     server.on("/data/tickers/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
         requestRemoveTickers(request);
+    });
+
+    server.on("/data/alarms/add", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestAddAlarms(request);
+    });
+
+    server.on("/data/alarms/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
+        requestRemoveAlarms(request);
     });
 
     server.on("/data/settings/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
