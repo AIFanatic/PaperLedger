@@ -41,8 +41,9 @@ class NetworkManager {
 
         void requestTickers(AsyncWebServerRequest *request);
         void requestAddTickers(AsyncWebServerRequest *request);
-        void requestOrderTickers(AsyncWebServerRequest *request);
         void requestRemoveTickers(AsyncWebServerRequest *request);
+
+        void requestAlarms(AsyncWebServerRequest *request);
         void requestAddAlarms(AsyncWebServerRequest *request);
         void requestRemoveAlarms(AsyncWebServerRequest *request);
 
