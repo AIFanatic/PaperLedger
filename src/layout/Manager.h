@@ -6,6 +6,7 @@
 #include "./NetworkManager.h"
 #include "./Settings.h"
 #include "./Tickers.h"
+#include "./Alarms.h"
 #include "../Speaker.h"
 
 #include "../variables.h"
@@ -25,6 +26,7 @@ class Manager {
         
         Settings *settings;
         Tickers *tickers;
+        Alarms *alarms;
 
         SPEAKER *speaker;
         
