@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'dejavu_sansbook';
-    src: url('fonts/DVUS.woff') format('woff');
+    src: url('../fonts/DVUS.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
@@ -8,7 +8,7 @@
 
 @font-face {
     font-family: 'dejavu_sansbook_extraligh';
-    src: url('fonts/DVUS-L.woff') format('woff');
+    src: url('../fonts/DVUS-L.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
