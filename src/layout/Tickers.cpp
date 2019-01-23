@@ -108,58 +108,6 @@ bool Tickers::remove(int index) {
     return manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
 }
 
-bool Tickers::addAlarm(const char *id, const char *currency, const char *price, const char *duration) {
-
-    int coinIndex = getIndexOf(id, currency);
-
-    if(coinIndex == -1) {
-        return false;
-    }
-
-    File tickersFile;
-    DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
-
-    DynamicJsonBuffer alarmBuffer;
-    JsonObject& alarm = alarmBuffer.createObject();
-    alarm["price"] = price;
-    alarm["duration"] = duration;
-
-    tickersArray[coinIndex]["alarms"].as<JsonArray>().add(alarm);
-    
-    String str;
-    tickersArray.printTo(str);
-    return manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
-}
-
-bool Tickers::removeAlarm(const char *id, const char *currency, int index) {
-    int coinIndex = getIndexOf(id, currency);
-
-    if(coinIndex == -1) {
-        return false;
-    }
-
-    File tickersFile;
-    DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
-
-    tickersArray[coinIndex]["alarms"].as<JsonArray>().remove(index);
-
-    String str;
-    tickersArray.printTo(str);
-
-    return manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
-}
-
-
 void Tickers::reset() {
     manager->filesystem->deleteFile(SPIFFS, FILE_TICKERS);
     manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, "[]");

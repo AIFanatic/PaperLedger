@@ -25,11 +25,6 @@ class Tickers {
 
         bool updateTickers();
 
-        bool addAlarm(const char *id, const char *currency, const char *price, const char *duration);
-        bool removeAlarm(const char *id, const char *currency, int index);
-
-        void checkAlarms();
-
         void reset();
 
     private:
