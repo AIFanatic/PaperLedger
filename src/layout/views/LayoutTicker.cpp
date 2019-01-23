@@ -23,7 +23,9 @@ void LayoutTicker::rightButtonClicked() {
 };
 
 void LayoutTicker::okButtonClicked() {
-    manager->show(LAYOUT_MAIN);
+    // manager->show(LAYOUT_MAIN);
+    manager->tickers->updateTickers();
+    manager->alarms->checkAlarms();
 };
 
 void LayoutTicker::gotoPreviousTicker() {
@@ -100,6 +102,7 @@ void LayoutTicker::update() {
 
     if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {
         manager->tickers->updateTickers();
+        manager->alarms->checkAlarms();
         lastTickersUpdate = currentTime;
         updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     }
