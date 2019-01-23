@@ -23,9 +23,7 @@ void LayoutTicker::rightButtonClicked() {
 };
 
 void LayoutTicker::okButtonClicked() {
-    // manager->show(LAYOUT_MAIN);
-    manager->tickers->updateTickers();
-    manager->alarms->checkAlarms();
+    manager->show(LAYOUT_MAIN);
 };
 
 void LayoutTicker::gotoPreviousTicker() {
