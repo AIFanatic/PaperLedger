@@ -215,7 +215,7 @@ void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
         return;
     }
 
-    bool ret = manager->tickers->addAlarm(id_value.c_str(), currency_value.c_str(), price_value.c_str(), duration_value.c_str());
+    bool ret = manager->alarms->add(id_value.c_str(), currency_value.c_str(), price_value.c_str(), duration_value.c_str());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };
@@ -240,7 +240,7 @@ void NetworkManager::requestRemoveAlarms(AsyncWebServerRequest *request) {
         return;
     }
 
-    bool ret = manager->tickers->removeAlarm(id_value.c_str(), currency_value.c_str(), index_value.toInt());
+    bool ret = manager->alarms->remove(id_value.c_str(), currency_value.c_str(), index_value.toInt());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };
