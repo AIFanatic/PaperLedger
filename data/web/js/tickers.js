@@ -17,17 +17,21 @@ $(document).ready(function() {
         if(LIST_TICKERS_COINS[0].options.choices.length == 0) {
             console.log("loaded")
             $.getJSON(ENDPOINT_TICKERS + "/coins/list", (response) => {
+                var choices = [];
                 for(coin of response) {
-                    LIST_TICKERS_COINS[0].options.choices.push({text: coin["name"], value: coin["id"]});
+                    choices.push({text: coin["name"], value: coin["id"]});
                 }
+                LIST_TICKERS_COINS[0].setChoices(choices);
             });
         }
 
         if(LIST_TICKERS_CURRENCIES[0].options.choices.length == 0) {
             $.getJSON(ENDPOINT_TICKERS + "/simple/supported_vs_currencies", (response) => {
+                var choices = [];
                 for(currency of response) {
-                    LIST_TICKERS_CURRENCIES[0].options.choices.push({text: currency.toUpperCase(), value: currency.toUpperCase()});
+                    choices.push({text: currency.toUpperCase(), value: currency.toUpperCase()});
                 }
+                LIST_TICKERS_CURRENCIES[0].setChoices(choices);
             });
         }
     }
