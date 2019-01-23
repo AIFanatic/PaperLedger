@@ -70,39 +70,39 @@ bool Alarms::remove(const char *id, const char *currency, int index) {
 }
 
 void Alarms::checkAlarms() {
-    // JsonArray& tickersArray = manager->tickers->get();
+    JsonArray& tickersArray = manager->tickers->get();
 
-    // bool alarmTriggered = false;
+    bool alarmTriggered = false;
 
-    // for(int i = 0; i < tickersArray.size(); i++) {
-    //     // Check if stored as String will likely fail
-    //     double tickerPrice = tickersArray[i]["price"];
+    for(int i = 0; i < tickersArray.size(); i++) {
+        double tickerPrice = tickersArray[i]["price"];
 
-    //     JsonArray& alarms = tickersArray[i]["alarms"].as<JsonArray>();
+        JsonArray& alarms = tickersArray[i]["alarms"].as<JsonArray>();
 
-    //     for(int j = 0; j < alarms.size(); j++) {
-    //         JsonObject& alarm = alarms[j].as<JsonObject>();
+        for(int j = 0; j < alarms.size(); j++) {
+            JsonObject& alarm = alarms[j].as<JsonObject>();
 
-    //         int coinIndex = alarm["coinIndex"];
-    //         double price = alarm["price"];
-    //         int duration = alarm["duration"];
-    //         int type = alarm["type"];
+            double price = alarm["price"];
+            int duration = alarm["duration"];
+            int type = alarm["type"];
 
-    //         if((type == TYPE_ABOVE && tickerPrice >= price) ||
-    //         (type == TYPE_BELOW && tickerPrice <= price)) {
-    //             manager->speaker->tone(2240);
-    //             delay(duration * 1000);
-    //             manager->speaker->mute();
-    //             alarms.remove(i);
-    //             alarmTriggered = true;
-    //         }
-    //     }
-    // }
+            if(tickerPrice > 0) {
+                if((type == TYPE_ABOVE && tickerPrice >= price) ||
+                   (type == TYPE_BELOW && tickerPrice <= price)) {
+                    manager->speaker->tone(2240);
+                    delay(duration * 1000);
+                    manager->speaker->mute();
+                    alarms.remove(j);
+                    alarmTriggered = true;
+                }
+            }
+        }
+    }
 
-    // if(alarmTriggered) {
-    //     String str;
-    //     alarms.printTo(str);
+    if(alarmTriggered) {
+        String str;
+        tickersArray.printTo(str);
 
-    //     manager->filesystem->writeFile(SPIFFS, FILE_ALARMS, str.c_str());
-    // }
+        manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
+    }
 }

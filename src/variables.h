@@ -19,7 +19,6 @@ enum LAYOUTS {
 
 #define FILE_SETTINGS "/settings.json"
 #define FILE_TICKERS "/tickers.json"
-#define FILE_ALARMS "/alarms.json"
 
 #define AP_NAME "inkCrypto"
 #define AP_IP "192.168.1.1"
