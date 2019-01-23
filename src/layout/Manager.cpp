@@ -10,7 +10,6 @@ Manager::Manager() {
     networkManager = new NetworkManager(this);
     settings = new Settings(this);
     tickers = new Tickers(this);
-    alarms = new Alarms(this);
 
     speaker = new SPEAKER();
     speaker->begin(SPEAKER_PIN_PIN, 0);
