@@ -193,7 +193,7 @@ void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
 };
 
 void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
-    if(request->params() != 4) {
+    if(request->params() != 5) {
         requestInvalid(request);
         return;
     }
@@ -210,12 +210,15 @@ void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
     String duration_name = request->getParam(3)->name();
     String duration_value = request->getParam(3)->value();
 
-    if(!id_name.equals("id") || !currency_name.equals("currency") || !price_name.equals("price") || !duration_name.equals("duration")) {
+    String type_name = request->getParam(4)->name();
+    String type_value = request->getParam(4)->value();
+
+    if(!id_name.equals("id") || !currency_name.equals("currency") || !price_name.equals("price") || !duration_name.equals("duration") || !type_name.equals("type")) {
         requestInvalid(request);
         return;
     }
 
-    bool ret = manager->alarms->add(id_value.c_str(), currency_value.c_str(), price_value.c_str(), duration_value.c_str());
+    bool ret = manager->alarms->add(id_value.c_str(), currency_value.c_str(), price_value.c_str(), duration_value.toInt(), type_value.toInt());
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };

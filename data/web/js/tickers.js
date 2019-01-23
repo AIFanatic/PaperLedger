@@ -12,6 +12,7 @@ $(document).ready(function() {
     const BTN_ALARMS = ".btn-alarms";
     const BTN_ALARMS_ADD = ".btn-alarms-add";
     const BTN_ALARMS_REMOVE = ".btn-alarms-remove";
+    const BTN_ALARMS_TYPE = ".btn-alarms-type";
 
     function getTickers() {
         if(LIST_TICKERS_COINS[0].options.choices.length == 0) {
@@ -60,7 +61,12 @@ $(document).ready(function() {
                     const alarms = ticker["alarms"];
                     var alarmCount = 0;
                     for(alarm of alarms) {
-                        var alarmBox = $('<div class="alarms-box">Price: ' + alarm["price"] + " - Duration: " + alarm["duration"] + 's</div>');
+                        var typeIcon = '<i class="fas fa-caret-up green"></i>';
+                        if(alarm["type"] == 1) {
+                            typeIcon = '<i class="fas fa-caret-down red"></i>';
+                        }
+
+                        var alarmBox = $('<div class="alarms-box">' + typeIcon + " " + alarm["price"] + " - Duration: " + alarm["duration"] + 's</div>');
                         alarmBox.attr("data-index", alarmCount);
 
                         var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
@@ -73,6 +79,7 @@ $(document).ready(function() {
 
                     // Add new alarm box
                     var newAlarmBox = $('<div class="alarms-box"></div>');
+                    newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
                     newAlarmBox.append( $('<input class="input-price col-4" type="number" placeholder="Price">') );
                     newAlarmBox.append( $('<input class="input-duration col-4" type="number" placeholder="Duration">') );
                     newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
@@ -114,6 +121,23 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on("click", BTN_ALARMS_TYPE, function(e) {
+        e.preventDefault();
+        const type = $(this).attr("data-type");
+        if(type == 0) {
+            $(this).removeClass("green");
+            $(this).addClass("red");
+            $(this).html('<i class="fas fa-caret-down"></i>')
+            $(this).attr("data-type", "1");
+        }
+        else if(type == 1) {
+            $(this).removeClass("red");
+            $(this).addClass("green");
+            $(this).html('<i class="fas fa-caret-up"></i>')
+            $(this).attr("data-type", "0");
+        }
+    });
+
     $(document).on("click", BTN_ALARMS, function() {
         const parent = $(this).parent(".box");
 
@@ -146,19 +170,14 @@ $(document).ready(function() {
         const currency = parentBox.attr("data-currency");
         const price = $(this).siblings(".input-price").val();
         const duration = $(this).siblings(".input-duration").val();
-
-        console.log(price)
-        console.log(duration)
-
-        console.log(isNaN(price))
-        console.log(isNaN(duration))
+        const type = $(this).siblings(BTN_ALARMS_TYPE).attr("data-type");
 
         if(isNaN(price) || isNaN(duration) || price == 0 || duration == 0) {
             alert("Please enter a valid price and duration");
             return;
         }
         // http://192.168.8.108/data/alarms/add?id=bitcoin&currency=USD&price=2000&duration=3
-        $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration}, (response) => {
+        $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration, type: type}, (response) => {
             showTickers();
         });
     });
