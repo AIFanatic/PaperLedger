@@ -17,7 +17,7 @@ Alarms::Alarms(Manager *_manager) {
 Alarms::~Alarms() {
 };
 
-bool Alarms::add(const char *id, const char *currency, const char *price, const char *duration) {
+bool Alarms::add(const char *id, const char *currency, const char *price, int duration, int type) {
 
     int coinIndex = manager->tickers->getIndexOf(id, currency);
 
@@ -37,6 +37,7 @@ bool Alarms::add(const char *id, const char *currency, const char *price, const 
     JsonObject& alarm = alarmBuffer.createObject();
     alarm["price"] = price;
     alarm["duration"] = duration;
+    alarm["type"] = type;
 
     tickersArray[coinIndex]["alarms"].as<JsonArray>().add(alarm);
     
@@ -69,4 +70,39 @@ bool Alarms::remove(const char *id, const char *currency, int index) {
 }
 
 void Alarms::checkAlarms() {
+    // JsonArray& tickersArray = manager->tickers->get();
+
+    // bool alarmTriggered = false;
+
+    // for(int i = 0; i < tickersArray.size(); i++) {
+    //     // Check if stored as String will likely fail
+    //     double tickerPrice = tickersArray[i]["price"];
+
+    //     JsonArray& alarms = tickersArray[i]["alarms"].as<JsonArray>();
+
+    //     for(int j = 0; j < alarms.size(); j++) {
+    //         JsonObject& alarm = alarms[j].as<JsonObject>();
+
+    //         int coinIndex = alarm["coinIndex"];
+    //         double price = alarm["price"];
+    //         int duration = alarm["duration"];
+    //         int type = alarm["type"];
+
+    //         if((type == TYPE_ABOVE && tickerPrice >= price) ||
+    //         (type == TYPE_BELOW && tickerPrice <= price)) {
+    //             manager->speaker->tone(2240);
+    //             delay(duration * 1000);
+    //             manager->speaker->mute();
+    //             alarms.remove(i);
+    //             alarmTriggered = true;
+    //         }
+    //     }
+    // }
+
+    // if(alarmTriggered) {
+    //     String str;
+    //     alarms.printTo(str);
+
+    //     manager->filesystem->writeFile(SPIFFS, FILE_ALARMS, str.c_str());
+    // }
 }

@@ -74,7 +74,7 @@ $(document).ready(function() {
     $(document).on("click", BTN_NETWORK_DISCONNECT, function() {
         const ssid = $(this).attr("data-ssid");
 
-        $.post(INKTICKER_URL + "/data/wifi/disconnect", (response) => {
+        $.post(ENDPOINT_URL + "/data/wifi/disconnect", (response) => {
             showWifiNetworks();
         });
     });
