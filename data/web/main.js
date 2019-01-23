@@ -33,21 +33,14 @@ const BTN_TICKER_REMOVE = ".btn-ticker-remove";
 const BTN_ALARMS = ".btn-alarms";
 const BTN_ALARMS_ADD = ".btn-alarms-add";
 const BTN_ALARMS_REMOVE = ".btn-alarms-remove";
-const BTN_ALARMS_TYPE = ".btn-alarms-type";
 
 const BTN_SETTINGS_UPDATE = ".btn-settings-update";
 
 const INPUT_TICKERS_COIN = ".tickers .input-coin";
 const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
 
-const INPUT_ALARMS_COIN = ".alarms .input-coin";
-const INPUT_ALARMS_PRICE = ".alarms .input-price";
-const INPUT_ALARMS_DURATION = ".alarms .input-duration";
-
 const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: [],showArrow: false});
 const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [],showArrow: false});
-
-const LIST_ALARMS_COINS = $(INPUT_ALARMS_COIN).immybox({choices: [],showArrow: false});
 
 const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
 
@@ -208,19 +201,43 @@ $(document).ready(function() {
             if(response["status"] == "ok") {
                 const tickers = response["message"];
 
-                var tickersCount = 0;
                 for(ticker of tickers) {
                     var newBox = $('<div class="box"></div>');
                     newBox.text(ticker["coin"] + " - " + ticker["currency"]);
-                    newBox.attr("data-index", tickersCount);
+                    newBox.attr("data-id", ticker["id"]);
+                    newBox.attr("data-coin", ticker["coin"]);
+                    newBox.attr("data-currency", ticker["currency"]);
 
                     var deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" href="#"><i class="fas fa-trash"></i></a>');
+                    var alarmsButton = $('<a class="button dark-blue yellow-bg btn-alarms" href="#"><i class="fas fa-clock"></i></a>');
 
                     newBox.append(deleteButton);
+                    newBox.append(alarmsButton);
+
+                    // Alarms
+                    const alarms = ticker["alarms"];
+                    var alarmCount = 0;
+                    for(alarm of alarms) {
+                        var alarmBox = $('<div class="alarms-box">Price: ' + alarm["price"] + " - Duration: " + alarm["duration"] + 's</div>');
+                        alarmBox.attr("data-index", alarmCount);
+
+                        var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
+                        
+                        alarmBox.append(alarmDeleteButton);
+                        newBox.append(alarmBox);
+
+                        alarmCount++;
+                    }
+
+                    // Add new alarm box
+                    var newAlarmBox = $('<div class="alarms-box"></div>');
+                    newAlarmBox.append( $('<input class="input-price col-4" type="number" placeholder="Price">') );
+                    newAlarmBox.append( $('<input class="input-duration col-4" type="number" placeholder="Duration">') );
+                    newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
+
+                    newBox.append(newAlarmBox);
 
                     $(SUBCONTENT_TICKERS).append(newBox);
-                    
-                    tickersCount++;
                 }
 
                 $(HEADER_TITLE_RIGHT).html('You have ' + tickers.length + " ticker(s)");
@@ -230,9 +247,10 @@ $(document).ready(function() {
 
     $(document).on("click", BTN_TICKER_REMOVE, function() {
         const parent = $(this).parent(".box");
-        const index = parent.attr("data-index");
+        const id = parent.attr("data-id");
+        const currency = parent.attr("data-currency");
 
-        $.post(ENDPOINT_URL + "/data/tickers/remove", {index: index}, (response) => {
+        $.post(ENDPOINT_URL + "/data/tickers/remove", {id: id, currency: currency}, (response) => {
             showTickers();
         });
     });
@@ -254,6 +272,55 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on("click", BTN_ALARMS, function() {
+        const parent = $(this).parent(".box");
+
+        if(parent.css("height") != "60px") {
+            parent.css("height", "60px");
+            return;
+        }
+
+        parent.css("height", "initial");
+    });
+
+    $(document).on("click", BTN_ALARMS_REMOVE, function() {
+        const parentAlarmsBox = $(this).parent(".alarms-box");
+        const parentBox = parentAlarmsBox.parent(".box");
+        
+        const id = parentBox.attr("data-id");
+        const currency = parentBox.attr("data-currency");
+        const index = parentAlarmsBox.attr("data-index");
+
+        $.post(ENDPOINT_URL + "/data/alarms/remove", {id: id, currency: currency, index: index}, (response) => {
+            showTickers();
+        });
+    });
+
+    $(document).on("click", BTN_ALARMS_ADD, function() {
+        const parentAlarmsBox = $(this).parent(".alarms-box");
+        const parentBox = parentAlarmsBox.parent(".box");
+
+        const id = parentBox.attr("data-id");
+        const currency = parentBox.attr("data-currency");
+        const price = $(this).siblings(".input-price").val();
+        const duration = $(this).siblings(".input-duration").val();
+
+        console.log(price)
+        console.log(duration)
+
+        console.log(isNaN(price))
+        console.log(isNaN(duration))
+
+        if(isNaN(price) || isNaN(duration) || price == 0 || duration == 0) {
+            alert("Please enter a valid price and duration");
+            return;
+        }
+        // http://192.168.8.108/data/alarms/add?id=bitcoin&currency=USD&price=2000&duration=3
+        $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration}, (response) => {
+            showTickers();
+        });
+    });
+
     document.addEventListener('MENU_CHANGED', (event) => {
         if(event.detail.menu == "tickers") {
             $(HEADER_TITLE).html("Tickers");
@@ -263,117 +330,26 @@ $(document).ready(function() {
             showTickers();
         }
     });
+
+    $(SUBCONTENT_TICKERS).sortable({
+        items: ".box:not(.non-sortable)",
+        start: function(event, ui) {
+            $(this).attr('data-previndex', ui.item.index());
+        },
+        update: function(event, ui) {
+            var from = $(this).attr('data-previndex');
+            var to = ui.item.index();
+
+            $(this).removeAttr('data-previndex');
+
+            $.post(ENDPOINT_URL + "/data/tickers/order", {from: from, to: to}, (response) => {
+                console.log(response);
+            });
+        }
+    });
+
+    $(".tickers" ).disableSelection();
 });
-
-/* ALARMS */
-$(document).ready(function() {
-    function showCoins() {
-        $.getJSON(ENDPOINT_URL + "/data/tickers/list", (response) => {
-            if(response["status"] == "ok") {
-                const tickers = response["message"];
-
-                var tickersCount = 0;
-                for(ticker of tickers) {
-                    LIST_ALARMS_COINS[0].options.choices.push({text: ticker["coin"] + " - " + ticker["currency"], value: tickersCount});
-
-                    tickersCount++;
-                }
-            }
-        });
-    }
-    function showAlarms() {
-        $(SUBCONTENT_ALARMS).html("");
-
-        $.getJSON(ENDPOINT_URL + "/data/alarms/list", (response) => {
-            if(response["status"] == "ok") {
-                const alarms = response["message"];
-                var alarmCount = 0;
-                for(alarm of alarms) {
-                    var typeIcon = '<i class="fas fa-caret-up"></i>';
-                    if(alarm["type"] == "below") {
-                        typeIcon = '<i class="fas fa-caret-down"></i>';
-                    }
-
-                    var newBox = $('<div class="box"></div>');
-                    newBox.html('Price: ' + typeIcon + " " + alarm["price"] + " - Duration: " + alarm["duration"] + 's');
-                    newBox.attr("data-index", alarmCount);
-
-                    var deleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
-
-                    newBox.append(deleteButton);
-
-                    alarmCount++;
-
-                    $(SUBCONTENT_ALARMS).append(newBox);
-                }
-
-                $(HEADER_TITLE_RIGHT).html('You have ' + alarms.length + " alarm(s)");
-            }
-        });
-    }
-
-    $(document).on("click", BTN_ALARMS_REMOVE, function() {
-        const parent = $(this).parent(".box");
-        const index = parent.attr("data-index");
-
-        $.post(ENDPOINT_URL + "/data/alarms/remove", {index: index}, (response) => {
-            showAlarms();
-        });
-    });
-
-    $(document).on("click", BTN_ALARMS_ADD, function() {
-        if(LIST_ALARMS_COINS[0].selectedChoice === null || LIST_ALARMS_COINS[0].selectedChoice === null) {
-            alert("Please select a coin");
-            return;
-        }
-
-        const coinIndex = LIST_ALARMS_COINS[0].selectedChoice.value;
-        const price = $(INPUT_ALARMS_PRICE).val();
-        const duration = $(INPUT_ALARMS_DURATION).val();
-        const type = $(this).siblings(BTN_ALARMS_TYPE).attr("data-type");
-
-        if(isNaN(price) || isNaN(duration) || price == 0 || duration == 0) {
-            alert("Please enter a valid price and duration");
-            return;
-        }
-
-        $.post(ENDPOINT_URL + "/data/alarms/add", {coinIndex: coinIndex, price: price, duration: duration, type: type}, (response) => {
-            $(INPUT_ALARMS_PRICE).val("");
-            $(INPUT_ALARMS_DURATION).val("");
-
-            showAlarms();
-        });
-    });
-
-    $(document).on("click", BTN_ALARMS_TYPE, function(e) {
-        e.preventDefault();
-        const type = $(this).attr("data-type");
-        if(type == 0) {
-            $(this).removeClass("green");
-            $(this).addClass("red");
-            $(this).html('<i class="fas fa-caret-down"></i>')
-            $(this).attr("data-type", "1");
-        }
-        else if(type == 1) {
-            $(this).removeClass("red");
-            $(this).addClass("green");
-            $(this).html('<i class="fas fa-caret-up"></i>')
-            $(this).attr("data-type", "0");
-        }
-    });
-
-    document.addEventListener('MENU_CHANGED', (event) => {
-        if(event.detail.menu == "alarms") {
-            $(HEADER_TITLE).html("Alarms");
-            $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
-
-            showCoins();
-            showAlarms();
-        }
-    });
-
-});
-
 
 /* SETUP */
 $(document).ready(function() {
@@ -503,3 +479,24 @@ $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
         $( ".nav-button" ).removeClass("disabled");
     }
 });
+
+
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
