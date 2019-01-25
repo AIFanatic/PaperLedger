@@ -14,7 +14,8 @@ class Tickers {
         Tickers(Manager *_manager);
         ~Tickers(void);
 
-        JsonArray& get();
+        String get();
+
         bool add(const char *id, const char *coin, const char *currency);
         bool remove(const char *id, const char *currency);
         bool remove(int index);

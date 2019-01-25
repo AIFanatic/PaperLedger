@@ -22,7 +22,7 @@ Settings::Settings(Manager *_manager) {
 Settings::~Settings() {
 };
 
-JsonObject& Settings::get() {
+String Settings::get() {
     File settings;
     manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
 
@@ -34,7 +34,10 @@ JsonObject& Settings::get() {
     settingsJson.remove("ssid");
     settingsJson.remove("password");
 
-    return settingsJson;
+    String str;
+    settingsJson.printTo(str);
+
+    return str;
 }
 
 String Settings::get(const char *name) {

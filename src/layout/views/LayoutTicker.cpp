@@ -24,6 +24,7 @@ void LayoutTicker::rightButtonClicked() {
 
 void LayoutTicker::okButtonClicked() {
     manager->show(LAYOUT_MAIN);
+    manager->tickers->updateTickers();
 };
 
 void LayoutTicker::gotoPreviousTicker() {
@@ -48,7 +49,9 @@ void LayoutTicker::showNoTickers() {
 }
 
 void LayoutTicker::showTicker() {
-    JsonArray& tickers = manager->tickers->get();
+    String str = manager->tickers->get();
+    DynamicJsonBuffer buffer;
+    JsonArray& tickers = buffer.parse(str);
 
     if(tickers.size() == 0) {
         showNoTickers();

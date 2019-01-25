@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    const CONTENT_DASHBOARD = ".main > .content > .dashboard";
+    const SUBCONTENT_DASHBOARD = CONTENT_DASHBOARD + " > .content .sub-content";
+    
     document.addEventListener('MENU_CHANGED', (event) => {
         if(event.detail.menu == "dashboard") {
             $(HEADER_TITLE).html("Dashboard");

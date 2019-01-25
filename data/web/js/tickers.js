@@ -176,7 +176,7 @@ $(document).ready(function() {
             alert("Please enter a valid price and duration");
             return;
         }
-        // http://192.168.8.108/data/alarms/add?id=bitcoin&currency=USD&price=2000&duration=3
+
         $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration, type: type}, (response) => {
             showTickers();
         });
