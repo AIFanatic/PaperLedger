@@ -70,7 +70,12 @@ bool Alarms::remove(const char *id, const char *currency, int index) {
 }
 
 void Alarms::checkAlarms() {
-    JsonArray& tickersArray = manager->tickers->get();
+    // JsonArray& tickersArray = manager->tickers->get();
+
+    String str = manager->tickers->get();
+
+    DynamicJsonBuffer buffer;
+    JsonArray& tickersArray = buffer.parse(str);
 
     bool alarmTriggered = false;
 

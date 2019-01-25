@@ -102,9 +102,11 @@ void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
 
-    response["status"] = "ok";
+    String tickersStr = manager->tickers->get();
 
-    response["message"] = manager->tickers->get();
+    DynamicJsonBuffer buffer;
+    response["status"] = "ok";
+    response["message"] = buffer.parse(tickersStr);
 
     String str;
     response.printTo(str);
@@ -252,8 +254,11 @@ void NetworkManager::requestSettings(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
 
+    String settingsStr = manager->settings->get();
+
+    DynamicJsonBuffer buffer;
     response["status"] = "ok";
-    response["message"] = manager->settings->get();
+    response["message"] = buffer.parse(settingsStr);
 
     String str;
     response.printTo(str);
