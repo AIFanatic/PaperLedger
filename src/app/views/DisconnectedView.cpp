@@ -34,7 +34,7 @@ void DisconnectedView::rightButtonClicked() {
 
 void DisconnectedView::okButtonClicked() {
     Serial.println("ok button clicked");
-    manager->show(LAYOUT_SETUP);
+    manager->show(SETUP_VIEW);
 };
 
 void DisconnectedView::update() {

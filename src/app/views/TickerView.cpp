@@ -23,7 +23,7 @@ void TickerView::rightButtonClicked() {
 };
 
 void TickerView::okButtonClicked() {
-    manager->show(LAYOUT_MAIN);
+    manager->show(VIEW_MAIN);
     manager->tickers->updateTickers();
 };
 

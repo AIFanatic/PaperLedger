@@ -255,10 +255,16 @@ void WebServer::requestSettings(AsyncWebServerRequest *request) {
     JsonObject& response = jsonBuffer.createObject();
 
     String settingsStr = manager->settings->get();
+    DynamicJsonBuffer settingsBuffer;
+    JsonObject& settings = settingsBuffer.parse(settingsStr);
+    
+    // Remove wifi credentials
+    settings.remove("ssid");
+    settings.remove("password");
 
     DynamicJsonBuffer buffer;
     response["status"] = "ok";
-    response["message"] = buffer.parse(settingsStr);
+    response["message"] = settings;
 
     String str;
     response.printTo(str);

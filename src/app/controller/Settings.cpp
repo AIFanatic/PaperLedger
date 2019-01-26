@@ -30,10 +30,6 @@ String Settings::get() {
     JsonObject& settingsJson = jsonBuffer.parse(settings);
     settings.close();
 
-    // Remove wifi credentials
-    settingsJson.remove("ssid");
-    settingsJson.remove("password");
-
     String str;
     settingsJson.printTo(str);
 
@@ -41,12 +37,9 @@ String Settings::get() {
 }
 
 String Settings::get(const char *name) {
-    File settings;
-    manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
-
+    String settings = get();
     DynamicJsonBuffer jsonBuffer;
     JsonObject& settingsJson = jsonBuffer.parse(settings);
-    settings.close();
 
     String value = settingsJson[name];
 
@@ -54,12 +47,9 @@ String Settings::get(const char *name) {
 }
 
 bool Settings::set(const char *name, const char *value) {
-    File settings;
-    manager->filesystem->readFile(SPIFFS, FILE_SETTINGS, settings);
-
+    String settings = get();
     DynamicJsonBuffer jsonBuffer;
     JsonObject& settingsJson = jsonBuffer.parse(settings);
-    settings.close();
 
     if(!settingsJson.containsKey(name)) {
         return false;
