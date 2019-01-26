@@ -29,13 +29,9 @@ String Tickers::get() {
 }
 
 bool Tickers::add(const char *id, const char *coin, const char *currency) {
-    File tickersFile;
+    String tickers = get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     DynamicJsonBuffer objBuffer;
     JsonObject& obj = objBuffer.createObject();
@@ -61,13 +57,9 @@ bool Tickers::add(const char *id, const char *coin, const char *currency) {
 }
 
 int Tickers::getIndexOf(const char *id, const char *currency) {
-    File tickersFile;
+    String tickers = get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-    
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     for(int i = 0; i < tickersArray.size(); i++) {
         JsonObject& obj = tickersArray[i].as<JsonObject>();
@@ -91,13 +83,9 @@ bool Tickers::remove(const char *id, const char *currency) {
 }
 
 bool Tickers::remove(int index) {
-    File tickersFile;
+    String tickers = get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     tickersArray.remove(index);
 
@@ -124,13 +112,9 @@ String Tickers::getTickerData(const char *ids, const char *currencies) {
 bool Tickers::updateTickers() {
     Serial.println("Updating tickers");
 
-    File tickersFile;
+    String tickers = get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     String coins;
     String currencies;
@@ -178,13 +162,9 @@ bool Tickers::updateTickers() {
 }
 
 bool Tickers::changeOrder(int from, int to) {
-    File tickersFile;
+    String tickers = get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     if(!tickersArray[from].is<JsonObject>() || !tickersArray[to].is<JsonObject>()) {
         return false;

@@ -57,9 +57,9 @@ void MainView::okButtonClicked() {
     if(currentMenu == WALLET) {
     }
     else if(currentMenu == TICKERS) {
-        manager->show(LAYOUT_TICKER);
+        manager->show(TICKER_VIEW);
     }
     else if(currentMenu == SETUP) {
-        manager->show(LAYOUT_SETUP);
+        manager->show(SETUP_VIEW);
     }
 };

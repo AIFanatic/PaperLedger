@@ -7,7 +7,7 @@ void setup() {
     Serial.begin(115200);
    
     manager = new Manager();
-    manager->show(LAYOUT_MAIN);
+    manager->show(VIEW_MAIN);
 }
 
 void loop() {

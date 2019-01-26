@@ -31,16 +31,16 @@ void Manager::show(int index) {
     //     currentLayout = nullptr;
     // }
 
-    if(index == LAYOUT_MAIN) {
+    if(index == VIEW_MAIN) {
         currentLayout = new MainView(this);
     }
-    else if(index == LAYOUT_TICKER) {
+    else if(index == TICKER_VIEW) {
         currentLayout = new TickerView(this);
     }
-    else if(index == LAYOUT_SETUP) {
+    else if(index == SETUP_VIEW) {
         currentLayout = new SetupView(this);
     }
-    else if(index == LAYOUT_DISCONNECTED) {
+    else if(index == DISCONNECTED_VIEW) {
         currentLayout = new DisconnectedView(this, currentIndex);
     }
 
@@ -52,24 +52,24 @@ void Manager::show(int index) {
 // TODO: Ugly, fix
 void Manager::update() {
     if(!isInitializingLayout) {
-        if(currentIndex == LAYOUT_MAIN) {
+        if(currentIndex == VIEW_MAIN) {
             (reinterpret_cast<MainView *>(currentLayout))->update();
         }
-        else if(currentIndex == LAYOUT_TICKER) {
+        else if(currentIndex == TICKER_VIEW) {
             (reinterpret_cast<TickerView *>(currentLayout))->update();
         }
-        else if(currentIndex == LAYOUT_SETUP) {
+        else if(currentIndex == SETUP_VIEW) {
             (reinterpret_cast<SetupView *>(currentLayout))->update();
         }
-        else if(currentIndex == LAYOUT_DISCONNECTED) {
+        else if(currentIndex == DISCONNECTED_VIEW) {
             (reinterpret_cast<DisconnectedView *>(currentLayout))->update();
         }
     }
 
     webserver->update();
 
-    if(!webserver->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED && currentIndex != LAYOUT_SETUP) {
-        show(LAYOUT_DISCONNECTED);
+    if(!webserver->hasInternetAccess && currentIndex != DISCONNECTED_VIEW && currentIndex != SETUP_VIEW) {
+        show(DISCONNECTED_VIEW);
     }
 
     speaker->update();

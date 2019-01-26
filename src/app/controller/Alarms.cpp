@@ -25,13 +25,9 @@ bool Alarms::add(const char *id, const char *currency, const char *price, int du
         return false;
     }
 
-    File tickersFile;
+    String tickers = manager->tickers->get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     DynamicJsonBuffer alarmBuffer;
     JsonObject& alarm = alarmBuffer.createObject();
@@ -53,13 +49,9 @@ bool Alarms::remove(const char *id, const char *currency, int index) {
         return false;
     }
 
-    File tickersFile;
+    String tickers = manager->tickers->get();
     DynamicJsonBuffer jsonBuffer;
-
-    manager->filesystem->readFile(SPIFFS, FILE_TICKERS, tickersFile);
-    JsonArray& tickersArray = jsonBuffer.parse(tickersFile);
-
-    tickersFile.close();
+    JsonArray& tickersArray = jsonBuffer.parse(tickers);
 
     tickersArray[coinIndex]["alarms"].as<JsonArray>().remove(index);
 
