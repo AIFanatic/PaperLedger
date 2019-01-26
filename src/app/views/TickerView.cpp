@@ -68,10 +68,7 @@ void TickerView::showTicker() {
         currentTicker = tickersSize;
     }
 
-    String tickerStr = tickers[currentTicker];
-
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& ticker = jsonBuffer.parse(tickerStr);
+    JsonObject& ticker = tickers[currentTicker].as<JsonObject>();
 
     String coin = ticker["coin"];
     String price = ticker["price"];

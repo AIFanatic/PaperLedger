@@ -70,9 +70,7 @@ int Tickers::getIndexOf(const char *id, const char *currency) {
     tickersFile.close();
 
     for(int i = 0; i < tickersArray.size(); i++) {
-        String str = tickersArray[i];
-        DynamicJsonBuffer objBuffer;
-        JsonObject& obj = objBuffer.parse(str);
+        JsonObject& obj = tickersArray[i].as<JsonObject>();
 
         if(strcmp(obj["id"], id) == 0 && strcmp(obj["currency"], currency) == 0) {
             return i;
