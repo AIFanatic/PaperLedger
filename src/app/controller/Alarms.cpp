@@ -1,6 +1,6 @@
 #include "Alarms.h"
 
-#include "Manager.h"
+#include "../Manager.h"
 
 Alarms::Alarms(Manager *_manager) {
     manager = _manager;

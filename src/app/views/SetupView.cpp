@@ -1,41 +1,41 @@
-#include "LayoutSetup.h"
+#include "SetupView.h"
 
-LayoutSetup::LayoutSetup(Manager *_manager): LayoutBase(_manager) {
+SetupView::SetupView(Manager *_manager): LayoutBase(_manager) {
     initMenu();
     
     showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
 };
 
-LayoutSetup::~LayoutSetup() {
+SetupView::~SetupView() {
 };
 
-void LayoutSetup::initMenu() {
+void SetupView::initMenu() {
     // Init list
     menuList = new LayoutList(manager->render);
     menuList->init(0, 0, 296, 125, 9, BLACK);
 }
 
-void LayoutSetup::showMenu(String menu[][2], int size) {
+void SetupView::showMenu(String menu[][2], int size) {
     menuList->removeAll();
     menuList->addFromArray(menu, size);
 
     menuList->setActive(0);
 }
 
-void LayoutSetup::showStatusMenu() {
+void SetupView::showStatusMenu() {
     String internet = "Internet: ";
-    String networkName = "Network name: " + manager->networkManager->getWifiSSID();
-    String networkSignal = "Network signal: " + String(manager->networkManager->getWifiSignal()) + " dBm";
-    String networkIP = "Network IP: " + manager->networkManager->getWifiIP();
+    String networkName = "Network name: " + manager->webserver->getWifiSSID();
+    String networkSignal = "Network signal: " + String(manager->webserver->getWifiSignal()) + " dBm";
+    String networkIP = "Network IP: " + manager->webserver->getWifiIP();
     String networkMode = "Network mode: Station";
     String freeHeap = "Free ram: " + String(ESP.getFreeHeap()/1000) + " KB";
 
-    if(manager->networkManager->getWifiMode() == WIFI_AP) {
+    if(manager->webserver->getWifiMode() == WIFI_AP) {
         networkName = "Network name: " + String(AP_NAME);
         networkMode = "Network mode: Access point";
     }
 
-    internet += (manager->networkManager->hasInternetAccess) ? "Yes" : "No";
+    internet += (manager->webserver->hasInternetAccess) ? "Yes" : "No";
 
     String STATUS_MENU[7][2] = 
     {
@@ -51,15 +51,15 @@ void LayoutSetup::showStatusMenu() {
     showMenu(STATUS_MENU, SIZEOFARRAY(STATUS_MENU));
 }
 
-void LayoutSetup::leftButtonClicked() {
+void SetupView::leftButtonClicked() {
     menuList->moveUp();
 };
 
-void LayoutSetup::rightButtonClicked() {
+void SetupView::rightButtonClicked() {
     menuList->moveDown();
 };
 
-void LayoutSetup::okButtonClicked() {
+void SetupView::okButtonClicked() {
     String active = menuList->getActiveIdentifier();
 
     Serial.print(active);

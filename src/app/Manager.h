@@ -1,13 +1,13 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "./Render.h"
-#include "../FileSystem.h"
-#include "./NetworkManager.h"
-#include "./Settings.h"
-#include "./Tickers.h"
-#include "./Alarms.h"
-#include "../Speaker.h"
+#include "./controller/Render.h"
+#include "./controller/FileSystem.h"
+#include "./controller/WebServer.h"
+#include "./controller/Settings.h"
+#include "./controller/Tickers.h"
+#include "./controller/Alarms.h"
+#include "./controller/Speaker.h"
 
 #include "../variables.h"
 
@@ -22,7 +22,7 @@ class Manager {
 
         Render *render;
         FileSystem *filesystem;
-        NetworkManager *networkManager;
+        WebServer *webserver;
         
         Settings *settings;
         Tickers *tickers;

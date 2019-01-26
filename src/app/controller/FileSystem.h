@@ -3,7 +3,7 @@
 
 #include "SD.h"
 #include <SPIFFS.h>
-#include "board.h"
+#include "variables.h"
 
 class FileSystem {
     public:

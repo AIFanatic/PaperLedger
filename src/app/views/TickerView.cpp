@@ -1,6 +1,6 @@
-#include "LayoutTicker.h"
+#include "TickerView.h"
 
-LayoutTicker::LayoutTicker(Manager *_manager): LayoutBase(_manager) {
+TickerView::TickerView(Manager *_manager): LayoutBase(_manager) {
     showTicker();
 
     // Init
@@ -11,35 +11,35 @@ LayoutTicker::LayoutTicker(Manager *_manager): LayoutBase(_manager) {
     lastTickersUpdate = millis();
 };
 
-LayoutTicker::~LayoutTicker() {
+TickerView::~TickerView() {
 };
 
-void LayoutTicker::leftButtonClicked() {
+void TickerView::leftButtonClicked() {
     gotoPreviousTicker();
 };
 
-void LayoutTicker::rightButtonClicked() {
+void TickerView::rightButtonClicked() {
     gotoNextTicker();
 };
 
-void LayoutTicker::okButtonClicked() {
+void TickerView::okButtonClicked() {
     manager->show(LAYOUT_MAIN);
     manager->tickers->updateTickers();
 };
 
-void LayoutTicker::gotoPreviousTicker() {
+void TickerView::gotoPreviousTicker() {
     currentTicker--;
     lastScreenUpdate = millis();
     showTicker();
 }
 
-void LayoutTicker::gotoNextTicker() {
+void TickerView::gotoNextTicker() {
     currentTicker++;
     lastScreenUpdate = millis();
     showTicker();
 }
 
-void LayoutTicker::showNoTickers() {
+void TickerView::showNoTickers() {
     manager->render->fillScreen(1);
     manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
     manager->render->drawText(0, 35, "No tickers", 18, WHITE, CENTER_ALIGNMENT);
@@ -48,7 +48,7 @@ void LayoutTicker::showNoTickers() {
     manager->render->draw();
 }
 
-void LayoutTicker::showTicker() {
+void TickerView::showTicker() {
     String str = manager->tickers->get();
     DynamicJsonBuffer buffer;
     JsonArray& tickers = buffer.parse(str);
@@ -91,7 +91,7 @@ void LayoutTicker::showTicker() {
     manager->render->draw();
 }
 
-void LayoutTicker::update() {
+void TickerView::update() {
     LayoutBase::update();
 
     unsigned long currentTime = millis();

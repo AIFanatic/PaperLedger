@@ -1,14 +1,15 @@
-#include "LayoutDisconnected.h"
+#include "DisconnectedView.h"
 
-LayoutDisconnected::LayoutDisconnected(Manager *_manager, int _prevLayoutIndex): LayoutBase(_manager) {
+DisconnectedView::DisconnectedView(Manager *_manager, int _prevLayoutIndex): LayoutBase(_manager) {
     manager->render->fillScreen(WHITE);
     manager->render->drawText(35, 40, "No Internet", 18, BLACK);
 
     String networkName = "Network name: ";
-    String networkIP = "Network IP: ";
+    String networkIP = "Web Portal: http://";
 
     networkName.concat(AP_NAME);
-    networkIP.concat(manager->networkManager->getWifiIP());
+    networkIP.concat(AP_NAME);
+    networkIP.concat(".local");
 
     manager->render->fillScreen(1);
     manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
@@ -20,26 +21,26 @@ LayoutDisconnected::LayoutDisconnected(Manager *_manager, int _prevLayoutIndex):
     prevLayoutIndex = _prevLayoutIndex;
 };
 
-LayoutDisconnected::~LayoutDisconnected() {
+DisconnectedView::~DisconnectedView() {
 };
 
-void LayoutDisconnected::leftButtonClicked() {
+void DisconnectedView::leftButtonClicked() {
     Serial.println("MAIN - left button clicked");
 };
 
-void LayoutDisconnected::rightButtonClicked() {
+void DisconnectedView::rightButtonClicked() {
     Serial.println("right button clicked");
 };
 
-void LayoutDisconnected::okButtonClicked() {
+void DisconnectedView::okButtonClicked() {
     Serial.println("ok button clicked");
     manager->show(LAYOUT_SETUP);
 };
 
-void LayoutDisconnected::update() {
+void DisconnectedView::update() {
     LayoutBase::update();
 
-    if(manager->networkManager->hasInternetAccess) {
+    if(manager->webserver->hasInternetAccess) {
         manager->show(prevLayoutIndex);
     }
 }
