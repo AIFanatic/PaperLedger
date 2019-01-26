@@ -1,14 +1,14 @@
-#ifndef LayoutTicker_H
-#define LayoutTicker_H
+#ifndef TickerView_H
+#define TickerView_H
 
-#include "../Render.h"
+#include "../controller/Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
-class LayoutTicker: public LayoutBase {
+class TickerView: public LayoutBase {
     public:
-        LayoutTicker(Manager *_manager);
-        ~LayoutTicker(void);
+        TickerView(Manager *_manager);
+        ~TickerView(void);
 
         void update();
 

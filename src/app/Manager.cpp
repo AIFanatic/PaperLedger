@@ -1,13 +1,13 @@
 #include "Manager.h"
-#include "./views/LayoutMain.h"
-#include "./views/LayoutTicker.h"
-#include "./views/LayoutSetup.h"
-#include "./views/LayoutDisconnected.h"
+#include "./views/MainView.h"
+#include "./views/TickerView.h"
+#include "./views/SetupView.h"
+#include "./views/DisconnectedView.h"
 
 Manager::Manager() {
     render = new Render();
     filesystem = new FileSystem();
-    networkManager = new NetworkManager(this);
+    webserver = new WebServer(this);
     settings = new Settings(this);
     tickers = new Tickers(this);
     alarms = new Alarms(this);
@@ -17,7 +17,7 @@ Manager::Manager() {
 
     render->clearScreen();
 
-    networkManager->needNetworkReconnect = true;
+    webserver->needNetworkReconnect = true;
 };
 
 Manager::~Manager() {
@@ -32,16 +32,16 @@ void Manager::show(int index) {
     // }
 
     if(index == LAYOUT_MAIN) {
-        currentLayout = new LayoutMain(this);
+        currentLayout = new MainView(this);
     }
     else if(index == LAYOUT_TICKER) {
-        currentLayout = new LayoutTicker(this);
+        currentLayout = new TickerView(this);
     }
     else if(index == LAYOUT_SETUP) {
-        currentLayout = new LayoutSetup(this);
+        currentLayout = new SetupView(this);
     }
     else if(index == LAYOUT_DISCONNECTED) {
-        currentLayout = new LayoutDisconnected(this, currentIndex);
+        currentLayout = new DisconnectedView(this, currentIndex);
     }
 
     currentIndex = index;
@@ -53,22 +53,22 @@ void Manager::show(int index) {
 void Manager::update() {
     if(!isInitializingLayout) {
         if(currentIndex == LAYOUT_MAIN) {
-            (reinterpret_cast<LayoutMain *>(currentLayout))->update();
+            (reinterpret_cast<MainView *>(currentLayout))->update();
         }
         else if(currentIndex == LAYOUT_TICKER) {
-            (reinterpret_cast<LayoutTicker *>(currentLayout))->update();
+            (reinterpret_cast<TickerView *>(currentLayout))->update();
         }
         else if(currentIndex == LAYOUT_SETUP) {
-            (reinterpret_cast<LayoutSetup *>(currentLayout))->update();
+            (reinterpret_cast<SetupView *>(currentLayout))->update();
         }
         else if(currentIndex == LAYOUT_DISCONNECTED) {
-            (reinterpret_cast<LayoutDisconnected *>(currentLayout))->update();
+            (reinterpret_cast<DisconnectedView *>(currentLayout))->update();
         }
     }
 
-    networkManager->update();
+    webserver->update();
 
-    if(!networkManager->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED && currentIndex != LAYOUT_SETUP) {
+    if(!webserver->hasInternetAccess && currentIndex != LAYOUT_DISCONNECTED && currentIndex != LAYOUT_SETUP) {
         show(LAYOUT_DISCONNECTED);
     }
 

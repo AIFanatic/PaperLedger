@@ -13,44 +13,17 @@
 // FreeFonts from Adafruit_GFX
 #include <fonts/FreeSans7.h>
 #include <Fonts/FreeSans8.h>
-
 #include <Fonts/FreeSans9pt7b.h>
 #include <Fonts/FreeSans12pt7b.h>
 #include <Fonts/FreeSans18pt7b.h>
 #include <Fonts/FreeSans24pt7b.h>
-// #include <fonts/DejaVu_9.h>
-// #include <fonts/DejaVu_12.h>
-// #include <fonts/DejaVu_18.h>
-// #include <fonts/DejaVu_24.h>
-
 
 #include <GxIO/GxIO_SPI/GxIO_SPI.h>
 #include <GxIO/GxIO.h>
 
 #include "SPI.h"
 
-#define ELINK_BUSY 4
-#define ELINK_RESET 12
-#define ELINK_DC 19
-#define ELINK_SS 5
-
-#define SPI_MOSI 23
-#define SPI_MISO 2
-#define SPI_CLK 18
-
-#define SDCARD_SS 13
-
-
-
-
-
-#define BLACK 0
-#define WHITE 1
-
-#define NO_ALIGNMENT 0
-#define LEFT_ALIGNMENT 1
-#define RIGHT_ALIGNMENT 2
-#define CENTER_ALIGNMENT 3
+#include "variables.h"
 
 class Render {
     public:

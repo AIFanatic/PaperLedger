@@ -1,13 +1,13 @@
-#include "LayoutMain.h"
+#include "MainView.h"
 
-LayoutMain::LayoutMain(Manager *_manager): LayoutBase(_manager) {
+MainView::MainView(Manager *_manager): LayoutBase(_manager) {
     showMenu();
 };
 
-LayoutMain::~LayoutMain() {
+MainView::~MainView() {
 };
 
-void LayoutMain::showMenu() {
+void MainView::showMenu() {
     manager->render->fillScreen(1);
     manager->render->drawRectangle(85, 4, 130, 120, BLACK, 0);
 
@@ -33,18 +33,9 @@ void LayoutMain::showMenu() {
     }
 
     manager->render->draw();
-
-    // for(int i = 35; i < 255; i++) {
-    //     manager->render->fillScreen(1);
-    //     manager->render->drawText(0, 115, "A", (char)i, 18, BLACK, CENTER_ALIGNMENT);
-    //     Serial.printf("%c %i\n", (char)i, i);
-
-    //     manager->render->draw();
-    //     delay(1000);
-    // }
 };
 
-void LayoutMain::leftButtonClicked() {
+void MainView::leftButtonClicked() {
     Serial.println("left");
     if(currentMenu != WALLET) {
         currentMenu--;
@@ -53,7 +44,7 @@ void LayoutMain::leftButtonClicked() {
     showMenu();
 };
 
-void LayoutMain::rightButtonClicked() {
+void MainView::rightButtonClicked() {
     Serial.println("right");
     if(currentMenu != SETUP) {
         currentMenu++;
@@ -62,7 +53,7 @@ void LayoutMain::rightButtonClicked() {
     showMenu();
 };
 
-void LayoutMain::okButtonClicked() {
+void MainView::okButtonClicked() {
     if(currentMenu == WALLET) {
     }
     else if(currentMenu == TICKERS) {

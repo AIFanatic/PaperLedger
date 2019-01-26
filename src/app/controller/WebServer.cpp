@@ -1,26 +1,26 @@
 
-#include "NetworkManager.h"
+#include "WebServer.h"
 
-#include "Manager.h"
+#include "../Manager.h"
 
-NetworkManager::NetworkManager(Manager *_manager) {
+WebServer::WebServer(Manager *_manager) {
     manager = _manager;
 
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
 };
 
-NetworkManager::~NetworkManager() {
+WebServer::~WebServer() {
 };
 
-void NetworkManager::requestNotFound(AsyncWebServerRequest *request) {
+void WebServer::requestNotFound(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Endpoint not found\"}");
 };
 
-void NetworkManager::requestInvalid(AsyncWebServerRequest *request) {
+void WebServer::requestInvalid(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
 };
 
-void NetworkManager::requestWifiStatus(AsyncWebServerRequest *request) {
+void WebServer::requestWifiStatus(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
     JsonObject& message = response.createNestedObject("message");
@@ -36,7 +36,7 @@ void NetworkManager::requestWifiStatus(AsyncWebServerRequest *request) {
     request->send(200, "application/json", jsonStr);
 };
 
-void NetworkManager::requestWifiList(AsyncWebServerRequest *request) {
+void WebServer::requestWifiList(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
 
@@ -64,7 +64,7 @@ void NetworkManager::requestWifiList(AsyncWebServerRequest *request) {
     request->send(200, "application/json", jsonStr);
 };
 
-void NetworkManager::requestWifiConnect(AsyncWebServerRequest *request) {
+void WebServer::requestWifiConnect(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
         requestInvalid(request);
         return;
@@ -94,11 +94,11 @@ void NetworkManager::requestWifiConnect(AsyncWebServerRequest *request) {
     needNetworkReconnect = true;
 };
 
-void NetworkManager::requestWifiDisconnect(AsyncWebServerRequest *request) {
+void WebServer::requestWifiDisconnect(AsyncWebServerRequest *request) {
     disconnectWifi();
 };
 
-void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
+void WebServer::requestTickers(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
 
@@ -113,7 +113,7 @@ void NetworkManager::requestTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", str);
 };
 
-void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
+void WebServer::requestAddTickers(AsyncWebServerRequest *request) {
     if(request->params() != 3) {
         requestInvalid(request);
         return;
@@ -145,7 +145,7 @@ void NetworkManager::requestAddTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"added\"}");
 };
 
-void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
+void WebServer::requestRemoveTickers(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
         requestInvalid(request);
         return;
@@ -167,7 +167,7 @@ void NetworkManager::requestRemoveTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
 };
 
-void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
+void WebServer::requestOrderTickers(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
         requestInvalid(request);
         return;
@@ -194,7 +194,7 @@ void NetworkManager::requestOrderTickers(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
 };
 
-void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
+void WebServer::requestAddAlarms(AsyncWebServerRequest *request) {
     if(request->params() != 5) {
         requestInvalid(request);
         return;
@@ -225,7 +225,7 @@ void NetworkManager::requestAddAlarms(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };
 
-void NetworkManager::requestRemoveAlarms(AsyncWebServerRequest *request) {
+void WebServer::requestRemoveAlarms(AsyncWebServerRequest *request) {
     if(request->params() != 3) {
         requestInvalid(request);
         return;
@@ -250,7 +250,7 @@ void NetworkManager::requestRemoveAlarms(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };
 
-void NetworkManager::requestSettings(AsyncWebServerRequest *request) {
+void WebServer::requestSettings(AsyncWebServerRequest *request) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject& response = jsonBuffer.createObject();
 
@@ -265,7 +265,7 @@ void NetworkManager::requestSettings(AsyncWebServerRequest *request) {
     request->send(200, "application/json", str);
 }
 
-void NetworkManager::requestChangeSettings(AsyncWebServerRequest *request) {
+void WebServer::requestChangeSettings(AsyncWebServerRequest *request) {
     if(request->params() != 2) {
         requestInvalid(request);
         return;
@@ -292,7 +292,7 @@ void NetworkManager::requestChangeSettings(AsyncWebServerRequest *request) {
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"updated setting\"}");
 }
 
-void NetworkManager::requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
+void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
     //Upload handler chunks in data
     
     if(!index){ // if index == 0 then this is the first frame of data
@@ -328,11 +328,11 @@ void NetworkManager::requestUpdate(AsyncWebServerRequest *request, String filena
     }
 }
 
-void NetworkManager::reset() {
+void WebServer::reset() {
     server.reset();
 }
 
-void NetworkManager::begin() {
+void WebServer::begin() {
     if (MDNS.begin(AP_NAME))
     {
         Serial.println("MDNS responder started");
@@ -431,7 +431,7 @@ void NetworkManager::begin() {
     server.begin();
 }
 
-String NetworkManager::get(String url) {
+String WebServer::get(String url) {
     http.begin(url);
     int httpCode = http.GET();
  
@@ -447,7 +447,7 @@ String NetworkManager::get(String url) {
     return payload;
 };
 
-String NetworkManager::post(String url, String params) {
+String WebServer::post(String url, String params) {
     http.begin(url);
     int httpCode = http.POST(params);
  
@@ -463,23 +463,23 @@ String NetworkManager::post(String url, String params) {
     return payload;
 }
 
-bool NetworkManager::disconnectWifi() {
+bool WebServer::disconnectWifi() {
     return WiFi.disconnect();
 }
 
-bool NetworkManager::reconnectWifi() {
+bool WebServer::reconnectWifi() {
     return WiFi.reconnect();
 }
 
-bool NetworkManager::connectAP(const char *apName) {
+bool WebServer::connectAP(const char *apName) {
     WiFi.mode(WIFI_AP);
 
-    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-
-    if (!WiFi.softAP(apName, NULL, 1, 0, 1))
+    if (!WiFi.softAP(apName))
     {
         return false;
     }
+
+    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     Serial.println(F("AP connected"));
     Serial.println("");
@@ -488,7 +488,7 @@ bool NetworkManager::connectAP(const char *apName) {
     return true;
 }
 
-bool NetworkManager::connectWifi(const char *ssid, const char *password) {
+bool WebServer::connectWifi(const char *ssid, const char *password) {
     if(!ssid || strlen(ssid) == 0) {
         return false;
     }
@@ -515,7 +515,7 @@ bool NetworkManager::connectWifi(const char *ssid, const char *password) {
     return true;
 }
 
-String NetworkManager::getWifiIP() {
+String WebServer::getWifiIP() {
     if(getWifiMode() == WIFI_MODE_AP) {
         return WiFi.softAPIP().toString();
     }
@@ -523,20 +523,20 @@ String NetworkManager::getWifiIP() {
     return WiFi.localIP().toString();
 }
 
-String NetworkManager::getWifiSSID() {
+String WebServer::getWifiSSID() {
     return WiFi.SSID();
 }
 
-int NetworkManager::getWifiSignal() {
+int WebServer::getWifiSignal() {
     return WiFi.RSSI();
 }
 
-wifi_mode_t NetworkManager::getWifiMode() {
+wifi_mode_t WebServer::getWifiMode() {
     return WiFi.getMode();
 }
 
 
-void NetworkManager::checkInternetAccess() {
+void WebServer::checkInternetAccess() {
     String response = get(URL_IM_ALIVE);
 
     if(response.length() == 0) {
@@ -547,7 +547,7 @@ void NetworkManager::checkInternetAccess() {
     Serial.println("Im alive!!!");
 }
 
-void NetworkManager::connectNetwork() {
+void WebServer::connectNetwork() {
     String ssid = manager->settings->get("ssid");
     String password = manager->settings->get("password");
 
@@ -563,7 +563,7 @@ void NetworkManager::connectNetwork() {
     }
 }
 
-void NetworkManager::update() {
+void WebServer::update() {
     // Its better to handle network reconnects in a loop instead of a request
     if(needNetworkReconnect) {
         hasInternetAccess = false;

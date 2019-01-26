@@ -12,11 +12,11 @@
  * https://github.com/me-no-dev/ESPAsyncWebServer#setup-global-and-class-functions-as-request-handlers
  */
 
-#ifndef NetworkManager_h
-#define NetworkManager_h
+#ifndef WebServer_h
+#define WebServer_h
 
 #include <HTTPClient.h>
-#include <ESPAsyncWebServer.h>
+#include <ESPAsyncWebserver.h>
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
 
@@ -24,10 +24,10 @@
 
 class Manager;
 
-class NetworkManager {
+class WebServer {
     public:
-        NetworkManager(Manager *_manager);
-        ~NetworkManager(void);
+        WebServer(Manager *_manager);
+        ~WebServer(void);
 
         void update();
 

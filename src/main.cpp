@@ -1,4 +1,4 @@
-#include "./layout/Manager.h"
+#include "./app/Manager.h"
 
 Manager *manager;
 

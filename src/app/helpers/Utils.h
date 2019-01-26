@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-class Util {
+class Utils {
     public:
         static double roundDecimals(double num, int precision) {
             if(num == 0) {
@@ -18,16 +18,16 @@ class Util {
             }
 
             if(num >= 1000000000) {
-                return String(Util::roundDecimals(num / 1000000000, precision)) + " B";
+                return String(Utils::roundDecimals(num / 1000000000, precision)) + " B";
             }
             else if(num >= 1000000) {
-                return String(Util::roundDecimals(num / 1000000, precision)) + " M";
+                return String(Utils::roundDecimals(num / 1000000, precision)) + " M";
             }
             else if(num >= 1000) {
-                return String(Util::roundDecimals(num / 1000, precision)) + " K";
+                return String(Utils::roundDecimals(num / 1000, precision)) + " K";
             }
 
-            return String(Util::roundDecimals(num, precision));
+            return String(Utils::roundDecimals(num, precision));
         }
 };
 

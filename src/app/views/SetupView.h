@@ -1,7 +1,7 @@
-#ifndef LayoutSetup_H
-#define LayoutSetup_H
+#ifndef SetupView_H
+#define SetupView_H
 
-#include "../Render.h"
+#include "../controller/Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 #include "../helpers/LayoutList.h"
@@ -11,10 +11,10 @@
 
 #define SIZEOFARRAY(x)  (sizeof(x) / sizeof((x)[0]))
 
-class LayoutSetup: public LayoutBase {
+class SetupView: public LayoutBase {
     public:
-        LayoutSetup(Manager *_manager);
-        ~LayoutSetup(void);
+        SetupView(Manager *_manager);
+        ~SetupView(void);
 
     private:        
         void initMenu();

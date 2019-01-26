@@ -1,6 +1,6 @@
 #include "Tickers.h"
 
-#include "Manager.h"
+#include "../Manager.h"
 
 Tickers::Tickers(Manager *_manager) {
     manager = _manager;
@@ -120,7 +120,7 @@ String Tickers::getTickerData(const char *ids, const char *currencies) {
     url.concat("&vs_currencies=");
     url.concat(currencies);
 
-    return manager->networkManager->get(url);
+    return manager->webserver->get(url);
 }
 
 bool Tickers::updateTickers() {
@@ -164,8 +164,8 @@ bool Tickers::updateTickers() {
 
         String price = responseJson[id][currency];
         String last_update = responseJson[id]["last_updated_at"];
-        String change_24h = String(Util::roundDecimals(responseJson[id][currency + "_24h_change"], 2));
-        String vol_24h = Util::numToHuman(responseJson[id][currency + "_24h_vol"], 2);
+        String change_24h = String(Utils::roundDecimals(responseJson[id][currency + "_24h_change"], 2));
+        String vol_24h = Utils::numToHuman(responseJson[id][currency + "_24h_vol"], 2);
 
         tickersArray[i]["price"] = price;
         tickersArray[i]["last_update"] = last_update;

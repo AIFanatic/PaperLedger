@@ -21,7 +21,7 @@ $(document).ready(function() {
                         settingParsed = settingParsed.charAt(0).toUpperCase() + settingParsed.slice(1);
 
                         var newBox = $('<div class="box"></div>');
-                        newBox.text(settingParsed + ": " + settings[key]);
+                        newBox.text(settingParsed + ": " + settings[key] + "s");
 
                         var button = $('<a class="button dark-blue yellow-bg btn-settings-update" href="#"><i class="fas fa-edit"></i></a>');
                         button.attr("data-name", key);

@@ -1,14 +1,14 @@
-#ifndef LayoutMain_H
-#define LayoutMain_H
+#ifndef MainView_H
+#define MainView_H
 
-#include "../Render.h"
+#include "../controller/Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
-class LayoutMain: public LayoutBase {
+class MainView: public LayoutBase {
     public:
-        LayoutMain(Manager *_manager);
-        ~LayoutMain(void);
+        MainView(Manager *_manager);
+        ~MainView(void);
 
     private:
         void leftButtonClicked();

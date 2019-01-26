@@ -1,6 +1,6 @@
 #include "Settings.h"
 
-#include "Manager.h"
+#include "../Manager.h"
 
 Settings::Settings(Manager *_manager) {
     manager = _manager;
