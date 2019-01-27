@@ -32,6 +32,16 @@ void SPEAKER::beep() {
     tone(_beep_freq, _beep_duration);
 }
 
+void SPEAKER::beep(uint16_t frequency, uint16_t duration, uint16_t numBeeps) {
+    for(int i = 0; i < numBeeps; i++) {
+        tone(frequency);
+        delay(duration / 2);
+        mute();
+        delay(duration / 2);
+
+    }
+}
+
 void SPEAKER::setBeep(uint16_t frequency, uint16_t duration) {
     _beep_freq = frequency;
     _beep_duration = duration;

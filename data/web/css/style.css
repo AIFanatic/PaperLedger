@@ -219,6 +219,10 @@ html, body, .grid-container {
     .nav-open-button {
         display: table-cell;
     }
+
+    .main > .content {
+        padding: 20px 0px 0px 0px !important;
+    }
 }
 
 
@@ -319,8 +323,6 @@ html, body, .grid-container {
     border: none;
     color: white;
     cursor: pointer;
-    /* caret-color: transparent; */
-    width: 33%;
 }
 
 .tickers input:focus {

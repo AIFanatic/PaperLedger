@@ -86,9 +86,12 @@ void Alarms::checkAlarms() {
             if(tickerPrice > 0) {
                 if((type == TYPE_ABOVE && tickerPrice >= price) ||
                    (type == TYPE_BELOW && tickerPrice <= price)) {
-                    manager->speaker->tone(2240);
-                    delay(duration * 1000);
+                    // manager->speaker->tone(2240);
+                    // delay(duration * 1000);
+                    // manager->speaker->mute();
+                    manager->speaker->beep(2240, (duration * 1000) / 5, 5);
                     manager->speaker->mute();
+                    
                     alarms.remove(j);
                     alarmTriggered = true;
                 }
