@@ -14,6 +14,9 @@ void MainView::showMenu() {
     if(currentMenu == WALLET) {
         manager->render->drawImage(8, 115, 15, 64, 64, BLACK, 2);
         manager->render->drawText(0, 115, "Wallet", 18, BLACK, CENTER_ALIGNMENT);
+
+        manager->render->drawRectangle(100, 44, 100, 15, BLACK, 1);
+        manager->render->drawText(0, 55, "Coming soon", 7, WHITE, CENTER_ALIGNMENT);
     }
     else if(currentMenu == TICKERS) {
         manager->render->drawImage(9, 115, 15, 64, 64, BLACK, 2);

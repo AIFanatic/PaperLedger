@@ -313,7 +313,7 @@ void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, s
 
         // calculate sketch space required for the update
         // uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
-        if(!Update.begin(UPDATE_SIZE_UNKNOWN, command)){//start with max available size
+        if(!Update.begin(UPDATE_SIZE_UNKNOWN, command)) {//start with max available size
             Update.printError(Serial);
         }
         // Update.runAsync(true); // tell the updaterClass to run in async mode
@@ -413,8 +413,14 @@ void WebServer::begin() {
         DynamicJsonBuffer jsonBuffer;
         JsonObject& response = jsonBuffer.createObject();
 
-        response["status"] = "ok";
-        response["message"] = Update.getError();
+        if(Update.hasError()) {
+            response["status"] = "error";
+            response["message"] = Update.getError();
+        }
+        else {
+            response["status"] = "ok";
+            response["message"] = "Updated";
+        }
 
         String str;
         response.printTo(str);

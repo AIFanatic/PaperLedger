@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     const CONTENT_SETUP = ".main > .content > .setup";
     const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
@@ -5,6 +6,18 @@ $(document).ready(function() {
     const BTN_SETTINGS_UPDATE = ".btn-settings-update";
     
     const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
+
+    const ERRORS_UPDATE = ["No Error", "Flash Write Failed", "Flash Erase Failed", "Flash Read Failed", "Not Enough Space",
+    "Bad Size Given", "Stream Read Timeout", "MD5 Check Failed", "Wrong Magic Byte", "Could Not Activate The Firmware", 
+    "Partition Could Not be Found", "Aborted"];
+
+    function updateError2Str(error){
+    if(!ERRORS_UPDATE[error]) {
+    return "UNKNOWN";
+    }
+
+    return ERRORS_UPDATE[error];
+    }
 
     function showSettings() {
         $(SUBCONTENT_SETUP).html("");
@@ -55,6 +68,7 @@ $(document).ready(function() {
     });
 
     $(document).on("change", INPUT_UPDATE_FILE, function() {
+
         $(HEADER_TITLE_RIGHT).html('Updating: <span>0</span>% <i class="fas fa-circle-notch fa-spin"></i>');
 
         var headerPercentage = $(HEADER_TITLE_RIGHT).children("span");
@@ -62,6 +76,8 @@ $(document).ready(function() {
         const file = $(this).get(0).files[0], formData = new FormData();
 
         formData.append('file', file);
+
+        $(this).val("");
 
         $.ajax({
             url: ENDPOINT_URL + "/update",
@@ -88,11 +104,11 @@ $(document).ready(function() {
                 return jqXHR;
             },
             success: function(data) {
-                if(data["message"] == 0) {
+                if(data["status"] == "ok") {
                     $(HEADER_TITLE_RIGHT).html("Updated successfully");
                     return;
                 }
-                $(HEADER_TITLE_RIGHT).html("Update failed: " + data["message"]);
+                $(HEADER_TITLE_RIGHT).html("Update failed: " + updateError2Str(data["message"]));
             },
             error: function(data) {
                 $(HEADER_TITLE_RIGHT).html("Update failed: " + data);

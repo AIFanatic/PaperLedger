@@ -19,6 +19,7 @@ public:
     void tone(uint16_t frequency, uint32_t duration);
     void beep();
     void setBeep(uint16_t frequency, uint16_t duration);
+    void beep(uint16_t frequency, uint16_t duration, uint16_t numBeeps);
     void update();
     
     void write(uint8_t value);

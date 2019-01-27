@@ -4,8 +4,8 @@ $(document).ready(function() {
     const INPUT_TICKERS_COIN = ".tickers .input-coin";
     const INPUT_TICKERS_CURRENCY = ".tickers .input-currency";
 
-    const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: [],showArrow: false});
-    const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [],showArrow: false});
+    const LIST_TICKERS_COINS = $(INPUT_TICKERS_COIN).immybox({choices: [], showArrow: false, maxResults: 100});
+    const LIST_TICKERS_CURRENCIES = $(INPUT_TICKERS_CURRENCY).immybox({choices: [], showArrow: false, maxResults: 100});
 
     const BTN_TICKER_ADD = ".btn-ticker-add";
     const BTN_TICKER_REMOVE = ".btn-ticker-remove";
@@ -80,8 +80,8 @@ $(document).ready(function() {
                     // Add new alarm box
                     var newAlarmBox = $('<div class="alarms-box"></div>');
                     newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
-                    newAlarmBox.append( $('<input class="input-price col-4" type="number" placeholder="Price">') );
-                    newAlarmBox.append( $('<input class="input-duration col-4" type="number" placeholder="Duration">') );
+                    newAlarmBox.append( $('<input class="input-price" type="number" placeholder="Price" min=0>') );
+                    newAlarmBox.append( $('<input class="input-duration" type="number" placeholder="Duration">') );
                     newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
 
                     newBox.append(newAlarmBox);
