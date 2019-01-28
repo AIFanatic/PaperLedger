@@ -1,0 +1,386 @@
+@font-face {
+    font-family: 'dejavu_sansbook';
+    src: url('../fonts/DVUS.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'dejavu_sansbook_extraligh';
+    src: url('../fonts/DVUS-L.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+html, body, .grid-container {
+    height: 100%; 
+    margin: 0;
+    color: white;
+    font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 100px 1.8fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "nav main";
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100px 1.8fr;
+  grid-template-areas: "header" ".";
+  grid-area: main;
+
+  background: #214263;
+}
+
+.main > .content {
+    padding: 20px;
+}
+
+.main-filter {
+    -webkit-filter: brightness(0.6);
+    -moz-filter: brightness(0.6);
+    -o-filter: brightness(0.6);
+    -ms-filter: brightness(0.6);
+    filter: brightness(0.6);
+
+    z-index: -1;
+}
+
+.header {
+    grid-area: header;
+    background: #18344d;
+
+    height: 100%;
+    display: table;
+}
+
+.header h2 {
+    vertical-align: middle;
+    display: table-cell;
+    padding-left: 20px;
+}
+
+.header h2.right {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.nav {
+    grid-area: nav;
+
+    background: #18344d;
+}
+
+.nav ul {
+    text-align: center;
+    list-style: none;
+    float: right;
+    margin: 0;
+}
+
+.nav ul > li {
+    margin-bottom: 10px;
+    width: 100px;
+    line-height: 100px;
+}
+
+.nav li a {
+    text-decoration: none;
+    color: #52c6f6;
+    width: 100%;
+    display: block;
+    font-size: 1.6em;
+    
+    transition: background 0.2s linear,
+    color 0.2s linear;
+}
+
+.nav li a:hover {
+    color: #222;
+    background-color: #52c6f6;
+}
+
+.nav li a.disabled {
+    cursor: inherit;
+    color: #222 !important;
+    background: transparent !important;
+}
+
+.nav-open-button {
+    color: white;
+    vertical-align: middle;
+    display: table-cell;
+    padding-left: 20px;
+    font-size: 1.6em;
+
+    display: none;
+}
+
+.nav-mobile {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+}
+
+.box {
+    background: #18344d;
+    height: 60px;
+
+    line-height: 60px;
+    padding-left: 20px;
+
+    margin-bottom: 20px;
+
+    font-size: 1.2em;
+
+    overflow-y: hidden;
+}
+
+.button {
+    width: 60px;
+    text-align: center;
+    font-size: 1.6em;
+    float: right;
+    margin-left: 10px;
+}
+
+.box > .dropdown {
+    color: white;
+    border: none;
+    height: 60px;
+    font-size: 20px;
+    outline: none;
+    font-family: dejavu_sansbook_extraligh;
+}
+
+/* COLORS */
+
+.dark-blue-bg {
+    background: #18344d;
+}
+
+.light-blue-bg {
+    background: #52c6f6;
+}
+
+.green-bg {
+    background: #10adad;
+}
+
+.red-bg {
+    background: #e74a63;
+}
+
+.yellow-bg {
+    background: #f4aa4d;
+}
+
+.dark-blue {
+    color: #18344d;
+}
+
+.light-blue {
+    color: #52c6f6;
+}
+
+.green {
+    color: #10adad;
+}
+
+.red {
+    color: #e74a63;
+}
+
+.yellow {
+    color: #f4aa4d;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+    
+    .grid-container {
+        display: grid;
+        grid-template-columns: 0px 1.8fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "nav main";
+    }
+
+    .nav-open-button {
+        display: table-cell;
+    }
+
+    .main > .content {
+        padding: 20px 0px 0px 0px !important;
+    }
+}
+
+
+
+
+  /* DASHBOARD */
+
+  .dashboard > .grid {
+    /* Grid Fallback */
+    display: flex;
+    flex-wrap: wrap;
+    
+    /* Supports Grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+    grid-gap: 1em;
+  }
+  
+  .dashboard > .grid > .col {
+    background: #18344d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex: 280px;
+  }
+
+  .dashboard > .grid > .col > i {
+    font-size: 5em;
+    margin-right: 1em;
+    margin-left: 1em;
+  }
+  
+  /* If Grid is supported, remove the margin we set for the fallback */
+  @supports (display: grid) {
+    .module {
+      margin: 0;
+    }
+  }
+
+/* CUSTOMIZE */
+.customize {
+    width: 100%;
+    min-height: 100%;
+    background: #18344d;
+}
+
+.customize > .drawer {
+    display: block;
+    /* width: 500px;
+    min-height: 500px; */
+    background: white;
+}
+
+.rectangle {
+    border: 1px solid #FF0000;
+    position: absolute;
+}
+
+/* WELCOME */
+.dashboard {
+    min-height: 250px;
+    background: #18344d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 20px;
+}
+
+.dashboard > .content a {
+    text-decoration: none;
+    color: #52c6f6;
+    display: block;
+    font-size: 1.5em;
+    
+    transition: background 0.2s linear,
+    color 0.2s linear;
+}
+
+.dashboard > .content a:hover {
+    color: #969696;
+}
+
+.dashboard > .content .title {
+    padding-bottom: 30px;
+}
+
+/* TICKERS */
+.tickers input {
+    font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.tickers input:focus {
+    outline: none;
+}
+
+
+
+.input-update-file {
+    height: 60px;
+    width: 60px;
+    float: right;
+    font-size: 1.6em;
+}
+
+.input-update-file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.input-update-file::before {
+    content: "\f093";
+    display: block;
+    outline: none;
+    cursor: pointer;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    text-align: center;
+    line-height: 60px;
+}
+
+.input-update-file:active {
+    outline: 0;
+}
+
+.input-update-file:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+.ui-sortable-helper {
+    border:1px dashed #52c6f6;
+}
+
+/* ALARMS */
+.alarms input {
+    font-family: dejavu_sansbook_extraligh;
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    /* caret-color: transparent; */
+    width: 20%;
+}
+
+.alarms input:focus {
+    outline: none;
+}
+
+.btn-alarms-type {
+    margin-right: 10px;
+}

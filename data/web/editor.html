@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="icons.css">
+
+        <style>
+
+            .toolbar {
+                display: inline-grid;
+                background: #535353;
+                text-align: center;
+            }
+
+            .toolbar > a {
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+                color: white;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .toolbar > a:hover {
+                background: #383838;
+            }
+        </style>
+    </head>
+    <body>
+        <ul id="list" style="position: absolute;min-width: 200px;">
+        </ul>
+        <div class="toolbar">
+            <a class="tool-del"><i class="fas fa-minus-circle"></i></a>
+            <a class="tool-delAll"><i class="fas fa-trash"></i></a>
+            <a class="tool-type" data-param="rect"><i class="far fa-square"></i></a>
+            <a class="tool-type" data-param="rect_filled"><i class="fas fa-square"></i></a>
+            <a class="tool-type" data-param="circle"><i class="far fa-circle"></i></a>
+            <a class="tool-type" data-param="circle_filled"><i class="fas fa-circle"></i></a>
+            <a class="tool-type" data-param="text" ><i class="fas fa-font"></i></a>
+            <a class="tool-color" data-param="white"><i class="fas fa-square-full"></i></a>
+            <a class="tool-color" data-param="black"><i style="color: black;" class="fas fa-square-full"></i></a>
+        </div>
+
+        <canvas id="canvas" width="592" height="256" style="background: white; border:1px solid"></canvas>
+
+        <script src="jquery.min.js"></script>
+
+        <script>
+            var drawType = "rect";
+            var color = "black";
+            var action = "draw";
+
+            var selectedNode;
+
+            $(document).on("click",".tool-del", function() {
+                if(selectedNode && action == "move") {
+                    list.removeChild(selectedNode);
+                    selectedNode = null;
+                    action = "draw";
+                    draw();
+                }
+            });
+
+            $(document).on("click",".tool-delAll", function() {
+                while (list.hasChildNodes()) {   
+                    list.removeChild(list.firstChild);
+                }
+                selectedNode = null;
+                action = "draw";
+                draw();
+            });
+
+            $(document).on("click",".tool-type", function() {
+                drawType = $(this).attr("data-param");
+                action = "draw";
+
+                if(selectedNode) {
+                    selectedNode.style.backgroundColor = "transparent";
+                }
+            });
+
+            $(document).on("click",".tool-color", function() {
+                color = $(this).attr("data-param");
+            });
+
+            $(document).on("click","li", function() {
+                if(selectedNode) {
+                    selectedNode.style.backgroundColor = "transparent";
+                }
+
+                selectedNode = $(this)[0];
+                selectedNode.style.backgroundColor = "blue";
+                action = "move";
+                drawType = $(this).attr("data-t");
+            });
+
+            //Canvas
+            var canvas = document.getElementById('canvas');
+            var list = document.getElementById('list');
+            var ctx = canvas.getContext('2d');
+            //Variables
+            var canvasx = canvas.offsetLeft;
+            var canvasy = canvas.offsetTop;
+            var last_mousex = last_mousey = 0;
+            var mousex = mousey = 0;
+            var mousedown = false;
+
+            //Mousedown
+            canvas.onmousedown = function(e) {
+                last_mousex = parseInt(e.clientX-canvasx);
+                last_mousey = parseInt(e.clientY-canvasy);
+                mousedown = true;
+
+                console.log(selectedNode);
+                
+                if(action == "draw") {
+                    selectedNode = document.createElement("li");
+                    var textnode = document.createTextNode(drawType);
+                    selectedNode.appendChild(textnode);
+                }
+                
+                selectedNode.setAttribute("data-x", last_mousex);
+                selectedNode.setAttribute("data-y", last_mousey);
+                selectedNode.setAttribute("data-t", drawType);
+                selectedNode.setAttribute("data-c", color);
+                list.appendChild(selectedNode);
+            }
+
+            //Mouseup
+            canvas.onmouseup = function(e) {
+                mousedown = false;
+            };
+
+            //Mousemove
+            canvas.onmousemove = function(e) {
+                mousex = parseInt(e.clientX-canvasx);
+                mousey = parseInt(e.clientY-canvasy);
+                if(mousedown) {
+                    draw();
+                }
+            };
+
+            function draw() {
+                var width = mousex-last_mousex;
+                var height = mousey-last_mousey;
+
+                if(selectedNode) {
+                    selectedNode.setAttribute("data-w", width);
+                    selectedNode.setAttribute("data-h", height);
+                }
+
+                ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
+                ctx.lineWidth = 1;
+
+                for(child of list.children) {
+                    ctx.beginPath();
+                    const x = child.getAttribute("data-x");
+                    const y = child.getAttribute("data-y");
+                    const w = child.getAttribute("data-w");
+                    const h = child.getAttribute("data-h");
+                    const c = child.getAttribute("data-c");
+                    const t = child.getAttribute("data-t");
+                    
+                    ctx.fillStyle = c;
+                    ctx.strokeStyle = c;
+
+                    if(t == "rect") {
+                        ctx.rect(x,y,w,h);
+                    }
+                    else if(t == "rect_filled") {
+                        ctx.rect(x,y,w,h);
+                        ctx.fill();
+                    }
+                    else if(t == "circle") {
+                        ctx.arc(x, y, Math.abs(w), 0, 2 * Math.PI);
+                    }
+                    else if(t == "circle_filled") {
+                        ctx.arc(x, y, Math.abs(w), 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+
+                    ctx.stroke();
+                }
+            }
+
+        </script>
+    </body>
+</html>
