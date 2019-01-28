@@ -35,10 +35,11 @@
 
 // VIEWS
 enum VIEWS {
-    VIEW_MAIN,
+    MAIN_VIEW,
     TICKER_VIEW,
     SETUP_VIEW,
-    DISCONNECTED_VIEW
+    DISCONNECTED_VIEW,
+    LOADING_VIEW
 };
 
 // FILENAMES
@@ -46,7 +47,7 @@ enum VIEWS {
 #define FILE_TICKERS "/tickers.json"
 
 // NETWORK
-#define AP_NAME "paperledger"
+#define AP_NAME "PaperLedger"
 #define AP_IP "192.168.1.1"
 
 // ENDPOINTS
