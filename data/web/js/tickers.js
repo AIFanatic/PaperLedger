@@ -82,6 +82,8 @@ $(document).ready(function() {
                     newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
                     newAlarmBox.append( $('<input class="input-price" type="number" placeholder="Price" min=0>') );
                     newAlarmBox.append( $('<input class="input-duration" type="number" placeholder="Duration">') );
+                    newAlarmBox.append( $('<input class="input-frequency" type="number" placeholder="Frequency">') );
+                    newAlarmBox.append( $('<input class="input-beeps" type="number" placeholder="Beeps">') );
                     newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
 
                     newBox.append(newAlarmBox);
@@ -170,14 +172,25 @@ $(document).ready(function() {
         const currency = parentBox.attr("data-currency");
         const price = $(this).siblings(".input-price").val();
         const duration = $(this).siblings(".input-duration").val();
+        const frequency = $(this).siblings(".input-frequency").val();
+        const beeps = $(this).siblings(".input-beeps").val();
         const type = $(this).siblings(BTN_ALARMS_TYPE).attr("data-type");
 
-        if(isNaN(price) || isNaN(duration) || price == 0 || duration == 0) {
-            alert("Please enter a valid price and duration");
+        if(isNaN(price) || isNaN(duration) || isNaN(frequency) || isNaN(beeps) || price == 0 || duration == 0 || frequency == 0 || beeps == 0) {
+            alert("Please enter a valid positive values");
             return;
         }
 
-        $.post(ENDPOINT_URL + "/data/alarms/add", {id: id, currency: currency, price: price, duration: duration, type: type}, (response) => {
+        $.post(ENDPOINT_URL + "/data/alarms/add", 
+        {
+            id: id, 
+            currency: currency, 
+            price: price, 
+            duration: duration, 
+            type: type, 
+            frequency: frequency, 
+            beeps: beeps
+        }, (response) => {
             showTickers();
         });
     });
