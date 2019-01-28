@@ -91,6 +91,6 @@ void SetupView::okButtonClicked() {
         showMenu(MAIN_MENU, SIZEOFARRAY(MAIN_MENU));
     }
     else if(active.equals("BACK")) {
-        manager->show(VIEW_MAIN);
+        manager->show(MAIN_VIEW);
     }
 };

@@ -3,6 +3,7 @@
 #include "./views/TickerView.h"
 #include "./views/SetupView.h"
 #include "./views/DisconnectedView.h"
+#include "./views/LoadingView.h"
 
 Manager::Manager() {
     render = new Render();
@@ -31,7 +32,7 @@ void Manager::show(int index) {
     //     currentLayout = nullptr;
     // }
 
-    if(index == VIEW_MAIN) {
+    if(index == MAIN_VIEW) {
         currentLayout = new MainView(this);
     }
     else if(index == TICKER_VIEW) {
@@ -43,6 +44,9 @@ void Manager::show(int index) {
     else if(index == DISCONNECTED_VIEW) {
         currentLayout = new DisconnectedView(this, currentIndex);
     }
+    else if(index == LOADING_VIEW) {
+        currentLayout = new LoadingView(this);
+    }
 
     currentIndex = index;
 
@@ -52,7 +56,7 @@ void Manager::show(int index) {
 // TODO: Ugly, fix
 void Manager::update() {
     if(!isInitializingLayout) {
-        if(currentIndex == VIEW_MAIN) {
+        if(currentIndex == MAIN_VIEW) {
             (reinterpret_cast<MainView *>(currentLayout))->update();
         }
         else if(currentIndex == TICKER_VIEW) {
@@ -63,6 +67,9 @@ void Manager::update() {
         }
         else if(currentIndex == DISCONNECTED_VIEW) {
             (reinterpret_cast<DisconnectedView *>(currentLayout))->update();
+        }
+        else if(currentIndex == LOADING_VIEW) {
+            (reinterpret_cast<LoadingView *>(currentLayout))->update();
         }
     }
 

@@ -23,7 +23,7 @@ void TickerView::rightButtonClicked() {
 };
 
 void TickerView::okButtonClicked() {
-    manager->show(VIEW_MAIN);
+    manager->show(MAIN_VIEW);
 };
 
 void TickerView::gotoPreviousTicker() {
