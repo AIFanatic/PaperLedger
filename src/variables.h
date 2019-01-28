@@ -46,7 +46,7 @@ enum VIEWS {
 #define FILE_TICKERS "/tickers.json"
 
 // NETWORK
-#define AP_NAME "inkCrypto"
+#define AP_NAME "paperledger"
 #define AP_IP "192.168.1.1"
 
 // ENDPOINTS

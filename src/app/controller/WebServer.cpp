@@ -95,6 +95,7 @@ void WebServer::requestWifiConnect(AsyncWebServerRequest *request) {
 };
 
 void WebServer::requestWifiDisconnect(AsyncWebServerRequest *request) {
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"disconnecting\"}");
     disconnectWifi();
 };
 
