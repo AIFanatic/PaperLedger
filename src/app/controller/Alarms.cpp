@@ -17,7 +17,7 @@ Alarms::Alarms(Manager *_manager) {
 Alarms::~Alarms() {
 };
 
-bool Alarms::add(const char *id, const char *currency, const char *price, int duration, int type) {
+bool Alarms::add(const char *id, const char *currency, const char *price, int duration, int type, int frequency, int beeps) {
 
     int coinIndex = manager->tickers->getIndexOf(id, currency);
 
@@ -34,6 +34,8 @@ bool Alarms::add(const char *id, const char *currency, const char *price, int du
     alarm["price"] = price;
     alarm["duration"] = duration;
     alarm["type"] = type;
+    alarm["frequency"] = frequency;
+    alarm["beeps"] = beeps;
 
     tickersArray[coinIndex]["alarms"].as<JsonArray>().add(alarm);
     
@@ -82,6 +84,8 @@ void Alarms::checkAlarms() {
             double price = alarm["price"];
             int duration = alarm["duration"];
             int type = alarm["type"];
+            int frequency = alarm["frequency"];
+            int beeps = alarm["beeps"];
 
             if(tickerPrice > 0) {
                 if((type == TYPE_ABOVE && tickerPrice >= price) ||
@@ -89,7 +93,7 @@ void Alarms::checkAlarms() {
                     // manager->speaker->tone(2240);
                     // delay(duration * 1000);
                     // manager->speaker->mute();
-                    manager->speaker->beep(2240, (duration * 1000) / 5, 5);
+                    manager->speaker->beep(frequency, (duration * 1000) / beeps, beeps);
                     manager->speaker->mute();
                     
                     alarms.remove(j);
