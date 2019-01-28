@@ -24,7 +24,6 @@ void TickerView::rightButtonClicked() {
 
 void TickerView::okButtonClicked() {
     manager->show(VIEW_MAIN);
-    manager->tickers->updateTickers();
 };
 
 void TickerView::gotoPreviousTicker() {
