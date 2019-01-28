@@ -6,3 +6,5 @@
 .vscode/.browse.c_cpp.db*
 .pioenvs
 .piolibdeps
+
+mock
