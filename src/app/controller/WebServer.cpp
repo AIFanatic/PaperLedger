@@ -65,31 +65,18 @@ void WebServer::requestWifiList(AsyncWebServerRequest *request) {
 };
 
 void WebServer::requestWifiConnect(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
-        requestInvalid(request);
+    if(!request->hasParam("ssid", true) || !request->hasParam("password", true)) {
+        manager->webserver->requestInvalid(request);
         return;
     }
 
-    String ssid_name = request->getParam(0)->name();
-    String ssid_value = request->getParam(0)->value();
+    const char *ssid = request->getParam("ssid", true)->value().c_str();
+    const char *password = request->getParam("password", true)->value().c_str();
 
-    String password_name = request->getParam(1)->name();
-    String password_value = request->getParam(1)->value();
+    manager->settings->set("ssid", ssid);
+    manager->settings->set("password", password);
 
-    if(!ssid_name.equals("ssid") || !password_name.equals("password")) {
-        requestInvalid(request);
-        return;
-    }
-
-    Serial.print("Connect to ");
-    Serial.print(ssid_value);
-    Serial.print(" with password ");
-    Serial.println(password_value);
-
-    manager->settings->set("ssid", ssid_value.c_str());
-    manager->settings->set("password", password_value.c_str());
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"reconnecting\"}");
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"connecting\"}");
 
     needNetworkReconnect = true;
 };
