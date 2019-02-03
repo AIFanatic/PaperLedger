@@ -39,16 +39,6 @@ class WebServer {
         void requestWifiConnect(AsyncWebServerRequest *request);
         void requestWifiDisconnect(AsyncWebServerRequest *request);
 
-        void requestTickers(AsyncWebServerRequest *request);
-        void requestAddTickers(AsyncWebServerRequest *request);
-        void requestOrderTickers(AsyncWebServerRequest *request);
-        void requestRemoveTickers(AsyncWebServerRequest *request);
-        void requestAddAlarms(AsyncWebServerRequest *request);
-        void requestRemoveAlarms(AsyncWebServerRequest *request);
-
-        void requestSettings(AsyncWebServerRequest *request);
-        void requestChangeSettings(AsyncWebServerRequest *request);
-
         void requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
 
         void requestNotFound(AsyncWebServerRequest *request);

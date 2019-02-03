@@ -99,220 +99,6 @@ void WebServer::requestWifiDisconnect(AsyncWebServerRequest *request) {
     disconnectWifi();
 };
 
-void WebServer::requestTickers(AsyncWebServerRequest *request) {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& response = jsonBuffer.createObject();
-
-    String tickersStr = manager->tickers->get();
-
-    DynamicJsonBuffer buffer;
-    response["status"] = "ok";
-    response["message"] = buffer.parse(tickersStr);
-
-    String str;
-    response.printTo(str);
-    request->send(200, "application/json", str);
-};
-
-void WebServer::requestAddTickers(AsyncWebServerRequest *request) {
-    if(request->params() != 3) {
-        requestInvalid(request);
-        return;
-    }
-
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
-
-    String coin_name = request->getParam(1)->name();
-    String coin_value = request->getParam(1)->value();
-
-    String currency_name = request->getParam(2)->name();
-    String currency_value = request->getParam(2)->value();
-
-    if(!id_name.equals("id") || !coin_name.equals("coin") || !currency_name.equals("currency")) {
-        requestInvalid(request);
-        return;
-    }
-
-    int index = manager->tickers->getIndexOf(id_value.c_str(), currency_value.c_str());
-
-    if(index != -1) {
-        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Coin already exists\"}");
-        return;
-    }
-
-    manager->tickers->add(id_value.c_str(), coin_value.c_str(), currency_value.c_str());
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"added\"}");
-};
-
-void WebServer::requestRemoveTickers(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
-        requestInvalid(request);
-        return;
-    }
-
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
-
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
-
-    if(!id_name.equals("id") || !currency_name.equals("currency")) {
-        requestInvalid(request);
-        return;
-    }
-
-    manager->tickers->remove(id_value.c_str(), currency_value.c_str());
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
-};
-
-void WebServer::requestOrderTickers(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
-        requestInvalid(request);
-        return;
-    }
-
-    String from_name = request->getParam(0)->name();
-    String from_value = request->getParam(0)->value();
-
-    String to_name = request->getParam(1)->name();
-    String to_value = request->getParam(1)->value();
-
-    if(!from_name.equals("from") || !to_name.equals("to")) {
-        requestInvalid(request);
-        return;
-    }
-
-    bool changedOrder = manager->tickers->changeOrder(from_value.toInt(), to_value.toInt());
-
-    if(!changedOrder) {
-        requestInvalid(request);
-        return;
-    }
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
-};
-
-void WebServer::requestAddAlarms(AsyncWebServerRequest *request) {
-    if(request->params() != 7) {
-        requestInvalid(request);
-        return;
-    }
-
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
-
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
-
-    String price_name = request->getParam(2)->name();
-    String price_value = request->getParam(2)->value();
-
-    String duration_name = request->getParam(3)->name();
-    String duration_value = request->getParam(3)->value();
-
-    String type_name = request->getParam(4)->name();
-    String type_value = request->getParam(4)->value();
-
-    String frequency_name = request->getParam(5)->name();
-    String frequency_value = request->getParam(5)->value();
-
-    String beeps_name = request->getParam(6)->name();
-    String beeps_value = request->getParam(6)->value();
-
-    if(!id_name.equals("id") || !currency_name.equals("currency") || 
-       !price_name.equals("price") || !duration_name.equals("duration") || 
-       !type_name.equals("type") || !frequency_name.equals("frequency") || 
-       !beeps_name.equals("beeps")) {
-        requestInvalid(request);
-        return;
-    }
-
-    bool ret = manager->alarms->add(
-        id_value.c_str(), currency_value.c_str(), 
-        price_value.c_str(), duration_value.toInt(), 
-        type_value.toInt(), frequency_value.toInt(), 
-        beeps_value.toInt()
-    );
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
-};
-
-void WebServer::requestRemoveAlarms(AsyncWebServerRequest *request) {
-    if(request->params() != 3) {
-        requestInvalid(request);
-        return;
-    }
-
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
-
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
-
-    String index_name = request->getParam(2)->name();
-    String index_value = request->getParam(2)->value();
-
-    if(!id_name.equals("id") || !currency_name.equals("currency") || !index_name.equals("index")) {
-        requestInvalid(request);
-        return;
-    }
-
-    bool ret = manager->alarms->remove(id_value.c_str(), currency_value.c_str(), index_value.toInt());
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
-};
-
-void WebServer::requestSettings(AsyncWebServerRequest *request) {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject& response = jsonBuffer.createObject();
-
-    String settingsStr = manager->settings->get();
-    DynamicJsonBuffer settingsBuffer;
-    JsonObject& settings = settingsBuffer.parse(settingsStr);
-    
-    // Remove wifi credentials
-    settings.remove("ssid");
-    settings.remove("password");
-
-    DynamicJsonBuffer buffer;
-    response["status"] = "ok";
-    response["message"] = settings;
-
-    String str;
-    response.printTo(str);
-    request->send(200, "application/json", str);
-}
-
-void WebServer::requestChangeSettings(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
-        requestInvalid(request);
-        return;
-    }
-
-    String setting_name = request->getParam(0)->name();
-    String setting_value = request->getParam(0)->value();
-
-    String value_name = request->getParam(1)->name();
-    String value_value = request->getParam(1)->value();
-
-    if(!setting_name.equals("name") || !value_name.equals("value")) {
-        requestInvalid(request);
-        return;
-    }
-
-    bool changed = manager->settings->set(setting_value.c_str(), value_value.c_str());
-
-    if(!changed) {
-        requestInvalid(request);
-        return;
-    }
-
-    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"updated setting\"}");
-}
-
 void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
     //Upload handler chunks in data
     
@@ -396,35 +182,35 @@ void WebServer::begin() {
     });
 
     server.on("/data/tickers/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
-        requestTickers(request);
+        manager->tickers->requestTickers(request);
     });
 
     server.on("/data/tickers/add", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestAddTickers(request);
+        manager->tickers->requestAddTickers(request);
     });
     
     server.on("/data/tickers/order", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestOrderTickers(request);
+        manager->tickers->requestOrderTickers(request);
     });
 
     server.on("/data/tickers/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestRemoveTickers(request);
+        manager->tickers->requestRemoveTickers(request);
     });
 
     server.on("/data/alarms/add", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestAddAlarms(request);
+        manager->alarms->requestAddAlarms(request);
     });
 
     server.on("/data/alarms/remove", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestRemoveAlarms(request);
+        manager->alarms->requestRemoveAlarms(request);
     });
 
     server.on("/data/settings/list", HTTP_GET, [this](AsyncWebServerRequest *request) {
-        requestSettings(request);
+        manager->settings->requestSettings(request);
     });
 
     server.on("/data/settings/change", HTTP_POST, [this](AsyncWebServerRequest *request) {
-        requestChangeSettings(request);
+        manager->settings->requestChangeSettings(request);
     });
 
     server.on("/update", HTTP_POST, [this](AsyncWebServerRequest *request){

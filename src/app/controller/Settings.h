@@ -2,6 +2,7 @@
 #define Settings_h
 
 #include <Arduino.h>
+#include <ESPAsyncWebserver.h>
 #include <ArduinoJson.h>
 
 class Manager;
@@ -16,6 +17,9 @@ class Settings {
         bool set(const char *name, const char *value);
 
         void reset();
+
+        void requestSettings(AsyncWebServerRequest *request);
+        void requestChangeSettings(AsyncWebServerRequest *request);
 
     private:
         Manager *manager;

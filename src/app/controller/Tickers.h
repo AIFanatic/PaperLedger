@@ -2,7 +2,7 @@
 #define Tickers_h
 
 #include <Arduino.h>
-
+#include <ESPAsyncWebserver.h>
 #include <ArduinoJson.h>
 
 #include "../helpers/Utils.h"
@@ -27,6 +27,11 @@ class Tickers {
         bool updateTickers();
 
         void reset();
+
+        void requestTickers(AsyncWebServerRequest *request);
+        void requestAddTickers(AsyncWebServerRequest *request);
+        void requestOrderTickers(AsyncWebServerRequest *request);
+        void requestRemoveTickers(AsyncWebServerRequest *request);
 
     private:
         Manager *manager;
