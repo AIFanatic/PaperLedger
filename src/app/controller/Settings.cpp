@@ -89,23 +89,15 @@ void Settings::requestSettings(AsyncWebServerRequest *request) {
 }
 
 void Settings::requestChangeSettings(AsyncWebServerRequest *request) {
-    if(request->params() != 2) {
+    if(!request->hasParam("name", true) || !request->hasParam("value", true)) {
         manager->webserver->requestInvalid(request);
         return;
     }
 
-    String setting_name = request->getParam(0)->name();
-    String setting_value = request->getParam(0)->value();
+    const char *name = request->getParam("name", true)->value().c_str();
+    const char *value = request->getParam("value", true)->value().c_str();
 
-    String value_name = request->getParam(1)->name();
-    String value_value = request->getParam(1)->value();
-
-    if(!setting_name.equals("name") || !value_name.equals("value")) {
-        manager->webserver->requestInvalid(request);
-        return;
-    }
-
-    bool changed = manager->settings->set(setting_value.c_str(), value_value.c_str());
+    bool changed = manager->settings->set(name, value);
 
     if(!changed) {
         manager->webserver->requestInvalid(request);

@@ -112,71 +112,44 @@ void Alarms::checkAlarms() {
 }
 
 void Alarms::requestAddAlarms(AsyncWebServerRequest *request) {
-    if(request->params() != 7) {
+    if(!request->hasParam("id", true) || !request->hasParam("currency", true) || 
+       !request->hasParam("price", true) || !request->hasParam("duration", true) ||
+       !request->hasParam("type", true) || !request->hasParam("frequency", true) ||
+       !request->hasParam("beeps", true)) {
         manager->webserver->requestInvalid(request);
         return;
     }
 
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
+    const char *id = request->getParam("id", true)->value().c_str();
+    const char *currency = request->getParam("currency", true)->value().c_str();
+    const char *price = request->getParam("price", true)->value().c_str();
+    int duration = request->getParam("duration", true)->value().toInt();
+    int type = request->getParam("type", true)->value().toInt();
+    int frequency = request->getParam("frequency", true)->value().toInt();
+    int beeps = request->getParam("beeps", true)->value().toInt();
 
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
-
-    String price_name = request->getParam(2)->name();
-    String price_value = request->getParam(2)->value();
-
-    String duration_name = request->getParam(3)->name();
-    String duration_value = request->getParam(3)->value();
-
-    String type_name = request->getParam(4)->name();
-    String type_value = request->getParam(4)->value();
-
-    String frequency_name = request->getParam(5)->name();
-    String frequency_value = request->getParam(5)->value();
-
-    String beeps_name = request->getParam(6)->name();
-    String beeps_value = request->getParam(6)->value();
-
-    if(!id_name.equals("id") || !currency_name.equals("currency") || 
-       !price_name.equals("price") || !duration_name.equals("duration") || 
-       !type_name.equals("type") || !frequency_name.equals("frequency") || 
-       !beeps_name.equals("beeps")) {
-        manager->webserver->requestInvalid(request);
-        return;
-    }
 
     bool ret = add(
-        id_value.c_str(), currency_value.c_str(), 
-        price_value.c_str(), duration_value.toInt(), 
-        type_value.toInt(), frequency_value.toInt(), 
-        beeps_value.toInt()
+        id, currency, 
+        price, duration, 
+        type, frequency, 
+        beeps
     );
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };
 
 void Alarms::requestRemoveAlarms(AsyncWebServerRequest *request) {
-    if(request->params() != 3) {
+    if(!request->hasParam("id", true) || !request->hasParam("currency", true) || !request->hasParam("index", true)) {
         manager->webserver->requestInvalid(request);
         return;
     }
 
-    String id_name = request->getParam(0)->name();
-    String id_value = request->getParam(0)->value();
+    const char *id = request->getParam("id", true)->value().c_str();
+    const char *currency = request->getParam("currency", true)->value().c_str();
+    int index = request->getParam("index", true)->value().toInt();
 
-    String currency_name = request->getParam(1)->name();
-    String currency_value = request->getParam(1)->value();
-
-    String index_name = request->getParam(2)->name();
-    String index_value = request->getParam(2)->value();
-
-    if(!id_name.equals("id") || !currency_name.equals("currency") || !index_name.equals("index")) {
-        manager->webserver->requestInvalid(request);
-        return;
-    }
-
-    bool ret = remove(id_value.c_str(), currency_value.c_str(), index_value.toInt());
+    bool ret = remove(id, currency, index);
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":" + String(ret) + "}");
 };

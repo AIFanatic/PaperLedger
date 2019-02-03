@@ -1,17 +1,3 @@
-/**
- * TODO
- * 
- * Handling responses properly (instead of a String):
- * https://github.com/me-no-dev/ESPAsyncWebServer#arduinojson-basic-response
- * https://github.com/me-no-dev/ESPAsyncWebServer#arduinojson-advanced-response
- * 
- * OTA Updates:
- * https://github.com/me-no-dev/ESPAsyncWebServer#setting-up-the-server
- * 
- * AsyncWebServer in class:
- * https://github.com/me-no-dev/ESPAsyncWebServer#setup-global-and-class-functions-as-request-handlers
- */
-
 #ifndef WebServer_h
 #define WebServer_h
 
