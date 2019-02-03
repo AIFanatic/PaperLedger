@@ -66,7 +66,12 @@ $(document).ready(function() {
                             typeIcon = '<i class="fas fa-caret-down red"></i>';
                         }
 
-                        var alarmBox = $('<div class="alarms-box">' + typeIcon + " " + alarm["price"] + " - Duration: " + alarm["duration"] + 's</div>');
+                        var alarmBox = $('<div class="alarms-box"></div>');
+                        alarmBox.append(typeIcon);
+                        alarmBox.append(" <input disabled value='$" + alarm["price"] + "'>");
+                        alarmBox.append("<input disabled value='" + alarm["duration"] + "s'>");
+                        alarmBox.append("<input disabled value='" + alarm["frequency"] + "Hz'>");
+                        alarmBox.append("<input disabled value='#" + alarm["beeps"] + "'>");
                         alarmBox.attr("data-index", alarmCount);
 
                         var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
@@ -82,7 +87,7 @@ $(document).ready(function() {
                     newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
                     newAlarmBox.append( $('<input class="input-price" type="number" placeholder="Price" min=0>') );
                     newAlarmBox.append( $('<input class="input-duration" type="number" placeholder="Duration">') );
-                    newAlarmBox.append( $('<input class="input-frequency" type="number" placeholder="Frequency">') );
+                    newAlarmBox.append( $('<input class="input-frequency" type="number" placeholder="Freq">') );
                     newAlarmBox.append( $('<input class="input-beeps" type="number" placeholder="Beeps">') );
                     newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
 
@@ -177,7 +182,7 @@ $(document).ready(function() {
         const type = $(this).siblings(BTN_ALARMS_TYPE).attr("data-type");
 
         if(isNaN(price) || isNaN(duration) || isNaN(frequency) || isNaN(beeps) || price == 0 || duration == 0 || frequency == 0 || beeps == 0) {
-            alert("Please enter a valid positive values");
+            alert("Please enter valid positive values, all fields need to be filled.");
             return;
         }
 

@@ -317,6 +317,8 @@ void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, s
     //Upload handler chunks in data
     
     if(!index){ // if index == 0 then this is the first frame of data
+        manager->show(UPDATE_VIEW);
+
         Serial.printf("UploadStart: %s\n", filename.c_str());
         Serial.setDebugOutput(true);
         
@@ -342,6 +344,7 @@ void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, s
     if(final) { // if the final flag is set then this is the last frame of data
         if(Update.end(true)) { //true to set the size to the current progress
             Serial.printf("Update Success: %u B\nRebooting...\n", index+len);
+            manager->show(MAIN_VIEW);
         } else {
             Update.printError(Serial);
         }
