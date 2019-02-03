@@ -2,7 +2,7 @@
 #define Alarms_h
 
 #include <Arduino.h>
-
+#include <ESPAsyncWebserver.h>
 #include <ArduinoJson.h>
 
 #include "../helpers/Utils.h"
@@ -18,6 +18,9 @@ class Alarms {
         bool remove(const char *id, const char *currency, int index);
 
         void checkAlarms();
+
+        void requestAddAlarms(AsyncWebServerRequest *request);
+        void requestRemoveAlarms(AsyncWebServerRequest *request);
 
     private:
         Manager *manager;

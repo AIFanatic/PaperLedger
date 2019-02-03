@@ -181,3 +181,100 @@ bool Tickers::changeOrder(int from, int to) {
 
     return true;
 }
+
+void Tickers::requestTickers(AsyncWebServerRequest *request) {
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& response = jsonBuffer.createObject();
+
+    String tickersStr = get();
+
+    DynamicJsonBuffer buffer;
+    response["status"] = "ok";
+    response["message"] = buffer.parse(tickersStr);
+
+    String str;
+    response.printTo(str);
+    request->send(200, "application/json", str);
+};
+
+void Tickers::requestAddTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 3) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
+
+    String coin_name = request->getParam(1)->name();
+    String coin_value = request->getParam(1)->value();
+
+    String currency_name = request->getParam(2)->name();
+    String currency_value = request->getParam(2)->value();
+
+    if(!id_name.equals("id") || !coin_name.equals("coin") || !currency_name.equals("currency")) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    int index = getIndexOf(id_value.c_str(), currency_value.c_str());
+
+    if(index != -1) {
+        request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Coin already exists\"}");
+        return;
+    }
+
+    add(id_value.c_str(), coin_value.c_str(), currency_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"added\"}");
+};
+
+
+void Tickers::requestRemoveTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    String id_name = request->getParam(0)->name();
+    String id_value = request->getParam(0)->value();
+
+    String currency_name = request->getParam(1)->name();
+    String currency_value = request->getParam(1)->value();
+
+    if(!id_name.equals("id") || !currency_name.equals("currency")) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    remove(id_value.c_str(), currency_value.c_str());
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"removed\"}");
+};
+
+void Tickers::requestOrderTickers(AsyncWebServerRequest *request) {
+    if(request->params() != 2) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    String from_name = request->getParam(0)->name();
+    String from_value = request->getParam(0)->value();
+
+    String to_name = request->getParam(1)->name();
+    String to_value = request->getParam(1)->value();
+
+    if(!from_name.equals("from") || !to_name.equals("to")) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    bool changedOrder = changeOrder(from_value.toInt(), to_value.toInt());
+
+    if(!changedOrder) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"changed order\"}");
+};
