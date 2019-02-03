@@ -1,6 +1,6 @@
 #include "DisconnectedView.h"
 
-DisconnectedView::DisconnectedView(Manager *_manager, int _prevLayoutIndex): LayoutBase(_manager) {
+DisconnectedView::DisconnectedView(Manager *_manager): LayoutBase(_manager) {
     String networkName = "Network name: ";
     String networkIP = "Web Portal: http://";
 
@@ -14,8 +14,6 @@ DisconnectedView::DisconnectedView(Manager *_manager, int _prevLayoutIndex): Lay
     manager->render->drawText(0, 85, networkName.c_str(), 9, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 110, networkIP.c_str() , 9, BLACK, CENTER_ALIGNMENT);
     manager->render->draw();
-
-    prevLayoutIndex = _prevLayoutIndex;
 };
 
 DisconnectedView::~DisconnectedView() {

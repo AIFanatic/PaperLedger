@@ -1,14 +1,14 @@
-#ifndef DisconnectedView_H
-#define DisconnectedView_H
+#ifndef UpdateView_H
+#define UpdateView_H
 
 #include "../controller/Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
-class DisconnectedView: public LayoutBase {
+class UpdateView: public LayoutBase {
     public:
-        DisconnectedView(Manager *_manager);
-        ~DisconnectedView(void);
+        UpdateView(Manager *_manager);
+        ~UpdateView(void);
 
         void update();
 

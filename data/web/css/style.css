@@ -323,6 +323,7 @@ html, body, .grid-container {
     border: none;
     color: white;
     cursor: pointer;
+    width: 35%;
 }
 
 .tickers input:focus {
@@ -382,5 +383,22 @@ html, body, .grid-container {
 }
 
 .btn-alarms-type {
-    margin-right: 10px;
+    margin-right: 6px;
 }
+
+.alarms-box input {
+    width: 18%;
+    text-align: center;
+}
+
+.alarms-box {
+    font-size: 0.8em;
+}
+
+* {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition:    all 0.2s ease;
+    -ms-transition:     all 0.2s ease;
+    -o-transition:      all 0.2s ease;
+    transition:         all 0.2s ease;
+  }

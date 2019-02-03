@@ -4,6 +4,7 @@
 #include "./views/SetupView.h"
 #include "./views/DisconnectedView.h"
 #include "./views/LoadingView.h"
+#include "./views/UpdateView.h"
 
 Manager::Manager() {
     render = new Render();
@@ -42,10 +43,13 @@ void Manager::show(int index) {
         currentLayout = new SetupView(this);
     }
     else if(index == DISCONNECTED_VIEW) {
-        currentLayout = new DisconnectedView(this, currentIndex);
+        currentLayout = new DisconnectedView(this);
     }
     else if(index == LOADING_VIEW) {
         currentLayout = new LoadingView(this);
+    }
+    else if(index == UPDATE_VIEW) {
+        currentLayout = new UpdateView(this);
     }
 
     currentIndex = index;
@@ -70,6 +74,9 @@ void Manager::update() {
         }
         else if(currentIndex == LOADING_VIEW) {
             (reinterpret_cast<LoadingView *>(currentLayout))->update();
+        }
+        else if(currentIndex == UPDATE_VIEW) {
+            (reinterpret_cast<UpdateView *>(currentLayout))->update();
         }
     }
 
