@@ -7,7 +7,7 @@
     position:absolute;
     overflow:auto;
     max-height:20em;
-    background-color:#18344d;
+    background-color:#242424;;
     border:1px solid #52c6f6;
     z-index:9001
 }
@@ -21,7 +21,7 @@
     list-style-type:none;
     margin:0;
     padding:0;
-    background-color: #18344d;
+    background-color: #242424;;
 }
 .immybox_results ul li{
     padding:0.25em 1em;
@@ -35,7 +35,7 @@
     cursor:pointer
 }
 .immybox_results ul li.immybox_choice.active{
-    background-color:#214263
+    background-color:#363636
 }
 .immybox_results ul li.immybox_choice .highlight{
     text-decoration:underline

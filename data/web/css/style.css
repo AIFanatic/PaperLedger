@@ -36,7 +36,7 @@ html, body, .grid-container {
   grid-template-areas: "header" ".";
   grid-area: main;
 
-  background: #214263;
+  background: #242424;
 }
 
 .main > .content {
@@ -55,7 +55,7 @@ html, body, .grid-container {
 
 .header {
     grid-area: header;
-    background: #18344d;
+    background: #363636;
 
     height: 100%;
     display: table;
@@ -75,7 +75,7 @@ html, body, .grid-container {
 .nav {
     grid-area: nav;
 
-    background: #18344d;
+    background: #363636;
 }
 
 .nav ul {
@@ -130,7 +130,7 @@ html, body, .grid-container {
 }
 
 .box {
-    background: #18344d;
+    background: #363636;
     height: 60px;
 
     line-height: 60px;
@@ -288,7 +288,7 @@ html, body, .grid-container {
 /* WELCOME */
 .dashboard {
     min-height: 250px;
-    background: #18344d;
+    background: #363636;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -394,11 +394,3 @@ html, body, .grid-container {
 .alarms-box {
     font-size: 0.8em;
 }
-
-* {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition:    all 0.2s ease;
-    -ms-transition:     all 0.2s ease;
-    -o-transition:      all 0.2s ease;
-    transition:         all 0.2s ease;
-  }

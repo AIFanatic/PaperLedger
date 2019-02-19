@@ -131,6 +131,11 @@ bool Tickers::updateTickers() {
 
     String response = getTickerData(coins.c_str(), currencies.c_str());
 
+    if(response.length() == 0) {
+        Serial.println("Failed to update tickers, invalid response");
+        return false;
+    }
+
     DynamicJsonBuffer responseJsonBuffer;
     JsonObject& responseJson = responseJsonBuffer.parse(response);
 

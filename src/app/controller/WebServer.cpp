@@ -86,45 +86,6 @@ void WebServer::requestWifiDisconnect(AsyncWebServerRequest *request) {
     disconnectWifi();
 };
 
-void WebServer::requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
-    //Upload handler chunks in data
-    
-    if(!index){ // if index == 0 then this is the first frame of data
-        manager->show(UPDATE_VIEW);
-
-        Serial.printf("UploadStart: %s\n", filename.c_str());
-        Serial.setDebugOutput(true);
-        
-        int command = U_FLASH;
-        if(filename.equals("spiffs.bin")) {
-            command = U_SPIFFS;
-            SPIFFS.end();
-        }
-
-        // calculate sketch space required for the update
-        // uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
-        if(!Update.begin(UPDATE_SIZE_UNKNOWN, command)) {//start with max available size
-            Update.printError(Serial);
-        }
-        // Update.runAsync(true); // tell the updaterClass to run in async mode
-    }
-
-    //Write chunked data to the free sketch space
-    if(Update.write(data, len) != len){
-        Update.printError(Serial);
-    }
-    
-    if(final) { // if the final flag is set then this is the last frame of data
-        if(Update.end(true)) { //true to set the size to the current progress
-            Serial.printf("Update Success: %u B\nRebooting...\n", index+len);
-            manager->show(MAIN_VIEW);
-        } else {
-            Update.printError(Serial);
-        }
-        Serial.setDebugOutput(false);
-    }
-}
-
 void WebServer::reset() {
     server.reset();
 }
@@ -201,28 +162,9 @@ void WebServer::begin() {
     });
 
     server.on("/update", HTTP_POST, [this](AsyncWebServerRequest *request){
-        DynamicJsonBuffer jsonBuffer;
-        JsonObject& response = jsonBuffer.createObject();
-
-        if(Update.hasError()) {
-            response["status"] = "error";
-            response["message"] = Update.getError();
-        }
-        else {
-            response["status"] = "ok";
-            response["message"] = "Updated";
-        }
-
-        String str;
-        response.printTo(str);
-        request->send(200, "application/json", str);
-
-        if(!Update.hasError()) {
-            esp_restart();
-        }
-        
+        manager->updater->requestUpdate(request);
     },[this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
-        requestUpdate(request, filename, index, data, len, final);
+        manager->updater->requestUpdateUpload(request, filename, index, data, len, final);
     });
 
     server.onNotFound([this](AsyncWebServerRequest *request) {
@@ -353,9 +295,6 @@ void WebServer::checkInternetAccess() {
 void WebServer::connectNetwork() {
     String ssid = manager->settings->get("ssid");
     String password = manager->settings->get("password");
-
-    Serial.println(ssid);
-    Serial.println(password);
     
     if(!connectWifi(ssid.c_str(), password.c_str())) {
         Serial.println("Unable to connect to wifi, creating AP");

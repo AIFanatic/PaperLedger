@@ -12,10 +12,14 @@ class UpdateView: public LayoutBase {
 
         void update();
 
+        void setText(const char *title, const char *message, const char *subMessage);
+
     private:
         void leftButtonClicked();
         void rightButtonClicked();
         void okButtonClicked();
+
+
 };
 
 #endif

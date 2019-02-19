@@ -13,6 +13,7 @@ Manager::Manager() {
     settings = new Settings(this);
     tickers = new Tickers(this);
     alarms = new Alarms(this);
+    updater = new Updater(this);
 
     speaker = new SPEAKER();
     speaker->begin(SPEAKER_PIN_PIN, 0);
@@ -29,27 +30,27 @@ Manager::~Manager() {
 void Manager::show(int index) {
     isInitializingLayout = true;
 
-    // if(currentLayout) {
-    //     currentLayout = nullptr;
+    // if(currentView) {
+    //     currentView = nullptr;
     // }
 
     if(index == MAIN_VIEW) {
-        currentLayout = new MainView(this);
+        currentView = new MainView(this);
     }
     else if(index == TICKER_VIEW) {
-        currentLayout = new TickerView(this);
+        currentView = new TickerView(this);
     }
     else if(index == SETUP_VIEW) {
-        currentLayout = new SetupView(this);
+        currentView = new SetupView(this);
     }
     else if(index == DISCONNECTED_VIEW) {
-        currentLayout = new DisconnectedView(this);
+        currentView = new DisconnectedView(this);
     }
     else if(index == LOADING_VIEW) {
-        currentLayout = new LoadingView(this);
+        currentView = new LoadingView(this);
     }
     else if(index == UPDATE_VIEW) {
-        currentLayout = new UpdateView(this);
+        currentView = new UpdateView(this);
     }
 
     currentIndex = index;
@@ -61,22 +62,22 @@ void Manager::show(int index) {
 void Manager::update() {
     if(!isInitializingLayout) {
         if(currentIndex == MAIN_VIEW) {
-            (reinterpret_cast<MainView *>(currentLayout))->update();
+            (reinterpret_cast<MainView *>(currentView))->update();
         }
         else if(currentIndex == TICKER_VIEW) {
-            (reinterpret_cast<TickerView *>(currentLayout))->update();
+            (reinterpret_cast<TickerView *>(currentView))->update();
         }
         else if(currentIndex == SETUP_VIEW) {
-            (reinterpret_cast<SetupView *>(currentLayout))->update();
+            (reinterpret_cast<SetupView *>(currentView))->update();
         }
         else if(currentIndex == DISCONNECTED_VIEW) {
-            (reinterpret_cast<DisconnectedView *>(currentLayout))->update();
+            (reinterpret_cast<DisconnectedView *>(currentView))->update();
         }
         else if(currentIndex == LOADING_VIEW) {
-            (reinterpret_cast<LoadingView *>(currentLayout))->update();
+            (reinterpret_cast<LoadingView *>(currentView))->update();
         }
         else if(currentIndex == UPDATE_VIEW) {
-            (reinterpret_cast<UpdateView *>(currentLayout))->update();
+            (reinterpret_cast<UpdateView *>(currentView))->update();
         }
     }
 
@@ -87,4 +88,12 @@ void Manager::update() {
     }
 
     speaker->update();
+}
+
+int Manager::getCurrentIndex() {
+    return currentIndex;
+}
+
+void *Manager::getCurrentView() {
+    return currentView;
 }

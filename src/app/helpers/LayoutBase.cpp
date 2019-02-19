@@ -6,8 +6,6 @@ LayoutBase::LayoutBase(Manager *_manager) {
 };
 
 void LayoutBase::initButtons() {
-    Serial.println("LayoutBase BUTTONS INIT");
-
     leftButton = new Pushbutton(LEFT_BUTTON);
     rightButton = new Pushbutton(RIGHT_BUTTON);
     okButton = new Pushbutton(OK_BUTTON);
