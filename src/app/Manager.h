@@ -8,6 +8,7 @@
 #include "./controller/Tickers.h"
 #include "./controller/Alarms.h"
 #include "./controller/Speaker.h"
+#include "./controller/Updater.h"
 
 #include "../variables.h"
 
@@ -17,8 +18,9 @@ class Manager {
         ~Manager(void);
 
         void update();
-
         void show(int index);
+        int getCurrentIndex();
+        void *getCurrentView();
 
         Render *render;
         FileSystem *filesystem;
@@ -27,13 +29,14 @@ class Manager {
         Settings *settings;
         Tickers *tickers;
         Alarms *alarms;
+        Updater *updater;
 
         SPEAKER *speaker;
         
     private:
         int currentIndex;
 
-        void *currentLayout;
+        void *currentView;
 
         bool isInitializingLayout;
 };

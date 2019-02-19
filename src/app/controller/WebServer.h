@@ -25,8 +25,6 @@ class WebServer {
         void requestWifiConnect(AsyncWebServerRequest *request);
         void requestWifiDisconnect(AsyncWebServerRequest *request);
 
-        void requestUpdate(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final);
-
         void requestNotFound(AsyncWebServerRequest *request);
         void requestInvalid(AsyncWebServerRequest *request);
 

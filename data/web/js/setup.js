@@ -7,18 +7,6 @@ $(document).ready(function() {
     
     const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
 
-    const ERRORS_UPDATE = ["No Error", "Flash Write Failed", "Flash Erase Failed", "Flash Read Failed", "Not Enough Space",
-    "Bad Size Given", "Stream Read Timeout", "MD5 Check Failed", "Wrong Magic Byte", "Could Not Activate The Firmware", 
-    "Partition Could Not be Found", "Aborted"];
-
-    function updateError2Str(error){
-    if(!ERRORS_UPDATE[error]) {
-    return "UNKNOWN";
-    }
-
-    return ERRORS_UPDATE[error];
-    }
-
     function showSettings() {
         $(SUBCONTENT_SETUP).html("");
 
@@ -108,7 +96,7 @@ $(document).ready(function() {
                     $(HEADER_TITLE_RIGHT).html("Updated successfully");
                     return;
                 }
-                $(HEADER_TITLE_RIGHT).html("Update failed: " + updateError2Str(data["message"]));
+                $(HEADER_TITLE_RIGHT).html("Update failed: " + data["message"]);
             },
             error: function(data) {
                 $(HEADER_TITLE_RIGHT).html("Update failed: " + data);
