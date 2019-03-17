@@ -1,6 +1,5 @@
 // const ENDPOINT_URL = "";
-// const ENDPOINT_URL = "http://192.168.1.1";
-const ENDPOINT_URL = "http://192.168.8.105";
+const ENDPOINT_URL = "http://paperledger.local";
 // const ENDPOINT_URL = "/mock";
 const ENDPOINT_TICKERS = "https://api.coingecko.com/api/v3";
 
