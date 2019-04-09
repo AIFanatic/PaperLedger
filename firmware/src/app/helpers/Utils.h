@@ -29,6 +29,15 @@ class Utils {
 
             return String(Utils::roundDecimals(num, precision));
         }
+        
+        static String readableTimestamp(String timestamp) { 
+            char buffer[21];
+            time_t input_time = (time_t) timestamp.toInt();
+            strftime(buffer, 21, "%Y-%m-%d %H:%M UTC", localtime(&input_time));
+
+            String readable_timestamp = buffer;
+            return readable_timestamp;
+        }
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "../controller/Render.h"
 #include "../Manager.h"
 #include "../helpers/LayoutBase.h"
+#include "../helpers/Utils.h"
 
 class TickerView: public LayoutBase {
     public:
