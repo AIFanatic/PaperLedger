@@ -10,7 +10,7 @@ $(document).ready(function() {
     function showSettings() {
         $(SUBCONTENT_SETUP).html("");
 
-        $.getJSON(ENDPOINT_URL + "/data/settings/list", (response) => {
+        $.getJSON("/data/settings/list", (response) => {
             if(response["status"] == "ok") {
                 const settings = response["message"];
 
@@ -50,7 +50,7 @@ $(document).ready(function() {
             return;
         }
 
-        $.post(ENDPOINT_URL + "/data/settings/change", {name: name, value: newValue}, (response) => {
+        $.post("/data/settings/change", {name: name, value: newValue}, (response) => {
             showSettings();
         });
     });
@@ -68,7 +68,7 @@ $(document).ready(function() {
         $(this).val("");
 
         $.ajax({
-            url: ENDPOINT_URL + "/update",
+            url: "/update",
             type: 'POST',
             contentType: false,
             cache: false,
