@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     const CONTENT_SETUP = ".main > .content > .setup";
     const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
@@ -21,12 +20,17 @@ $(document).ready(function() {
                         var settingParsed = key.replace(/_/g, " ");
                         settingParsed = settingParsed.charAt(0).toUpperCase() + settingParsed.slice(1);
 
+                        var settingValue = settings[key];
                         var newBox = $('<div class="box"></div>');
-                        newBox.text(settingParsed + ": " + settings[key] + "s");
+                        if (settingValue != "true" && settingValue != "false") {
+                            settingValue = settingValue + "s";
+                        }
 
+                        newBox.text(settingParsed + ": " + settingValue);
+                        
                         var button = $('<a class="button dark-blue yellow-bg btn-settings-update" href="#"><i class="fas fa-edit"></i></a>');
                         button.attr("data-name", key);
-                        button.attr("data-value", settings[key]);
+                        button.attr("data-value", settingValue);
 
                         newBox.append(button);
 
@@ -44,8 +48,7 @@ $(document).ready(function() {
         const value = $(this).attr("data-value");
 
         var newValue = prompt("Please enter the new value", value);
-
-        if(newValue == null || isNaN(newValue) || newValue == 0) {
+        if(newValue == null || newValue === 0) {
             alert("Invalid value entered");
             return;
         }
