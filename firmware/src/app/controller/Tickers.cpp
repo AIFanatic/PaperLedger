@@ -112,7 +112,7 @@ String Tickers::getTickerData(const char *ids, const char *currencies) {
 bool Tickers::updateTickers() {
     Serial.println("Updating tickers");
 
-    manager->render->drawText(0, 10, ".", 9, BLACK, LEFT_ALIGNMENT);
+    manager->render->drawText(0, 5, ".", 9, BLACK, LEFT_ALIGNMENT);
     manager->render->draw();
 
     String tickers = get();
@@ -132,7 +132,7 @@ bool Tickers::updateTickers() {
         currencies += currency + ",";
     }
 
-    manager->render->drawText(0, 10, "..", 9, BLACK, LEFT_ALIGNMENT);
+    manager->render->drawText(0, 5, "..", 9, BLACK, LEFT_ALIGNMENT);
     manager->render->draw();
 
     String response = getTickerData(coins.c_str(), currencies.c_str());
@@ -141,7 +141,7 @@ bool Tickers::updateTickers() {
         return false;
     }
 
-    manager->render->drawText(0, 10, "...", 9, BLACK, LEFT_ALIGNMENT);
+    manager->render->drawText(0, 5, "...", 9, BLACK, LEFT_ALIGNMENT);
     manager->render->draw();
 
     DynamicJsonBuffer responseJsonBuffer;
@@ -168,7 +168,7 @@ bool Tickers::updateTickers() {
         tickersArray[i]["vol_24h"] = vol_24h;
     }
 
-    manager->render->drawText(0, 10, "....", 9, BLACK, LEFT_ALIGNMENT);
+    manager->render->drawText(0, 5, "....", 9, BLACK, LEFT_ALIGNMENT);
     manager->render->draw();
 
     String str;
