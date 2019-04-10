@@ -9,7 +9,7 @@ $(document).ready(function() {
         }
     });
 
-    $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
+    $.getJSON("/data/wifi/status", (response) => {
         if(response["status"] == "ok") {
             const message = response["message"];
             if(message["internet"] == false) {
