@@ -81,7 +81,7 @@ void TickerView::showTicker() {
     String status = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
 
     manager->render->fillScreen(1);
-    manager->render->drawText(0, 10, ticker["last_update"] != "0" ? last_update.c_str() : "Never", 7, BLACK, RIGHT_ALIGNMENT);
+    manager->render->drawText(0, 10, last_update.c_str(), 7, BLACK, RIGHT_ALIGNMENT);
     manager->render->drawText(0, 52, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 92, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 117, status.c_str(), 8, BLACK, CENTER_ALIGNMENT);
