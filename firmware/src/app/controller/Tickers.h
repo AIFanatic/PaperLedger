@@ -2,7 +2,7 @@
 #define Tickers_h
 
 #include <Arduino.h>
-#include <ESPAsyncWebserver.h>
+#include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 
 #include "../helpers/Utils.h"
