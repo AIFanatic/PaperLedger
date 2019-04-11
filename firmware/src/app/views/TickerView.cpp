@@ -75,15 +75,16 @@ void TickerView::showTicker() {
 
     String pricePretty = price + " " + currency;
 
-    String last_update = ticker["last_update"];
-    String change_24h = ticker["change_24h"];
     String vol_24h = ticker["vol_24h"];
+    String change_24h = ticker["change_24h"];
+    String last_update = ticker["last_update"] != "0" ? Utils::readableTimestamp(ticker["last_update"]) : "Never";
     String status = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
 
     manager->render->fillScreen(1);
-    manager->render->drawText(0, 35, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 80, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 115, status.c_str(), 9, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 10, ticker["last_update"] != "0" ? last_update.c_str() : "Never", 7, BLACK, RIGHT_ALIGNMENT);
+    manager->render->drawText(0, 52, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 92, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 117, status.c_str(), 8, BLACK, CENTER_ALIGNMENT);
     manager->render->draw();
 }
 
