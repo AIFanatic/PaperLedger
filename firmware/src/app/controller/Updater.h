@@ -2,7 +2,7 @@
 #define Updater_h
 
 #include <Arduino.h>
-#include <ESPAsyncWebserver.h>
+#include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 
 class Manager;

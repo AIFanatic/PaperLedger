@@ -2,7 +2,6 @@
 #define _SPEAKER_H_
 
 #include "Arduino.h"
-#include "Config.h"
 
 extern "C" {
 #include "esp32-hal-dac.h"
