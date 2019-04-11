@@ -19,11 +19,11 @@ $(document).ready(function() {
     function showWifiNetworks() {
         $(CONTENT_NETWORK).html("");
 
-        $.getJSON(ENDPOINT_URL + "/data/wifi/status", (response) => {
+        $.getJSON("/data/wifi/status", (response) => {
             if(response["status"] == "ok") {
                 currentNetwork = response["message"]["ssid"];
 
-                $.getJSON(ENDPOINT_URL + "/data/wifi/list", (response) => {
+                $.getJSON("/data/wifi/list", (response) => {
                     if(response["status"] == "ok") {
 
                         const networks = response["message"];
@@ -66,7 +66,7 @@ $(document).ready(function() {
             return;
         }
 
-        $.post(ENDPOINT_URL + "/data/wifi/connect", {ssid: ssid, password: password}, (response) => {
+        $.post("/data/wifi/connect", {ssid: ssid, password: password}, (response) => {
             showWifiNetworks();
         });
     });
@@ -74,7 +74,7 @@ $(document).ready(function() {
     $(document).on("click", BTN_NETWORK_DISCONNECT, function() {
         const ssid = $(this).attr("data-ssid");
 
-        $.post(ENDPOINT_URL + "/data/wifi/disconnect", (response) => {
+        $.post("/data/wifi/disconnect", (response) => {
             showWifiNetworks();
         });
     });

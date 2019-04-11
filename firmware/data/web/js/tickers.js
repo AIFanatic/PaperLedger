@@ -40,7 +40,7 @@ $(document).ready(function() {
     function showTickers() {
         $(SUBCONTENT_TICKERS).html("");
 
-        $.getJSON(ENDPOINT_URL + "/data/tickers/list", (response) => {
+        $.getJSON("/data/tickers/list", (response) => {
             if(response["status"] == "ok") {
                 const tickers = response["message"];
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
         const id = parent.attr("data-id");
         const currency = parent.attr("data-currency");
 
-        $.post(ENDPOINT_URL + "/data/tickers/remove", {id: id, currency: currency}, (response) => {
+        $.post("/data/tickers/remove", {id: id, currency: currency}, (response) => {
             showTickers();
         });
     });
@@ -121,7 +121,7 @@ $(document).ready(function() {
         const coin = LIST_TICKERS_COINS[0].selectedChoice.text;
         const currency = LIST_TICKERS_CURRENCIES[0].selectedChoice.value
 
-        $.post(ENDPOINT_URL + "/data/tickers/add", {id: id, coin: coin, currency: currency}, (response) => {
+        $.post("/data/tickers/add", {id: id, coin: coin, currency: currency}, (response) => {
             $(INPUT_TICKERS_COIN).val("");
             $(INPUT_TICKERS_CURRENCY).val("");
             showTickers();
@@ -164,7 +164,7 @@ $(document).ready(function() {
         const currency = parentBox.attr("data-currency");
         const index = parentAlarmsBox.attr("data-index");
 
-        $.post(ENDPOINT_URL + "/data/alarms/remove", {id: id, currency: currency, index: index}, (response) => {
+        $.post("/data/alarms/remove", {id: id, currency: currency, index: index}, (response) => {
             showTickers();
         });
     });
@@ -186,7 +186,7 @@ $(document).ready(function() {
             return;
         }
 
-        $.post(ENDPOINT_URL + "/data/alarms/add", 
+        $.post("/data/alarms/add", 
         {
             id: id, 
             currency: currency, 
@@ -221,7 +221,7 @@ $(document).ready(function() {
 
             $(this).removeAttr('data-previndex');
 
-            $.post(ENDPOINT_URL + "/data/tickers/order", {from: from, to: to}, (response) => {
+            $.post("/data/tickers/order", {from: from, to: to}, (response) => {
                 console.log(response);
             });
         }
