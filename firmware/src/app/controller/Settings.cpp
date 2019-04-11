@@ -98,8 +98,7 @@ void Settings::requestChangeSettings(AsyncWebServerRequest *request) {
     const char *value = request->getParam("value", true)->value().c_str();
 
     bool changed = manager->settings->set(name, value);
-
-    if(!changed) {
+    if(false == changed) {
         manager->webserver->requestInvalid(request);
         return;
     }

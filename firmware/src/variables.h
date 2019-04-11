@@ -56,6 +56,6 @@ enum VIEWS {
 #define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true"
 
 // SETTINGS
-#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10}"
+#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10,\"mute_speakers\": \"false\"}"
 
 #endif

@@ -8,13 +8,10 @@
 
 class LayoutBase {
     public:
-
+        Manager *manager;
         LayoutBase(Manager *_manager);
-        // virtual ~LayoutBase() {};
 
         void update();
-
-        Manager *manager;
 
         virtual void leftButtonClicked() = 0;
         virtual void rightButtonClicked() = 0;
@@ -23,6 +20,7 @@ class LayoutBase {
     private:
         void initButtons();
         void updateButtons();
+        void beepIfNotMuted();
 
         Pushbutton *leftButton;
         Pushbutton *rightButton;
