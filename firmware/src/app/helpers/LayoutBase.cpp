@@ -13,25 +13,31 @@ void LayoutBase::initButtons() {
 
 void LayoutBase::updateButtons() {
     if (leftButton->getSingleDebouncedPress()) {
-        manager->speaker->tone(2240);
-        delay(100);
-        manager->speaker->mute();
+        beepIfNotMuted();
         leftButtonClicked();
     }
+
     if (rightButton->getSingleDebouncedPress()) {
-        manager->speaker->tone(2240);
-        delay(100);
-        manager->speaker->mute();
+        beepIfNotMuted();
         rightButtonClicked();
     }
+
     if (okButton->getSingleDebouncedPress()) {
-        manager->speaker->tone(2240);
-        delay(100);
-        manager->speaker->mute();
+        beepIfNotMuted();
         okButtonClicked();
     }
 }
 
 void LayoutBase::update() {
     updateButtons();
+}
+
+void LayoutBase::beepIfNotMuted() {
+    if(manager->settings->get("mute_speakers") == "true") {
+        return;
+    }
+
+    manager->speaker->tone(2240);
+    delay(100);
+    manager->speaker->mute();
 }
