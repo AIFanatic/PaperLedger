@@ -26,8 +26,8 @@ TickerDataResult *BitcoinAverage::tickerData(JsonObject &ticker) {
     DynamicJsonBuffer responseJsonBuffer;
     JsonObject &responseJson = responseJsonBuffer.parse(response);
 
-    String price = responseJson["last"].as<String>();
-    String volume = responseJson["volume"].as<String>() + " B";
+    String price = String(Utils::roundDecimals(responseJson["last"], 2));
+    String volume = String(Utils::roundDecimals(responseJson["volume"], 2)) + " BTC";
     String changes = responseJson["changes"]["percent"]["day"].as<String>();
     String timestamp = responseJson["timestamp"].as<String>();
 
