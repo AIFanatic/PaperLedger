@@ -94,13 +94,24 @@ void Settings::requestChangeSettings(AsyncWebServerRequest *request) {
         return;
     }
 
-    const char *name = request->getParam("name", true)->value().c_str();
-    const char *value = request->getParam("value", true)->value().c_str();
+    String name = request->getParam("name", true)->value();
+    String value = request->getParam("value", true)->value();
+    bool is_data_source = 0 == name.compareTo(DATA_SOURCE);
 
-    bool changed = manager->settings->set(name, value);
-    if(false == changed) {
+    // Only set data source if the provider exists
+    if (is_data_source && (value.toInt() >= PROVIDERS::COUNT || value.toInt() < 0)) {
         manager->webserver->requestInvalid(request);
         return;
+    }
+
+    if (false == manager->settings->set(name.c_str(), value.c_str())) {
+        manager->webserver->requestInvalid(request);
+        return;
+    }
+
+    // Clear tickers if the data source changes
+    if (is_data_source) {
+        manager->tickers->reset();
     }
 
     request->send(200, "application/json", "{\"status\":\"ok\",\"message\":\"updated setting\"}");

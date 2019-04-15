@@ -1,9 +1,13 @@
 #include "Tickers.h"
 
 #include "../Manager.h"
+#include "../api/DataProvider.h"
+
+DataProvider *dataProvider;
 
 Tickers::Tickers(Manager *_manager) {
     manager = _manager;
+    dataProvider = new DataProvider(_manager);
 
     bool tickersFileExists = manager->filesystem->exists(SPIFFS, FILE_TICKERS);
 
@@ -99,16 +103,6 @@ void Tickers::reset() {
     manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, "[]");
 }
 
-String Tickers::getTickerData(const char *ids, const char *currencies) {
-    String url = URL_TICKER_DATA;
-    url.concat("&ids=");
-    url.concat(ids);
-    url.concat("&vs_currencies=");
-    url.concat(currencies);
-
-    return manager->webserver->get(url);
-}
-
 bool Tickers::updateTickers() {
     Serial.println("Updating tickers");
 
@@ -122,50 +116,15 @@ bool Tickers::updateTickers() {
     String coins;
     String currencies;
 
-    for(int i = 0; i < tickersArray.size(); i++) {
-        JsonObject& obj = tickersArray[i].as<JsonObject>();
+    for (int i = 0; i < tickersArray.size(); i++) {
+        JsonObject &obj = tickersArray[i].as<JsonObject>();
 
-        String id = obj["id"];
-        String currency = obj["currency"];
+        TickerDataResult *result = dataProvider->get()->tickerData(obj);
 
-        coins += id + ",";
-        currencies += currency + ",";
-    }
-
-    manager->render->drawText(0, 5, "..", 9, BLACK, LEFT_ALIGNMENT);
-    manager->render->draw();
-
-    String response = getTickerData(coins.c_str(), currencies.c_str());
-    if(response.length() == 0) {
-        Serial.println("Failed to update tickers, invalid response");
-        return false;
-    }
-
-    manager->render->drawText(0, 5, "...", 9, BLACK, LEFT_ALIGNMENT);
-    manager->render->draw();
-
-    DynamicJsonBuffer responseJsonBuffer;
-    JsonObject& responseJson = responseJsonBuffer.parse(response);
-
-    for(int i = 0; i < tickersArray.size(); i++) {
-        JsonObject& obj = tickersArray[i].as<JsonObject>();
-
-        String id = obj["id"];
-        String currency = obj["currency"];
-
-        // CoinGecko responses are in lowercase
-        id.toLowerCase();
-        currency.toLowerCase();
-
-        String price = responseJson[id][currency];
-        String last_update = responseJson[id]["last_updated_at"];
-        String change_24h = String(Utils::roundDecimals(responseJson[id][currency + "_24h_change"], 2));
-        String vol_24h = Utils::numToHuman(responseJson[id][currency + "_24h_vol"], 2);
-
-        tickersArray[i]["price"] = price;
-        tickersArray[i]["last_update"] = last_update;
-        tickersArray[i]["change_24h"] = change_24h;
-        tickersArray[i]["vol_24h"] = vol_24h;
+        tickersArray[i]["price"] = result->getPrice();
+        tickersArray[i]["last_update"] = result->getLastUpdatedAt();
+        tickersArray[i]["change_24h"] = result->getChange();
+        tickersArray[i]["vol_24h"] = result->getVolume();
     }
 
     manager->render->drawText(0, 5, "....", 9, BLACK, LEFT_ALIGNMENT);
@@ -173,7 +132,7 @@ bool Tickers::updateTickers() {
 
     String str;
     tickersArray.printTo(str);
-    
+
     return manager->filesystem->writeFile(SPIFFS, FILE_TICKERS, str.c_str());
 }
 

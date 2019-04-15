@@ -43,6 +43,13 @@ enum VIEWS {
     UPDATE_VIEW
 };
 
+// PROVIDERS
+enum PROVIDERS {
+    COIN_GECKO = 0,
+    BITCOIN_AVERAGE = 1,
+    COUNT = 2
+};
+
 // FILENAMES
 #define FILE_SETTINGS "/settings.json"
 #define FILE_TICKERS "/tickers.json"
@@ -53,9 +60,9 @@ enum VIEWS {
 
 // ENDPOINTS
 #define URL_IM_ALIVE "https://api.ipify.org/"
-#define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true"
 
 // SETTINGS
-#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10,\"mute_speakers\": \"false\"}"
+#define DATA_SOURCE "data_source"
+#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10,\"mute_speakers\": \"false\", \"" DATA_SOURCE "\": \"0\"}"
 
 #endif

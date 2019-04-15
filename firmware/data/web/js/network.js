@@ -20,40 +20,43 @@ $(document).ready(function() {
         $(CONTENT_NETWORK).html("");
 
         $.getJSON("/data/wifi/status", (response) => {
-            if(response["status"] == "ok") {
-                currentNetwork = response["message"]["ssid"];
-
-                $.getJSON("/data/wifi/list", (response) => {
-                    if(response["status"] == "ok") {
-
-                        const networks = response["message"];
-
-                        for(network of networks) {
-                            var newNetwork = $('<div class="box"></div>');
-                            newNetwork.text(network["ssid"]);
-
-                            var actionButton = $('<a class="button dark-blue" data-ssid="' + network["ssid"] + '" href="#"></a>');
-
-                            if(network["ssid"] == currentNetwork) {
-                                actionButton.addClass("red-bg btn-network-disconnect");
-                                actionButton.append('<i class="fas fa-times"></i>');
-                            }
-                            else {
-                                actionButton.addClass("green-bg btn-network-connect");
-                                actionButton.append('<i class="fas fa-check"></i>');
-                            }
-                            newNetwork.append(actionButton);
-
-                            const signalColor = rssiToColor(network["rssi"]);
-                            newNetwork.append('<a class="button ' + signalColor + '" href="#"><i class="fas fa-signal"></i></a>');
-
-                            $(CONTENT_NETWORK).append(newNetwork);
-                        }
-
-                        $(HEADER_TITLE_RIGHT).html('Found ' + networks.length + " networks");
-                    }
-                });
+            if (response["status"] != "ok") {
+                return;
             }
+
+            const status = response["message"];
+            window.localStorage.setItem("connected", status["internet"]);
+
+            $.getJSON("/data/wifi/list", (response) => {
+                if (response["status"] != "ok") {
+                    return;
+                }
+
+                const networks = response["message"];
+                for (network of networks) {
+                    var newNetwork = $('<div class="box"></div>');
+                    newNetwork.text(network["ssid"]);
+
+                    var actionButton = $('<a class="button dark-blue" data-ssid="' + network["ssid"] + '" href="#"></a>');
+
+                    if (network["ssid"] == status["ssid"]) {
+                        actionButton.addClass("red-bg btn-network-disconnect");
+                        actionButton.append('<i class="fas fa-times"></i>');
+                    }
+                    else {
+                        actionButton.addClass("green-bg btn-network-connect");
+                        actionButton.append('<i class="fas fa-check"></i>');
+                    }
+                    newNetwork.append(actionButton);
+
+                    const signalColor = rssiToColor(network["rssi"]);
+                    newNetwork.append('<a class="button ' + signalColor + '" href="#"><i class="fas fa-signal"></i></a>');
+
+                    $(CONTENT_NETWORK).append(newNetwork);
+                }
+
+                $(HEADER_TITLE_RIGHT).html('Found ' + networks.length + " networks");
+            });
         });
     }
 
@@ -66,24 +69,30 @@ $(document).ready(function() {
             return;
         }
 
-        $.post("/data/wifi/connect", {ssid: ssid, password: password}, (response) => {
+        $.post("/data/wifi/connect", {ssid: ssid, password: password}).then(() => { 
             showWifiNetworks();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
     $(document).on("click", BTN_NETWORK_DISCONNECT, function() {
         const ssid = $(this).attr("data-ssid");
 
-        $.post("/data/wifi/disconnect", (response) => {
+        $.post("/data/wifi/disconnect").then(() => { 
             showWifiNetworks();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
     document.addEventListener('MENU_CHANGED', (event) => {
-        if(event.detail.menu == "network") {
-            $(HEADER_TITLE).html("Network");
-            $(HEADER_TITLE_RIGHT).html('Searching <i class="fas fa-circle-notch fa-spin"></i>');
-            showWifiNetworks();
+        if(event.detail.menu != "network") {
+            return;
         }
+
+        $(HEADER_TITLE).html("Network");
+        $(HEADER_TITLE_RIGHT).html('Searching <i class="fas fa-circle-notch fa-spin"></i>');
+        showWifiNetworks();
     });
 });

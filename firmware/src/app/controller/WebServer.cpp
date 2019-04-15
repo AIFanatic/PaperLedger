@@ -13,11 +13,11 @@ WebServer::~WebServer() {
 };
 
 void WebServer::requestNotFound(AsyncWebServerRequest *request) {
-    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Endpoint not found\"}");
+    request->send(404, "application/json", "{\"status\":\"error\",\"message\":\"Endpoint not found\"}");
 };
 
 void WebServer::requestInvalid(AsyncWebServerRequest *request) {
-    request->send(200, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
+    request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid request\"}");
 };
 
 void WebServer::requestWifiStatus(AsyncWebServerRequest *request) {
@@ -30,7 +30,7 @@ void WebServer::requestWifiStatus(AsyncWebServerRequest *request) {
     message["ssid"] = WiFi.SSID();
     message["rssi"] = WiFi.RSSI();
     message["internet"] = hasInternetAccess;
-    
+
     String jsonStr;
     response.printTo(jsonStr);
     request->send(200, "application/json", jsonStr);
@@ -49,7 +49,7 @@ void WebServer::requestWifiList(AsyncWebServerRequest *request) {
     if (n != 0) {
         for (int i = 0; i < n; ++i) {
             JsonObject& newWifi = message.createNestedObject();
-            
+
             newWifi["ssid"] = WiFi.SSID(i);
             newWifi["rssi"] = WiFi.RSSI(i);
             newWifi["algo"] = WiFi.encryptionType(i);
@@ -58,7 +58,7 @@ void WebServer::requestWifiList(AsyncWebServerRequest *request) {
             delay(10);
         }
     }
-    
+
     String jsonStr;
     response.printTo(jsonStr);
     request->send(200, "application/json", jsonStr);
@@ -91,8 +91,7 @@ void WebServer::reset() {
 }
 
 void WebServer::begin() {
-    if (MDNS.begin(AP_NAME))
-    {
+    if (MDNS.begin(AP_NAME)) {
         Serial.println("MDNS responder started");
     }
 
@@ -179,33 +178,25 @@ void WebServer::begin() {
 String WebServer::get(String url) {
     http.begin(url);
     int httpCode = http.GET();
- 
+
     if (httpCode == 0) {
         Serial.println("Error on HTTP request");
         return "";
     }
- 
-    String payload = http.getString();
-    
-    http.end(); //Free the resources
 
-    return payload;
+    return http.getString();
 };
 
 String WebServer::post(String url, String params) {
     http.begin(url);
     int httpCode = http.POST(params);
- 
+
     if (httpCode == 0) {
         Serial.println("Error on HTTP request");
         return "";
     }
- 
-    String payload = http.getString();
-    
-    http.end(); //Free the resources
 
-    return payload;
+    return http.getString();
 }
 
 bool WebServer::disconnectWifi() {
@@ -219,8 +210,7 @@ bool WebServer::reconnectWifi() {
 bool WebServer::connectAP(const char *apName) {
     WiFi.mode(WIFI_AP);
 
-    if (!WiFi.softAP(apName))
-    {
+    if (!WiFi.softAP(apName)) {
         return false;
     }
 
@@ -242,8 +232,7 @@ bool WebServer::connectWifi(const char *ssid, const char *password) {
     WiFi.begin(ssid, password);
 
     int MAX_TRIES = 1;
-    while (WiFi.waitForConnectResult() != WL_CONNECTED)
-    {
+    while (WiFi.waitForConnectResult() != WL_CONNECTED) {
         Serial.print(".");
 
         if(MAX_TRIES == 0) {
@@ -280,11 +269,10 @@ wifi_mode_t WebServer::getWifiMode() {
     return WiFi.getMode();
 }
 
-
 void WebServer::checkInternetAccess() {
     String response = get(URL_IM_ALIVE);
 
-    if(response.length() == 0) {
+    if (response.length() == 0) {
         return;
     }
 

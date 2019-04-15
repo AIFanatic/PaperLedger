@@ -22,8 +22,6 @@ class Tickers {
         int getIndexOf(const char *id, const char *currency);
         bool changeOrder(int from, int to);
 
-        String getTickerData(const char *ids, const char *currencies);
-
         bool updateTickers();
 
         void reset();
@@ -35,7 +33,6 @@ class Tickers {
 
     private:
         Manager *manager;
-        
 };
 
 #endif

@@ -15,89 +15,82 @@ $(document).ready(function() {
     const BTN_ALARMS_TYPE = ".btn-alarms-type";
 
     function getTickers() {
-        if(LIST_TICKERS_COINS[0].options.choices.length == 0) {
-            console.log("loaded")
-            $.getJSON(ENDPOINT_TICKERS + "/coins/list", (response) => {
-                var choices = [];
-                for(coin of response) {
-                    choices.push({text: coin["name"], value: coin["id"]});
-                }
-                LIST_TICKERS_COINS[0].setChoices(choices);
-            });
-        }
+        const provider = new Provider().get();
+        provider.then(provider => {
+            provider.getCoins().then((coins) => {
+                LIST_TICKERS_COINS[0].setChoices(coins);
+            })
+        });
 
-        if(LIST_TICKERS_CURRENCIES[0].options.choices.length == 0) {
-            $.getJSON(ENDPOINT_TICKERS + "/simple/supported_vs_currencies", (response) => {
-                var choices = [];
-                for(currency of response) {
-                    choices.push({text: currency.toUpperCase(), value: currency.toUpperCase()});
-                }
-                LIST_TICKERS_CURRENCIES[0].setChoices(choices);
-            });
-        }
+        provider.then(provider => {
+            provider.getCurrencies().then((currencies) => {
+                LIST_TICKERS_CURRENCIES[0].setChoices(currencies);
+            })
+        });
     }
 
     function showTickers() {
         $(SUBCONTENT_TICKERS).html("");
 
         $.getJSON("/data/tickers/list", (response) => {
-            if(response["status"] == "ok") {
-                const tickers = response["message"];
+            if (response["status"] != "ok") {
+                return;
+            }
+            
+            const tickers = response["message"];
+            for (ticker of tickers) {
+                var newBox = $('<div class="box"></div>');
+                newBox.text(ticker["coin"] + " - " + ticker["currency"]);
+                newBox.attr("data-id", ticker["id"]);
+                newBox.attr("data-coin", ticker["coin"]);
+                newBox.attr("data-currency", ticker["currency"]);
 
-                for(ticker of tickers) {
-                    var newBox = $('<div class="box"></div>');
-                    newBox.text(ticker["coin"] + " - " + ticker["currency"]);
-                    newBox.attr("data-id", ticker["id"]);
-                    newBox.attr("data-coin", ticker["coin"]);
-                    newBox.attr("data-currency", ticker["currency"]);
+                var deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" href="#"><i class="fas fa-trash"></i></a>');
+                var alarmsButton = $('<a class="button dark-blue yellow-bg btn-alarms" href="#"><i class="fas fa-clock"></i></a>');
 
-                    var deleteButton = $('<a class="button dark-blue red-bg btn-ticker-remove" href="#"><i class="fas fa-trash"></i></a>');
-                    var alarmsButton = $('<a class="button dark-blue yellow-bg btn-alarms" href="#"><i class="fas fa-clock"></i></a>');
+                newBox.append(deleteButton);
+                newBox.append(alarmsButton);
 
-                    newBox.append(deleteButton);
-                    newBox.append(alarmsButton);
-
-                    // Alarms
-                    const alarms = ticker["alarms"];
-                    var alarmCount = 0;
-                    for(alarm of alarms) {
-                        var typeIcon = '<i class="fas fa-caret-up green"></i>';
-                        if(alarm["type"] == 1) {
-                            typeIcon = '<i class="fas fa-caret-down red"></i>';
-                        }
-
-                        var alarmBox = $('<div class="alarms-box"></div>');
-                        alarmBox.append(typeIcon);
-                        alarmBox.append(" <input disabled value='$" + alarm["price"] + "'>");
-                        alarmBox.append("<input disabled value='" + alarm["duration"] + "s'>");
-                        alarmBox.append("<input disabled value='" + alarm["frequency"] + "Hz'>");
-                        alarmBox.append("<input disabled value='#" + alarm["beeps"] + "'>");
-                        alarmBox.attr("data-index", alarmCount);
-
-                        var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
-                        
-                        alarmBox.append(alarmDeleteButton);
-                        newBox.append(alarmBox);
-
-                        alarmCount++;
+                // Alarms
+                const alarms = ticker["alarms"];
+                var alarmCount = 0;
+                for(alarm of alarms) {
+                    var typeIcon = '<i class="fas fa-caret-up green"></i>';
+                    if(alarm["type"] == 1) {
+                        typeIcon = '<i class="fas fa-caret-down red"></i>';
                     }
 
-                    // Add new alarm box
-                    var newAlarmBox = $('<div class="alarms-box"></div>');
-                    newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
-                    newAlarmBox.append( $('<input class="input-price" type="number" placeholder="Price" min=0>') );
-                    newAlarmBox.append( $('<input class="input-duration" type="number" placeholder="Duration">') );
-                    newAlarmBox.append( $('<input class="input-frequency" type="number" placeholder="Freq">') );
-                    newAlarmBox.append( $('<input class="input-beeps" type="number" placeholder="Beeps">') );
-                    newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
+                    var alarmBox = $('<div class="alarms-box"></div>');
+                    alarmBox.append(typeIcon);
+                    alarmBox.append(" <input disabled value='$" + alarm["price"] + "'>");
+                    alarmBox.append("<input disabled value='" + alarm["duration"] + "s'>");
+                    alarmBox.append("<input disabled value='" + alarm["frequency"] + "Hz'>");
+                    alarmBox.append("<input disabled value='#" + alarm["beeps"] + "'>");
+                    alarmBox.attr("data-index", alarmCount);
 
-                    newBox.append(newAlarmBox);
+                    var alarmDeleteButton = $('<a class="button dark-blue red-bg btn-alarms-remove" href="#"><i class="fas fa-trash"></i></a>');
+                    
+                    alarmBox.append(alarmDeleteButton);
+                    newBox.append(alarmBox);
 
-                    $(SUBCONTENT_TICKERS).append(newBox);
+                    alarmCount++;
                 }
 
-                $(HEADER_TITLE_RIGHT).html('You have ' + tickers.length + " ticker(s)");
+                // Add new alarm box
+                var newAlarmBox = $('<div class="alarms-box"></div>');
+                newAlarmBox.append( $('<a class="green btn-alarms-type" data-type="0" href="#"><i class="fas fa-caret-up"></i></a>') );
+                newAlarmBox.append( $('<input class="input-price" type="number" placeholder="Price" min=0>') );
+                newAlarmBox.append( $('<input class="input-duration" type="number" placeholder="Duration">') );
+                newAlarmBox.append( $('<input class="input-frequency" type="number" placeholder="Freq">') );
+                newAlarmBox.append( $('<input class="input-beeps" type="number" placeholder="Beeps">') );
+                newAlarmBox.append( $('<a class="button dark-blue green-bg btn-alarms-add" href="#"><i class="fas fa-plus"></i></a>') );
+
+                newBox.append(newAlarmBox);
+
+                $(SUBCONTENT_TICKERS).append(newBox);
             }
+
+            $(HEADER_TITLE_RIGHT).html('You have ' + tickers.length + " ticker(s)");
         });
     }
 
@@ -106,8 +99,10 @@ $(document).ready(function() {
         const id = parent.attr("data-id");
         const currency = parent.attr("data-currency");
 
-        $.post("/data/tickers/remove", {id: id, currency: currency}, (response) => {
+        $.post("/data/tickers/remove", {id: id, currency: currency}).then(() => { 
             showTickers();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
@@ -121,10 +116,12 @@ $(document).ready(function() {
         const coin = LIST_TICKERS_COINS[0].selectedChoice.text;
         const currency = LIST_TICKERS_CURRENCIES[0].selectedChoice.value
 
-        $.post("/data/tickers/add", {id: id, coin: coin, currency: currency}, (response) => {
+        $.post("/data/tickers/add", {id: id, coin: coin, currency: currency}).then(() => { 
             $(INPUT_TICKERS_COIN).val("");
             $(INPUT_TICKERS_CURRENCY).val("");
             showTickers();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
@@ -164,8 +161,10 @@ $(document).ready(function() {
         const currency = parentBox.attr("data-currency");
         const index = parentAlarmsBox.attr("data-index");
 
-        $.post("/data/alarms/remove", {id: id, currency: currency, index: index}, (response) => {
+        $.post("/data/alarms/remove", {id: id, currency: currency, index: index}).then(() => { 
             showTickers();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
@@ -186,28 +185,11 @@ $(document).ready(function() {
             return;
         }
 
-        $.post("/data/alarms/add", 
-        {
-            id: id, 
-            currency: currency, 
-            price: price, 
-            duration: duration, 
-            type: type, 
-            frequency: frequency, 
-            beeps: beeps
-        }, (response) => {
+        $.post("/data/alarms/add", {id: id, currency: currency, price: price, duration: duration, type: type, frequency: frequency, beeps: beeps}).then(() => { 
             showTickers();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
-    });
-
-    document.addEventListener('MENU_CHANGED', (event) => {
-        if(event.detail.menu == "tickers") {
-            $(HEADER_TITLE).html("Tickers");
-            $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
-
-            getTickers();
-            showTickers();
-        }
     });
 
     $(SUBCONTENT_TICKERS).sortable({
@@ -221,11 +203,23 @@ $(document).ready(function() {
 
             $(this).removeAttr('data-previndex');
 
-            $.post("/data/tickers/order", {from: from, to: to}, (response) => {
-                console.log(response);
+            $.post("/data/tickers/order", {from: from, to: to}).catch(error => {
+                alert(error.responseJSON.message);
             });
         }
     });
 
     $(".tickers" ).disableSelection();
+    
+    document.addEventListener('MENU_CHANGED', (event) => {
+        if(event.detail.menu != "tickers") {
+            return;
+        }
+        
+        $(HEADER_TITLE).html("Tickers");
+        $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+
+        getTickers();
+        showTickers();
+    });
 });

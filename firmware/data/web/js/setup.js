@@ -1,45 +1,40 @@
 $(document).ready(function() {
     const CONTENT_SETUP = ".main > .content > .setup";
     const SUBCONTENT_SETUP = CONTENT_SETUP + " > .sub-content";
-    
     const BTN_SETTINGS_UPDATE = ".btn-settings-update";
-    
     const INPUT_UPDATE_FILE = CONTENT_SETUP + " .input-update-file";
 
     function showSettings() {
         $(SUBCONTENT_SETUP).html("");
 
         $.getJSON("/data/settings/list", (response) => {
-            if(response["status"] == "ok") {
-                const settings = response["message"];
-
-                console.log(settings)
-
-                for (var key in settings) {
-                    if (settings.hasOwnProperty(key)) {
-                        var settingParsed = key.replace(/_/g, " ");
-                        settingParsed = settingParsed.charAt(0).toUpperCase() + settingParsed.slice(1);
-
-                        var settingValue = settings[key];
-                        var newBox = $('<div class="box"></div>');
-                        if (settingValue != "true" && settingValue != "false") {
-                            settingValue = settingValue + "s";
-                        }
-
-                        newBox.text(settingParsed + ": " + settingValue);
-                        
-                        var button = $('<a class="button dark-blue yellow-bg btn-settings-update" href="#"><i class="fas fa-edit"></i></a>');
-                        button.attr("data-name", key);
-                        button.attr("data-value", settingValue);
-
-                        newBox.append(button);
-
-                        $(SUBCONTENT_SETUP).append(newBox);
-                    }
-                }
-
-                $(HEADER_TITLE_RIGHT).html("");
+            if (response["status"] != "ok") {
+                return;
             }
+
+            const settings = response["message"];
+            window.localStorage.setItem("settings", JSON.stringify(settings));
+
+            for (var key in settings) {
+                if (settings.hasOwnProperty(key)) {
+                    var settingParsed = key.replace(/_/g, " ");
+                    settingParsed = settingParsed.charAt(0).toUpperCase() + settingParsed.slice(1);
+
+                    var settingValue = settings[key];
+                    var newBox = $('<div class="box"></div>');
+                    newBox.text(settingParsed + ": " + settingValue);
+
+                    var button = $('<a class="button dark-blue yellow-bg btn-settings-update" href="#"><i class="fas fa-edit"></i></a>');
+                    button.attr("data-name", key);
+                    button.attr("data-value", settingValue);
+
+                    newBox.append(button);
+
+                    $(SUBCONTENT_SETUP).append(newBox);
+                }
+            }
+
+            $(HEADER_TITLE_RIGHT).html("");
         });
     }
 
@@ -53,8 +48,10 @@ $(document).ready(function() {
             return;
         }
 
-        $.post("/data/settings/change", {name: name, value: newValue}, (response) => {
+        $.post("/data/settings/change", {name: name, value: newValue}).then(() => {
             showSettings();
+        }).catch(error => {
+            alert(error.responseJSON.message);
         });
     });
 
@@ -78,13 +75,8 @@ $(document).ready(function() {
             processData: false,
             data: formData,
             xhr: function () {
-                var jqXHR = null;
-                if ( window.ActiveXObject ) {
-                    jqXHR = new window.ActiveXObject( "Microsoft.XMLHTTP" );
-                }
-                else {
-                    jqXHR = new window.XMLHttpRequest();
-                }
+                var jqXHR = new window.XMLHttpRequest();
+
                 //Upload progress
                 jqXHR.upload.addEventListener("progress", function(evt) {
                     if (evt.lengthComputable) {
@@ -92,6 +84,7 @@ $(document).ready(function() {
                         $(headerPercentage).text(percentComplete);
                     }
                 }, false );
+
                 return jqXHR;
             },
             success: function(data) {
@@ -108,10 +101,12 @@ $(document).ready(function() {
     });
 
     document.addEventListener('MENU_CHANGED', (event) => {
-        if(event.detail.menu == "setup") {
-            $(HEADER_TITLE).html("Setup");
-            $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
-            showSettings();
+        if(event.detail.menu != "setup") {
+            return; 
         }
+
+        $(HEADER_TITLE).html("Setup");
+        $(HEADER_TITLE_RIGHT).html('Getting data <i class="fas fa-circle-notch fa-spin"></i>');
+        showSettings();
     });
 });

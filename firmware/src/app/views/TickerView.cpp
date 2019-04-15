@@ -78,7 +78,7 @@ void TickerView::showTicker() {
     String vol_24h = ticker["vol_24h"];
     String change_24h = ticker["change_24h"];
     String last_update = ticker["last_update"] != "0" ? Utils::readableTimestamp(ticker["last_update"]) : "Never";
-    String status = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
+    String status = "24h: " + change_24h + " " + (char)37 + " | Vol: " + vol_24h; // % character needs to be passed directly
 
     manager->render->fillScreen(1);
     manager->render->drawText(0, 10, last_update.c_str(), 7, BLACK, RIGHT_ALIGNMENT);
