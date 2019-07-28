@@ -24,11 +24,11 @@ void SetupView::showMenu(String menu[][2], int size) {
 
 void SetupView::showStatusMenu() {
     String internet = "Internet: ";
-    String networkName = "Network name: " + manager->webserver->getWifiSSID();
-    String networkSignal = "Network signal: " + String(manager->webserver->getWifiSignal()) + " dBm";
+    String networkName = "Network: " + manager->webserver->getWifiSSID() + " (" + String(manager->webserver->getWifiSignal()) + " dBm)";
     String networkIP = "Network IP: " + manager->webserver->getWifiIP();
     String networkMode = "Network mode: Station";
     String freeHeap = "Free ram: " + String(ESP.getFreeHeap()/1000) + " KB";
+    String batteryCharge = "Battery: " + String(manager->battery->chargePercentage) + " %";
 
     if(manager->webserver->getWifiMode() == WIFI_AP) {
         networkName = "Network name: " + String(AP_NAME);
@@ -41,10 +41,10 @@ void SetupView::showStatusMenu() {
     {
         {internet.c_str(), "1"},
         {networkName.c_str(), ""},
-        {networkSignal.c_str(), ""},
         {networkIP.c_str(), ""},
         {networkMode.c_str(), ""},
         {freeHeap.c_str(), ""},
+        {batteryCharge.c_str(), ""},
         {"Back", "STATUS_BACK"},
     };
 

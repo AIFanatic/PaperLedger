@@ -161,6 +161,10 @@ void WebServer::begin() {
         manager->settings->requestChangeSettings(request);
     });
 
+    server.on("/data/battery/status", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        manager->battery->requestBatteryStatus(request);
+    });
+
     server.on("/update", HTTP_POST, [this](AsyncWebServerRequest *request){
         manager->updater->requestUpdate(request);
     },[this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
