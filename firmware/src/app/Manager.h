@@ -9,6 +9,7 @@
 #include "./controller/Alarms.h"
 #include "./controller/Speaker.h"
 #include "./controller/Updater.h"
+#include "./controller/Battery.h"
 
 #include "../variables.h"
 
@@ -29,9 +30,9 @@ class Manager {
         Settings *settings;
         Tickers *tickers;
         Alarms *alarms;
-        Updater *updater;
-
         SPEAKER *speaker;
+        Updater *updater;
+        Battery *battery;
         
     private:
         int currentIndex;

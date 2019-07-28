@@ -5,6 +5,7 @@
 #include "./views/DisconnectedView.h"
 #include "./views/LoadingView.h"
 #include "./views/UpdateView.h"
+#include "./views/BatteryView.h"
 
 Manager::Manager() {
     render = new Render();
@@ -14,9 +15,15 @@ Manager::Manager() {
     tickers = new Tickers(this);
     alarms = new Alarms(this);
     updater = new Updater(this);
+    battery = new Battery(this);
 
     speaker = new SPEAKER();
     speaker->begin(SPEAKER_PIN_PIN, 0);
+
+    // Setup pins
+    pinMode(RED_LED_PIN, OUTPUT);
+    pinMode(VBAT_PIN, INPUT);
+    pinMode(CHARGE_PIN, INPUT);
 
     render->clearScreen();
 
@@ -29,10 +36,6 @@ Manager::~Manager() {
 // TODO: Ugly, fix
 void Manager::show(int index) {
     isInitializingLayout = true;
-
-    // if(currentView) {
-    //     currentView = nullptr;
-    // }
 
     if(index == MAIN_VIEW) {
         currentView = new MainView(this);
@@ -51,6 +54,9 @@ void Manager::show(int index) {
     }
     else if(index == UPDATE_VIEW) {
         currentView = new UpdateView(this);
+    }
+    else if(index == BATTERY_VIEW) {
+        currentView = new BatteryView(this);
     }
 
     currentIndex = index;
@@ -79,15 +85,27 @@ void Manager::update() {
         else if(currentIndex == UPDATE_VIEW) {
             (reinterpret_cast<UpdateView *>(currentView))->update();
         }
+        else if(currentIndex == BATTERY_VIEW) {
+            (reinterpret_cast<BatteryView *>(currentView))->update();
+        }
     }
 
     webserver->update();
-
-    if(!webserver->hasInternetAccess && currentIndex != DISCONNECTED_VIEW && currentIndex != SETUP_VIEW) {
-        show(DISCONNECTED_VIEW);
-    }
-
     speaker->update();
+    battery->update();
+
+    if(currentIndex != SETUP_VIEW) {
+        // Ordered by "warning" priority
+        if(!battery->isCharging && battery->chargePercentage <= BATTERY_WARNING_PERCENTAGE && currentIndex != BATTERY_VIEW) {
+            show(BATTERY_VIEW);
+            return;
+        }
+
+        if(!webserver->hasInternetAccess && currentIndex != DISCONNECTED_VIEW) {
+            show(DISCONNECTED_VIEW);
+            return;
+        }
+    }
 }
 
 int Manager::getCurrentIndex() {
