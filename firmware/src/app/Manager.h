@@ -13,6 +13,8 @@
 
 #include "../variables.h"
 
+#include "./helpers/RTC.h"
+
 class Manager {
     public:
         Manager();
@@ -20,7 +22,6 @@ class Manager {
 
         void update();
         void show(int index);
-        int getCurrentIndex();
         void *getCurrentView();
 
         Render *render;
@@ -35,9 +36,10 @@ class Manager {
         Battery *battery;
         
     private:
-        int currentIndex;
+        void loadView();
 
         void *currentView;
+        int currentViewIndex;
 
         bool isInitializingLayout;
 };

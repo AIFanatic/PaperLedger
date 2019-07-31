@@ -21,7 +21,7 @@ void Render::initDisplay() {
     isInit = true;
     display->init();
     display->setRotation(3);
-    display->eraseDisplay();
+    // display->eraseDisplay();
     display->setTextColor(GxEPD_BLACK);
     display->setFont(&FreeSans9pt7b);
     display->setTextSize(0);

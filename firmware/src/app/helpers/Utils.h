@@ -38,6 +38,26 @@ class Utils {
             String readable_timestamp = buffer;
             return readable_timestamp;
         }
+
+        static long getCurrentTime() {
+            timeval t;
+            gettimeofday(&t, NULL);
+            return (t.tv_sec * (uint64_t)1000) + (t.tv_usec / 1000);
+        }
+
+        static long getCurrentTimeMicros() {
+            timeval t;
+            gettimeofday(&t, NULL);
+            return t.tv_usec;
+        }
+
+        static long getBootCurrentTime() {
+            return millis();
+        }
+
+        static bool hasBootedFromDeepSleep() {
+            return (esp_sleep_get_wakeup_cause() != ESP_SLEEP_WAKEUP_UNDEFINED);
+        }
 };
 
 #endif

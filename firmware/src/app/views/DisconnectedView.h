@@ -1,8 +1,6 @@
 #ifndef DisconnectedView_H
 #define DisconnectedView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class DisconnectedView: public LayoutBase {

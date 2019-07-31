@@ -1,5 +1,5 @@
-#ifndef WebServer_h
-#define WebServer_h
+#ifndef Networking_h
+#define Networking_h
 
 #include <HTTPClient.h>
 #include <ESPAsyncWebServer.h>
@@ -49,7 +49,7 @@ class WebServer {
     private:
         Manager *manager;
 
-        IPAddress apIP = IPAddress(192, 168, 1, 1);
+        IPAddress apIP = IPAddress(192, 168, 4, 1);
         AsyncWebServer server = AsyncWebServer(80);
         HTTPClient http;
 };

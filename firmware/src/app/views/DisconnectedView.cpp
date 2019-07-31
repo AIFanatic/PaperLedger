@@ -1,12 +1,13 @@
 #include "DisconnectedView.h"
 
 DisconnectedView::DisconnectedView(Manager *_manager): LayoutBase(_manager) {
-    String networkName = "Network name: ";
+    String networkName = "Network name: " + String(AP_NAME);
     String networkIP = "Web Portal: http://";
 
-    networkName.concat(AP_NAME);
-    networkIP.concat(AP_NAME);
-    networkIP.concat(".local");
+    String apNameLower = String(AP_NAME);
+    apNameLower.toLowerCase();
+
+    networkIP.concat(apNameLower + ".local");
 
     manager->render->fillScreen(WHITE);
     manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);

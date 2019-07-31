@@ -25,13 +25,24 @@ Manager::Manager() {
     pinMode(VBAT_PIN, INPUT);
     pinMode(CHARGE_PIN, INPUT);
 
-    render->clearScreen();
-
     webserver->needNetworkReconnect = true;
+
+    loadView();
 };
 
 Manager::~Manager() {
 };
+
+void Manager::loadView() {
+    // If device is not awaken by deep sleep load main view
+    if(!Utils::hasBootedFromDeepSleep()) {
+        render->clearScreen(false);
+        RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, LOADING_VIEW);
+    }
+
+    currentViewIndex = RTC::read(RTC_STORAGE::CURRENT_VIEW_INDEX);
+    show(currentViewIndex);
+}
 
 // TODO: Ugly, fix
 void Manager::show(int index) {
@@ -59,7 +70,8 @@ void Manager::show(int index) {
         currentView = new BatteryView(this);
     }
 
-    currentIndex = index;
+    currentViewIndex = index;
+    RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, currentViewIndex);
 
     isInitializingLayout = false;
 };
@@ -67,26 +79,26 @@ void Manager::show(int index) {
 // TODO: Ugly, fix
 void Manager::update() {
     if(!isInitializingLayout) {
-        if(currentIndex == MAIN_VIEW) {
-            (reinterpret_cast<MainView *>(currentView))->update();
+        if(currentViewIndex == MAIN_VIEW) {
+            (static_cast<MainView *>(currentView))->update();
         }
-        else if(currentIndex == TICKER_VIEW) {
-            (reinterpret_cast<TickerView *>(currentView))->update();
+        else if(currentViewIndex == TICKER_VIEW) {
+            (static_cast<TickerView *>(currentView))->update();
         }
-        else if(currentIndex == SETUP_VIEW) {
-            (reinterpret_cast<SetupView *>(currentView))->update();
+        else if(currentViewIndex == SETUP_VIEW) {
+            (static_cast<SetupView *>(currentView))->update();
         }
-        else if(currentIndex == DISCONNECTED_VIEW) {
-            (reinterpret_cast<DisconnectedView *>(currentView))->update();
+        else if(currentViewIndex == DISCONNECTED_VIEW) {
+            (static_cast<DisconnectedView *>(currentView))->update();
         }
-        else if(currentIndex == LOADING_VIEW) {
-            (reinterpret_cast<LoadingView *>(currentView))->update();
+        else if(currentViewIndex == LOADING_VIEW) {
+            (static_cast<LoadingView *>(currentView))->update();
         }
-        else if(currentIndex == UPDATE_VIEW) {
-            (reinterpret_cast<UpdateView *>(currentView))->update();
+        else if(currentViewIndex == UPDATE_VIEW) {
+            (static_cast<UpdateView *>(currentView))->update();
         }
-        else if(currentIndex == BATTERY_VIEW) {
-            (reinterpret_cast<BatteryView *>(currentView))->update();
+        else if(currentViewIndex == BATTERY_VIEW) {
+            (static_cast<BatteryView *>(currentView))->update();
         }
     }
 
@@ -94,22 +106,18 @@ void Manager::update() {
     speaker->update();
     battery->update();
 
-    if(currentIndex != SETUP_VIEW) {
+    if(currentViewIndex != SETUP_VIEW) {
         // Ordered by "warning" priority
-        if(!battery->isCharging && battery->chargePercentage <= BATTERY_WARNING_PERCENTAGE && currentIndex != BATTERY_VIEW) {
+        if(!battery->isCharging && battery->chargePercentage <= BATTERY_WARNING_PERCENTAGE && currentViewIndex != BATTERY_VIEW) {
             show(BATTERY_VIEW);
             return;
         }
 
-        if(!webserver->hasInternetAccess && currentIndex != DISCONNECTED_VIEW) {
+        if(!webserver->hasInternetAccess && currentViewIndex != DISCONNECTED_VIEW) {
             show(DISCONNECTED_VIEW);
             return;
         }
     }
-}
-
-int Manager::getCurrentIndex() {
-    return currentIndex;
 }
 
 void *Manager::getCurrentView() {

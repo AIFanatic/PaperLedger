@@ -1,8 +1,6 @@
 #ifndef SetupView_H
 #define SetupView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 #include "../helpers/LayoutList.h"
 

@@ -1,14 +1,18 @@
 #include "TickerView.h"
 
 TickerView::TickerView(Manager *_manager): LayoutBase(_manager) {
-    showTicker();
-
     // Init
     updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
 
-    lastScreenUpdate = millis();
-    lastTickersUpdate = millis();
+    // TODO: ONLY IF NORMAL BOOT
+    if(!Utils::hasBootedFromDeepSleep()) {
+        long currentTime = Utils::getCurrentTime();
+        setLastScrollUpdate(currentTime);
+        setLastTickersUpdate(currentTime);
+    }
+
+    showTicker();
 };
 
 TickerView::~TickerView() {
@@ -27,14 +31,14 @@ void TickerView::okButtonClicked() {
 };
 
 void TickerView::gotoPreviousTicker() {
-    currentTicker--;
-    lastScreenUpdate = millis();
+    setCurrentTickerIndex(getCurrentTickerIndex() - 1);
+    setLastScrollUpdate(Utils::getCurrentTime());
     showTicker();
 }
 
 void TickerView::gotoNextTicker() {
-    currentTicker++;
-    lastScreenUpdate = millis();
+    setCurrentTickerIndex(getCurrentTickerIndex() + 1);
+    setLastScrollUpdate(Utils::getCurrentTime());
     showTicker();
 }
 
@@ -59,15 +63,15 @@ void TickerView::showTicker() {
 
     int tickersSize = tickers.size() - 1;
 
-    if(currentTicker > tickersSize) {
-        currentTicker = 0;
+    if(getCurrentTickerIndex() > tickersSize) {
+        setCurrentTickerIndex(0);
     }
 
-    if(currentTicker < 0) {
-        currentTicker = tickersSize;
+    if(getCurrentTickerIndex() < 0) {
+        setCurrentTickerIndex(tickersSize);
     }
 
-    JsonObject& ticker = tickers[currentTicker].as<JsonObject>();
+    JsonObject& ticker = tickers[getCurrentTickerIndex()].as<JsonObject>();
 
     String coin = ticker["coin"];
     String price = ticker["price"];
@@ -91,17 +95,26 @@ void TickerView::showTicker() {
 void TickerView::update() {
     LayoutBase::update();
 
-    unsigned long currentTime = millis();
+    long currentTime = Utils::getCurrentTime();
 
-    if((currentTime - lastScreenUpdate) / 1000 > scrollFrequency) {
+    if((currentTime - getLastScrollUpdate()) > (scrollFrequency * 1000)) {
         gotoNextTicker();
         scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
     }
 
-    if((currentTime - lastTickersUpdate) / 1000 > updateFrequency) {
+    if((currentTime - getLastTickersUpdate()) > (updateFrequency * 1000) && manager->webserver->hasInternetAccess) {
         manager->tickers->updateTickers();
         manager->alarms->checkAlarms();
-        lastTickersUpdate = currentTime;
+        setLastTickersUpdate(currentTime);
         updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     }
+}
+
+void TickerView::enterDeepSleep(uint64_t sleepTimeMillis) {
+    esp_sleep_enable_ext0_wakeup(LEFT_BUTTON, LOW);
+    esp_sleep_enable_ext0_wakeup(OK_BUTTON, LOW);
+    esp_sleep_enable_ext0_wakeup(RIGHT_BUTTON, LOW);
+    esp_sleep_enable_timer_wakeup(sleepTimeMillis * 1000); // uS
+
+    esp_deep_sleep_start();
 }

@@ -66,7 +66,7 @@ void WebServer::requestWifiList(AsyncWebServerRequest *request) {
 
 void WebServer::requestWifiConnect(AsyncWebServerRequest *request) {
     if(!request->hasParam("ssid", true) || !request->hasParam("password", true)) {
-        manager->webserver->requestInvalid(request);
+        requestInvalid(request);
         return;
     }
 
@@ -228,7 +228,7 @@ bool WebServer::connectAP(const char *apName) {
         return false;
     }
 
-    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+    // WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     Serial.println(F("AP connected"));
     Serial.println("");
