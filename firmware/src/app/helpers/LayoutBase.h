@@ -1,7 +1,6 @@
 #ifndef LAYOUTBASE_H
 #define LAYOUTBASE_H
 
-#include "../controller/Render.h"
 #include "../Manager.h"
 
 #include <Pushbutton.h>

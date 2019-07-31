@@ -54,7 +54,7 @@ enum VIEWS {
 
 // NETWORK
 #define AP_NAME "PaperLedger"
-#define AP_IP "192.168.1.1"
+#define AP_IP "192.168.4.1"
 
 // ENDPOINTS
 #define URL_IM_ALIVE "https://api.ipify.org/"
@@ -63,11 +63,19 @@ enum VIEWS {
 // SETTINGS
 #define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10,\"mute_speakers\": \"false\"}"
 
-#define BATTERY_WARNING_PERCENTAGE 10
+#define BATTERY_WARNING_PERCENTAGE 20
 #define BATTERY_CHARGED_PERCENTAGE 90
-#define BATTERY_CHECK_FREQUENCY 1
+#define BATTERY_CHECK_FREQUENCY 10
 #define BATTERY_FULL_CHARGE_ADC 2365
 #define BATTERY_ZERO_CHARGE_ADC 1510
 #define BATTERY_CHARGE_DIFFERENCE_ADC 115
+
+// RTC
+enum RTC_STORAGE {
+    CURRENT_VIEW_INDEX,
+    TICKER_INDEX,
+    TICKER_LAST_TICKERS_UPDATE,
+    TICKER_LAST_SCROLL_UPDATE
+};
 
 #endif

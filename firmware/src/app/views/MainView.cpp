@@ -39,7 +39,6 @@ void MainView::showMenu() {
 };
 
 void MainView::leftButtonClicked() {
-    Serial.println("left");
     if(currentMenu != WALLET) {
         currentMenu--;
     }
@@ -48,7 +47,6 @@ void MainView::leftButtonClicked() {
 };
 
 void MainView::rightButtonClicked() {
-    Serial.println("right");
     if(currentMenu != SETUP) {
         currentMenu++;
     }

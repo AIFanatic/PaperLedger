@@ -4,6 +4,9 @@
 
 Battery::Battery(Manager *_manager) {
     manager = _manager;
+
+    isCharging = getIsCharging();
+    chargePercentage = getChargePercentage();
 }
 
 void Battery::requestBatteryStatus(AsyncWebServerRequest *request) {
@@ -37,13 +40,13 @@ int Battery::getChargePercentage() {
         vbat -= BATTERY_CHARGE_DIFFERENCE_ADC;
     }
 
-    return map(vbat, BATTERY_ZERO_CHARGE_ADC, BATTERY_FULL_CHARGE_ADC, 0, 100);
+    return constrain(map(vbat, BATTERY_ZERO_CHARGE_ADC, BATTERY_FULL_CHARGE_ADC, 0, 100), 0, 100);
 }
 
 void Battery::update() {
-    unsigned long currentTime = millis();
+    unsigned long currentTime = Utils::getCurrentTime();
 
-    if((currentTime - lastUpdate) / 1000 > BATTERY_CHECK_FREQUENCY) {
+    if((currentTime - lastUpdate) > BATTERY_CHECK_FREQUENCY) {
         isCharging = getIsCharging();
         chargePercentage = getChargePercentage();
 

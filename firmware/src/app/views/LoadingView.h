@@ -1,8 +1,6 @@
 #ifndef LoadingView_H
 #define LoadingView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class LoadingView: public LayoutBase {

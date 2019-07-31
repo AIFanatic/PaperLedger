@@ -1,8 +1,6 @@
 #ifndef MainView_H
 #define MainView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class MainView: public LayoutBase {

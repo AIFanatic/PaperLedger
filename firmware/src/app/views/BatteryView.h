@@ -1,8 +1,6 @@
 #ifndef BatteryView_H
 #define BatteryView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class BatteryView: public LayoutBase {
