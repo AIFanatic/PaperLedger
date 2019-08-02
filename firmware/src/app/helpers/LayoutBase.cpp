@@ -3,6 +3,8 @@
 LayoutBase::LayoutBase(Manager *_manager) {
     manager = _manager;
     initButtons();
+
+    statusView = new StatusView(_manager);
 };
 
 void LayoutBase::initButtons() {
@@ -30,6 +32,12 @@ void LayoutBase::updateButtons() {
 
 void LayoutBase::update() {
     updateButtons();
+    statusView->update();
+}
+
+void LayoutBase::draw() {
+    statusView->draw();
+    manager->render->draw();
 }
 
 void LayoutBase::beepIfNotMuted() {

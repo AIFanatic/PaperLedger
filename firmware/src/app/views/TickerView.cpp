@@ -82,14 +82,14 @@ void TickerView::showTicker() {
     String vol_24h = ticker["vol_24h"];
     String change_24h = ticker["change_24h"];
     String last_update = ticker["last_update"] != "0" ? Utils::readableTimestamp(ticker["last_update"]) : "Never";
-    String status = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
+    String stats = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
 
     manager->render->fillScreen(1);
-    manager->render->drawText(0, 10, last_update.c_str(), 7, BLACK, RIGHT_ALIGNMENT);
-    manager->render->drawText(0, 52, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 92, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 117, status.c_str(), 8, BLACK, CENTER_ALIGNMENT);
-    manager->render->draw();
+    manager->render->drawText(0, 45, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 82, pricePretty.c_str(), 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 105, stats.c_str(), 8, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 122, last_update.c_str(), 7, BLACK, CENTER_ALIGNMENT);
+    draw();
 }
 
 void TickerView::update() {
@@ -97,24 +97,20 @@ void TickerView::update() {
 
     long currentTime = Utils::getCurrentTime();
 
-    if((currentTime - getLastScrollUpdate()) > (scrollFrequency * 1000)) {
+    if((currentTime - getLastScrollUpdate()) > scrollFrequency) {
         gotoNextTicker();
         scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
     }
 
-    if((currentTime - getLastTickersUpdate()) > (updateFrequency * 1000) && manager->webserver->hasInternetAccess) {
+    if((currentTime - getLastTickersUpdate()) > updateFrequency && manager->webserver->hasInternetAccess) {
+        Serial.printf("cT: %lu, %lu, %lu", currentTime, getLastTickersUpdate(), updateFrequency);
         manager->tickers->updateTickers();
         manager->alarms->checkAlarms();
         setLastTickersUpdate(currentTime);
         updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     }
-}
 
-void TickerView::enterDeepSleep(uint64_t sleepTimeMillis) {
-    esp_sleep_enable_ext0_wakeup(LEFT_BUTTON, LOW);
-    esp_sleep_enable_ext0_wakeup(OK_BUTTON, LOW);
-    esp_sleep_enable_ext0_wakeup(RIGHT_BUTTON, LOW);
-    esp_sleep_enable_timer_wakeup(sleepTimeMillis * 1000); // uS
-
-    esp_deep_sleep_start();
+    // Enter deep sleep
+    // esp_sleep_enable_timer_wakeup(scrollFrequency * 1000); // uS
+    // manager->enterDeepSleep();
 }

@@ -131,6 +131,10 @@ void Render::drawText(int x, int y, const char *text, int size, int color, int a
     display->print(text);
 }
 
+void Render::drawPixel(int x, int y, int color) {
+    display->drawPixel(x, y, color);
+}
+
 void Render::setFont(int size) {
     // if(currentFontSize != size) {
     //     const GFXfont *font = &DVUS24pt7b;

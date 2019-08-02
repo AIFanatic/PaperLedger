@@ -39,6 +39,7 @@ class Render {
         void drawCircle(int x, int y, int r, int color, bool filled = false);
         void drawImage(int index, int x, int y, int w, int h, int color, int mode);
         void drawText(int x, int y, const char *text, int size, int color, int alignment = 0);
+        void drawPixel(int x, int y, int color);
         void setFont(int size);
 
         void getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1);

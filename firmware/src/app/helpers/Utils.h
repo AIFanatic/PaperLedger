@@ -45,18 +45,20 @@ class Utils {
             return (t.tv_sec * (uint64_t)1000) + (t.tv_usec / 1000);
         }
 
-        static long getCurrentTimeMicros() {
-            timeval t;
-            gettimeofday(&t, NULL);
-            return t.tv_usec;
-        }
-
         static long getBootCurrentTime() {
             return millis();
         }
 
         static bool hasBootedFromDeepSleep() {
             return (esp_sleep_get_wakeup_cause() != ESP_SLEEP_WAKEUP_UNDEFINED);
+        }
+
+        static int diff(int prev, int value) {
+            if(prev==0 || value == 0) {
+                return 0;
+            }
+            
+            return 100 * (value - prev) / prev;
         }
 };
 

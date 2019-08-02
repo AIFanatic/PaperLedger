@@ -35,7 +35,7 @@ void MainView::showMenu() {
         manager->render->drawImage(0, 225, 32, 64, 64, BLACK, 1);
     }
 
-    manager->render->draw();
+    draw();
 };
 
 void MainView::leftButtonClicked() {

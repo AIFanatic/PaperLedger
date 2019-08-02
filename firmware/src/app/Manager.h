@@ -23,6 +23,7 @@ class Manager {
         void update();
         void show(int index);
         void *getCurrentView();
+        void enterDeepSleep();
 
         Render *render;
         FileSystem *filesystem;
@@ -38,8 +39,10 @@ class Manager {
     private:
         void loadView();
 
+        void setCurrentViewIndex(int value) { RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, value); }
+        int getCurrentViewIndex() { return RTC::read(RTC_STORAGE::CURRENT_VIEW_INDEX); }
+
         void *currentView;
-        int currentViewIndex;
 
         bool isInitializingLayout;
 };
