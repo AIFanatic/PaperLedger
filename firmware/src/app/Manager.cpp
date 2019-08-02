@@ -2,10 +2,8 @@
 #include "./views/MainView.h"
 #include "./views/TickerView.h"
 #include "./views/SetupView.h"
-#include "./views/DisconnectedView.h"
 #include "./views/LoadingView.h"
 #include "./views/UpdateView.h"
-#include "./views/BatteryView.h"
 
 Manager::Manager() {
     render = new Render();
@@ -37,11 +35,10 @@ void Manager::loadView() {
     // If device is not awaken by deep sleep load main view
     if(!Utils::hasBootedFromDeepSleep()) {
         render->clearScreen(false);
-        RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, LOADING_VIEW);
+        setCurrentViewIndex(MAIN_VIEW);
     }
 
-    currentViewIndex = RTC::read(RTC_STORAGE::CURRENT_VIEW_INDEX);
-    show(currentViewIndex);
+    show(getCurrentViewIndex());
 }
 
 // TODO: Ugly, fix
@@ -57,27 +54,22 @@ void Manager::show(int index) {
     else if(index == SETUP_VIEW) {
         currentView = new SetupView(this);
     }
-    else if(index == DISCONNECTED_VIEW) {
-        currentView = new DisconnectedView(this);
-    }
     else if(index == LOADING_VIEW) {
         currentView = new LoadingView(this);
     }
     else if(index == UPDATE_VIEW) {
         currentView = new UpdateView(this);
     }
-    else if(index == BATTERY_VIEW) {
-        currentView = new BatteryView(this);
-    }
 
-    currentViewIndex = index;
-    RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, currentViewIndex);
+    setCurrentViewIndex(index);
 
     isInitializingLayout = false;
 };
 
 // TODO: Ugly, fix
 void Manager::update() {
+    int currentViewIndex = getCurrentViewIndex();
+
     if(!isInitializingLayout) {
         if(currentViewIndex == MAIN_VIEW) {
             (static_cast<MainView *>(currentView))->update();
@@ -88,38 +80,27 @@ void Manager::update() {
         else if(currentViewIndex == SETUP_VIEW) {
             (static_cast<SetupView *>(currentView))->update();
         }
-        else if(currentViewIndex == DISCONNECTED_VIEW) {
-            (static_cast<DisconnectedView *>(currentView))->update();
-        }
         else if(currentViewIndex == LOADING_VIEW) {
             (static_cast<LoadingView *>(currentView))->update();
         }
         else if(currentViewIndex == UPDATE_VIEW) {
             (static_cast<UpdateView *>(currentView))->update();
         }
-        else if(currentViewIndex == BATTERY_VIEW) {
-            (static_cast<BatteryView *>(currentView))->update();
-        }
     }
 
     webserver->update();
     speaker->update();
     battery->update();
-
-    if(currentViewIndex != SETUP_VIEW) {
-        // Ordered by "warning" priority
-        if(!battery->isCharging && battery->chargePercentage <= BATTERY_WARNING_PERCENTAGE && currentViewIndex != BATTERY_VIEW) {
-            show(BATTERY_VIEW);
-            return;
-        }
-
-        if(!webserver->hasInternetAccess && currentViewIndex != DISCONNECTED_VIEW) {
-            show(DISCONNECTED_VIEW);
-            return;
-        }
-    }
 }
 
 void *Manager::getCurrentView() {
     return currentView;
+}
+
+void Manager::enterDeepSleep() {
+    esp_sleep_enable_ext0_wakeup(LEFT_BUTTON, LOW);
+    esp_sleep_enable_ext0_wakeup(OK_BUTTON, LOW);
+    esp_sleep_enable_ext0_wakeup(RIGHT_BUTTON, LOW);
+
+    esp_deep_sleep_start();
 }
