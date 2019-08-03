@@ -49,10 +49,6 @@ class Utils {
             return millis();
         }
 
-        static bool hasBootedFromDeepSleep() {
-            return (esp_sleep_get_wakeup_cause() != ESP_SLEEP_WAKEUP_UNDEFINED);
-        }
-
         static int diff(int prev, int value) {
             if(prev==0 || value == 0) {
                 return 0;

@@ -71,11 +71,15 @@ enum VIEWS {
 #define BATTERY_CHARGE_DIFFERENCE_ADC 115
 
 // RTC
+// RTC only supports 16bit, therefore for longs an extra offset needs to be reserved
+// in order to prevent data from being overwritten
 enum RTC_STORAGE {
     CURRENT_VIEW_INDEX,
     TICKER_INDEX,
     TICKER_LAST_TICKERS_UPDATE,
-    TICKER_LAST_SCROLL_UPDATE
+    TICKER_LAST_TICKERS_UPDATE_RESERVED,
+    TICKER_LAST_SCROLL_UPDATE,
+    TICKER_LAST_SCROLL_UPDATE_RESERVED
 };
 
 #endif
