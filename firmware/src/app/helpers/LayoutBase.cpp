@@ -35,17 +35,11 @@ void LayoutBase::update() {
     statusView->update();
 }
 
-void LayoutBase::draw() {
-    statusView->draw();
-    manager->render->draw();
-}
-
 void LayoutBase::beepIfNotMuted() {
     if(manager->settings->get("mute_speakers") == "true") {
         return;
     }
 
-    manager->speaker->tone(2240);
-    delay(100);
+    manager->speaker->beep(2240, 100, 1);
     manager->speaker->mute();
 }

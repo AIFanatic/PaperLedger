@@ -10,6 +10,7 @@
 #include "./controller/Speaker.h"
 #include "./controller/Updater.h"
 #include "./controller/Battery.h"
+#include "./controller/DeepSleep.h"
 
 #include "../variables.h"
 
@@ -23,7 +24,6 @@ class Manager {
         void update();
         void show(int index);
         void *getCurrentView();
-        void enterDeepSleep();
 
         Render *render;
         FileSystem *filesystem;
@@ -35,9 +35,10 @@ class Manager {
         SPEAKER *speaker;
         Updater *updater;
         Battery *battery;
+        DeepSleep *deepSleep;
         
     private:
-        void loadView();
+        void wakeup();
 
         void setCurrentViewIndex(int value) { RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, value); }
         int getCurrentViewIndex() { return RTC::read(RTC_STORAGE::CURRENT_VIEW_INDEX); }

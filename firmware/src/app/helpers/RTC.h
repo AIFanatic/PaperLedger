@@ -36,6 +36,23 @@ class RTC {
             RTC_SLOW_MEM[ULP_DATA_OFFSET + offset] = value;
         }
 
+
+
+        static inline void writeLong(size_t offset, long value) {
+            uint16_t a = (uint16_t) (value >> 16);
+            uint16_t b = (uint16_t) (value);
+
+            RTC_SLOW_MEM[ULP_DATA_OFFSET + offset] = a;
+            RTC_SLOW_MEM[ULP_DATA_OFFSET + offset + 1] = b;
+        }
+
+        static inline long readLong(size_t offset) {
+            uint16_t a = RTC_SLOW_MEM[ULP_DATA_OFFSET + offset];
+            uint16_t b = RTC_SLOW_MEM[ULP_DATA_OFFSET + offset + 1];
+
+            return (long)a << 16 | (b & 0xFFFFFFFF);
+        }
+
         static void hexdump(const uint32_t* src, size_t count) {
             for (size_t i = 0; i < count; ++i) {
                 printf("%08x ", *src);

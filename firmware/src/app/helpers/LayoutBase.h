@@ -9,15 +9,16 @@
 
 class LayoutBase {
     public:
-        Manager *manager;
         LayoutBase(Manager *_manager);
 
         void update();
-        void draw();
 
         virtual void leftButtonClicked() = 0;
         virtual void rightButtonClicked() = 0;
         virtual void okButtonClicked() = 0;
+
+        Manager *manager;
+        StatusView *statusView;
 
     private:
         void initButtons();
@@ -27,8 +28,6 @@ class LayoutBase {
         Pushbutton *leftButton;
         Pushbutton *rightButton;
         Pushbutton *okButton;
-
-        StatusView *statusView;
 };
 
 #endif

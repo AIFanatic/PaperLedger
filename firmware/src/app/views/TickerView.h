@@ -26,11 +26,11 @@ class TickerView: public LayoutBase {
         void setCurrentTickerIndex(int value) { RTC::write(RTC_STORAGE::TICKER_INDEX, value); }
         int getCurrentTickerIndex() { return RTC::read(RTC_STORAGE::TICKER_INDEX); }
 
-        void setLastTickersUpdate(int value) { RTC::write(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE, value); }
-        int getLastTickersUpdate() { return RTC::read(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE); }
+        void setLastTickersUpdate(long value) { RTC::writeLong(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE, value); }
+        long getLastTickersUpdate() { return RTC::readLong(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE); }
 
-        void setLastScrollUpdate(int value) { RTC::write(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE, value); }
-        int getLastScrollUpdate() { return RTC::read(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE); }
+        void setLastScrollUpdate(long value) { RTC::writeLong(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE, value); }
+        long getLastScrollUpdate() { return RTC::readLong(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE); }
 
         int updateFrequency = 0;
         int scrollFrequency = 0;

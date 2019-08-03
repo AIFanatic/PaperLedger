@@ -14,6 +14,7 @@ Manager::Manager() {
     alarms = new Alarms(this);
     updater = new Updater(this);
     battery = new Battery(this);
+    deepSleep = new DeepSleep(this);
 
     speaker = new SPEAKER();
     speaker->begin(SPEAKER_PIN_PIN, 0);
@@ -23,17 +24,16 @@ Manager::Manager() {
     pinMode(VBAT_PIN, INPUT);
     pinMode(CHARGE_PIN, INPUT);
 
-    webserver->needNetworkReconnect = true;
-
-    loadView();
+    wakeup();
 };
 
 Manager::~Manager() {
 };
 
-void Manager::loadView() {
+void Manager::wakeup() {
     // If device is not awaken by deep sleep load main view
-    if(!Utils::hasBootedFromDeepSleep()) {
+    if(!deepSleep->hasBootedFromDeepSleep()) {
+        webserver->needNetworkReconnect = true;
         render->clearScreen(false);
         setCurrentViewIndex(MAIN_VIEW);
     }
@@ -95,12 +95,4 @@ void Manager::update() {
 
 void *Manager::getCurrentView() {
     return currentView;
-}
-
-void Manager::enterDeepSleep() {
-    esp_sleep_enable_ext0_wakeup(LEFT_BUTTON, LOW);
-    esp_sleep_enable_ext0_wakeup(OK_BUTTON, LOW);
-    esp_sleep_enable_ext0_wakeup(RIGHT_BUTTON, LOW);
-
-    esp_deep_sleep_start();
 }

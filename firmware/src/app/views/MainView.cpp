@@ -4,9 +4,6 @@ MainView::MainView(Manager *_manager): LayoutBase(_manager) {
     showMenu();
 };
 
-MainView::~MainView() {
-};
-
 void MainView::showMenu() {
     manager->render->fillScreen(1);
     manager->render->drawRectangle(85, 4, 130, 120, BLACK, 0);
@@ -35,7 +32,8 @@ void MainView::showMenu() {
         manager->render->drawImage(0, 225, 32, 64, 64, BLACK, 1);
     }
 
-    draw();
+    statusView->draw();
+    manager->render->draw();
 };
 
 void MainView::leftButtonClicked() {
