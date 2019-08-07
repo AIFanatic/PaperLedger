@@ -67,10 +67,11 @@ enum VIEWS {
 #define BATTERY_CHARGED_PERCENTAGE 90
 #define BATTERY_CHECK_FREQUENCY 10
 #define BATTERY_FULL_CHARGE_ADC 2365
-#define BATTERY_ZERO_CHARGE_ADC 1510
+#define BATTERY_ZERO_CHARGE_ADC 1610
 #define BATTERY_CHARGE_DIFFERENCE_ADC 115
 
-// RTC
+#define MIN_AWAKE_TIME_MS 60000
+
 // RTC only supports 16bit, therefore for longs an extra offset needs to be reserved
 // in order to prevent data from being overwritten
 enum RTC_STORAGE {

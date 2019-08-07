@@ -14,17 +14,16 @@ class StatusView {
 
     private:
         void drawBattery(int percentage, bool shouldRender);
-        void updateBattery(bool shouldDraw = false);
-
         void drawWifi(int rssi, bool hasInternet, bool shouldRender);
-        void updateWifi(bool shouldDraw = false);
+        void drawState(int stateIcon, bool shouldRender);
+
 
         int lastUpdate;
         int batteryChargePercentage;
         int networkSignalStrength;
         bool networkHasInternet;
-
-        int temp = 100;
+        bool isCharging;
+        bool isGoingToSleep;
 
         #define UPDATE_FREQUENCY 5000
 };

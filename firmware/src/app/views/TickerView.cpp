@@ -11,7 +11,7 @@ TickerView::TickerView(Manager *_manager): LayoutBase(_manager) {
     }
 
     if(manager->deepSleep->getWakeupCause() == ESP_SLEEP_WAKEUP_EXT0) {
-        manager->deepSleep->setMinAwakeBootTimeOffset(60000);
+        manager->deepSleep->setMinAwakeBootTimeOffset(MIN_AWAKE_TIME_MS);
     }
 
     showTicker();
@@ -21,12 +21,12 @@ TickerView::~TickerView() {
 };
 
 void TickerView::leftButtonClicked() {
-    manager->deepSleep->setMinAwakeBootTimeOffset(60000);
+    manager->deepSleep->setMinAwakeBootTimeOffset(MIN_AWAKE_TIME_MS);
     gotoPreviousTicker();
 };
 
 void TickerView::rightButtonClicked() {
-    manager->deepSleep->setMinAwakeBootTimeOffset(60000);
+    manager->deepSleep->setMinAwakeBootTimeOffset(MIN_AWAKE_TIME_MS);
     gotoNextTicker();
 };
 

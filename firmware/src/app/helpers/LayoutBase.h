@@ -10,6 +10,7 @@
 class LayoutBase {
     public:
         LayoutBase(Manager *_manager);
+        virtual ~LayoutBase() = default;
 
         void update();
 

@@ -46,6 +46,15 @@ void StatusView::drawWifi(int rssi, bool hasInternet, bool shouldRender) {
     }
 }
 
+void StatusView::drawState(int stateIcon, bool shouldRender) {
+    int x = 5;
+    int y = 5;
+    manager->render->drawImage(stateIcon, x, y, 16, 16, BLACK, 0);
+    if(shouldRender) {
+        manager->render->draw(x, y, 16, 16, true);
+    }
+}
+
 void StatusView::update() {
     long currentTime = Utils::getCurrentTime();
 
@@ -70,7 +79,25 @@ void StatusView::update() {
             drawWifi(networkSignalStrength, networkHasInternet, true);
         }
 
+        // Status
+        bool currentIsCharging = manager->battery->isCharging;
+
+        if(isCharging != currentIsCharging) {
+            isCharging = currentIsCharging;
+            if(isCharging) {
+                drawState(10, true);
+            }
+            else {
+                drawState(13, true);
+            }
+        }
+
         lastUpdate = currentTime;
+    }
+
+    if(manager->deepSleep->isGoingToDeepSleep() && !isGoingToSleep) {
+        isGoingToSleep = manager->deepSleep->isGoingToDeepSleep();
+        drawState(11, true);
     }
 }
 
@@ -82,16 +109,15 @@ void StatusView::draw() {
     networkHasInternet = manager->webserver->hasInternetAccess;
     drawWifi(networkSignalStrength, networkHasInternet, false);
 
-    /*
-    StatusView draw:
-- with each draw, from other views, draw bat + wifi always (because the views will wipe the screen)
-  draw even if values didnt change
-- every 10sec check for changes on network and battery and if so draw and render bat + wifi
-
-
-
-
-
-change wifi icon to have a cross instead open circle for no internet
-    */
+    isGoingToSleep = manager->deepSleep->isGoingToDeepSleep();
+    isCharging = manager->battery->isCharging;
+    if (isGoingToSleep) {
+        drawState(11, false);
+    }
+    else if(isCharging) {
+        drawState(10, false);
+    }
+    else {
+        drawState(13, false);
+    }
 }
