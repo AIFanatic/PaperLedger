@@ -4,6 +4,10 @@ MainView::MainView(Manager *_manager): LayoutBase(_manager) {
     showMenu();
 };
 
+MainView::~MainView() {
+    Serial.printf("MainView destroyed\n");
+}
+
 void MainView::showMenu() {
     manager->render->fillScreen(1);
     manager->render->drawRectangle(85, 4, 130, 120, BLACK, 0);

@@ -16,6 +16,7 @@ class DeepSleep {
 
         bool canEnterDeepSleep();
         void enterDeepSleep();
+        bool isGoingToDeepSleep();
 
         void setMinAwakeBootTimeOffset(long offsetMillis);
 
@@ -25,6 +26,10 @@ class DeepSleep {
         Manager *manager;
 
         long minAwakeBootTime;
+
+        bool needDeepSleep = false;
+
+        int sleepCountdown = 1000;
 };
 
 #endif

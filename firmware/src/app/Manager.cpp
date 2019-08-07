@@ -91,6 +91,7 @@ void Manager::update() {
     webserver->update();
     speaker->update();
     battery->update();
+    deepSleep->update();
 }
 
 void *Manager::getCurrentView() {
