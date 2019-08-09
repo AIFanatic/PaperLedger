@@ -46,10 +46,10 @@ void StatusView::drawWifi(int rssi, bool hasInternet, bool shouldRender) {
     }
 }
 
-void StatusView::drawState(int stateIcon, bool shouldRender) {
+void StatusView::drawState(const unsigned char *icon, bool shouldRender) {
     int x = 5;
     int y = 5;
-    manager->render->drawImage(stateIcon, x, y, 16, 16, BLACK);
+    manager->render->drawImage(icon, x, y, 16, 16, BLACK);
     if(shouldRender) {
         manager->render->draw(x, y, 16, 16, true);
     }
@@ -85,10 +85,7 @@ void StatusView::update() {
         if(isCharging != currentIsCharging) {
             isCharging = currentIsCharging;
             if(isCharging) {
-                drawState(10, true);
-            }
-            else {
-                drawState(13, true);
+                drawState(ICON_BOLT_16, true);
             }
         }
 
@@ -97,7 +94,7 @@ void StatusView::update() {
 
     if(manager->deepSleep->isGoingToDeepSleep() && !isGoingToSleep) {
         isGoingToSleep = manager->deepSleep->isGoingToDeepSleep();
-        drawState(11, true);
+        drawState(ICON_SLEEP_16, true);
     }
 }
 
@@ -112,12 +109,9 @@ void StatusView::draw() {
     isGoingToSleep = manager->deepSleep->isGoingToDeepSleep();
     isCharging = manager->battery->isCharging;
     if (isGoingToSleep) {
-        drawState(11, false);
+        drawState(ICON_SLEEP_16, false);
     }
     else if(isCharging) {
-        drawState(10, false);
-    }
-    else {
-        drawState(13, false);
+        drawState(ICON_BOLT_16, false);
     }
 }

@@ -33,6 +33,7 @@ class Render {
         void drawCircle(int x, int y, int r, int color, bool filled = false);
         void drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int color, bool filled);
         void drawImage(int index, int x, int y, int w, int h, int color);
+        void drawImage(const unsigned char *bitmap, int x, int y, int w, int h, int color);
         void drawText(int x, int y, const char *text, int size, int color, int alignment = 0);
         void drawPixel(int x, int y, int color);
         void setFont(int size);

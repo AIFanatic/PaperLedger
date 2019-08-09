@@ -15,7 +15,7 @@ class StatusView {
     private:
         void drawBattery(int percentage, bool shouldRender);
         void drawWifi(int rssi, bool hasInternet, bool shouldRender);
-        void drawState(int stateIcon, bool shouldRender);
+        void drawState(const unsigned char *icon, bool shouldRender);
 
 
         int lastUpdate;

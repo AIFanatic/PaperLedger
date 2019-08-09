@@ -169,6 +169,10 @@ void Render::drawImage(int index, int x, int y, int w, int h, int color) {
     display->drawBitmap(x, y, ICONS[index], w, h, color);
 }
 
+void Render::drawImage(const unsigned char *bitmap, int x, int y, int w, int h, int color) {
+    display->drawBitmap(x, y, bitmap, w, h, color);
+}
+
 void Render::draw() {
     display->displayWindow(0, 0, GxEPD2_290::HEIGHT, GxEPD2_290::WIDTH);
 }
