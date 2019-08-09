@@ -2,7 +2,6 @@
 #include "./views/MainView.h"
 #include "./views/TickerView.h"
 #include "./views/SetupView.h"
-#include "./views/DisconnectedView.h"
 #include "./views/LoadingView.h"
 #include "./views/UpdateView.h"
 
@@ -14,25 +13,37 @@ Manager::Manager() {
     tickers = new Tickers(this);
     alarms = new Alarms(this);
     updater = new Updater(this);
+    battery = new Battery(this);
+    deepSleep = new DeepSleep(this);
 
     speaker = new SPEAKER();
     speaker->begin(SPEAKER_PIN_PIN, 0);
 
-    render->clearScreen();
+    // Setup pins
+    pinMode(RED_LED_PIN, OUTPUT);
+    pinMode(VBAT_PIN, INPUT);
+    pinMode(CHARGE_PIN, INPUT);
 
-    webserver->needNetworkReconnect = true;
+    wakeup();
 };
 
 Manager::~Manager() {
 };
 
+void Manager::wakeup() {
+    // If device is not awaken by deep sleep load main view
+    if(!deepSleep->hasBootedFromDeepSleep()) {
+        webserver->needNetworkReconnect = true;
+        render->clearScreen(false);
+        setCurrentViewIndex(MAIN_VIEW);
+    }
+
+    show(getCurrentViewIndex());
+}
+
 // TODO: Ugly, fix
 void Manager::show(int index) {
     isInitializingLayout = true;
-
-    // if(currentView) {
-    //     currentView = nullptr;
-    // }
 
     if(index == MAIN_VIEW) {
         currentView = new MainView(this);
@@ -43,9 +54,6 @@ void Manager::show(int index) {
     else if(index == SETUP_VIEW) {
         currentView = new SetupView(this);
     }
-    else if(index == DISCONNECTED_VIEW) {
-        currentView = new DisconnectedView(this);
-    }
     else if(index == LOADING_VIEW) {
         currentView = new LoadingView(this);
     }
@@ -53,45 +61,37 @@ void Manager::show(int index) {
         currentView = new UpdateView(this);
     }
 
-    currentIndex = index;
+    setCurrentViewIndex(index);
 
     isInitializingLayout = false;
 };
 
 // TODO: Ugly, fix
 void Manager::update() {
+    int currentViewIndex = getCurrentViewIndex();
+
     if(!isInitializingLayout) {
-        if(currentIndex == MAIN_VIEW) {
-            (reinterpret_cast<MainView *>(currentView))->update();
+        if(currentViewIndex == MAIN_VIEW) {
+            (static_cast<MainView *>(currentView))->update();
         }
-        else if(currentIndex == TICKER_VIEW) {
-            (reinterpret_cast<TickerView *>(currentView))->update();
+        else if(currentViewIndex == TICKER_VIEW) {
+            (static_cast<TickerView *>(currentView))->update();
         }
-        else if(currentIndex == SETUP_VIEW) {
-            (reinterpret_cast<SetupView *>(currentView))->update();
+        else if(currentViewIndex == SETUP_VIEW) {
+            (static_cast<SetupView *>(currentView))->update();
         }
-        else if(currentIndex == DISCONNECTED_VIEW) {
-            (reinterpret_cast<DisconnectedView *>(currentView))->update();
+        else if(currentViewIndex == LOADING_VIEW) {
+            (static_cast<LoadingView *>(currentView))->update();
         }
-        else if(currentIndex == LOADING_VIEW) {
-            (reinterpret_cast<LoadingView *>(currentView))->update();
-        }
-        else if(currentIndex == UPDATE_VIEW) {
-            (reinterpret_cast<UpdateView *>(currentView))->update();
+        else if(currentViewIndex == UPDATE_VIEW) {
+            (static_cast<UpdateView *>(currentView))->update();
         }
     }
 
     webserver->update();
-
-    if(!webserver->hasInternetAccess && currentIndex != DISCONNECTED_VIEW && currentIndex != SETUP_VIEW) {
-        show(DISCONNECTED_VIEW);
-    }
-
     speaker->update();
-}
-
-int Manager::getCurrentIndex() {
-    return currentIndex;
+    battery->update();
+    deepSleep->update();
 }
 
 void *Manager::getCurrentView() {

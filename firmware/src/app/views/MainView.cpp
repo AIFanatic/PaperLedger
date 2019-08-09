@@ -5,7 +5,8 @@ MainView::MainView(Manager *_manager): LayoutBase(_manager) {
 };
 
 MainView::~MainView() {
-};
+    Serial.printf("MainView destroyed\n");
+}
 
 void MainView::showMenu() {
     manager->render->fillScreen(1);
@@ -35,11 +36,11 @@ void MainView::showMenu() {
         manager->render->drawImage(0, 225, 32, 64, 64, BLACK, 1);
     }
 
+    statusView->draw();
     manager->render->draw();
 };
 
 void MainView::leftButtonClicked() {
-    Serial.println("left");
     if(currentMenu != WALLET) {
         currentMenu--;
     }
@@ -48,7 +49,6 @@ void MainView::leftButtonClicked() {
 };
 
 void MainView::rightButtonClicked() {
-    Serial.println("right");
     if(currentMenu != SETUP) {
         currentMenu++;
     }

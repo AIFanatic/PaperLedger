@@ -1,8 +1,6 @@
 #ifndef TickerView_H
 #define TickerView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 #include "../helpers/Utils.h"
 
@@ -23,10 +21,16 @@ class TickerView: public LayoutBase {
         void showTicker();
         void showNoTickers();
 
-        int currentTicker = 0;
+        void enterDeepSleep(uint64_t sleepTimeMillis);
 
-        long lastScreenUpdate = 0;
-        long lastTickersUpdate = 0;
+        void setCurrentTickerIndex(int value) { RTC::write(RTC_STORAGE::TICKER_INDEX, value); }
+        int getCurrentTickerIndex() { return RTC::read(RTC_STORAGE::TICKER_INDEX); }
+
+        void setLastTickersUpdate(long value) { RTC::writeLong(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE, value); }
+        long getLastTickersUpdate() { return RTC::readLong(RTC_STORAGE::TICKER_LAST_TICKERS_UPDATE); }
+
+        void setLastScrollUpdate(long value) { RTC::writeLong(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE, value); }
+        long getLastScrollUpdate() { return RTC::readLong(RTC_STORAGE::TICKER_LAST_SCROLL_UPDATE); }
 
         int updateFrequency = 0;
         int scrollFrequency = 0;

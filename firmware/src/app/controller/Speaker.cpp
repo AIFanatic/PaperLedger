@@ -19,7 +19,7 @@ void SPEAKER::end() {
 }
 
 void SPEAKER::tone(uint16_t frequency) {
-    ledcWriteTone(TONE_PIN_CHANNEL, frequency);
+    // ledcWriteTone(TONE_PIN_CHANNEL, frequency);
 }
 
 void SPEAKER::tone(uint16_t frequency, uint32_t duration) {

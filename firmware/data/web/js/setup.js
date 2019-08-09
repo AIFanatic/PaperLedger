@@ -22,9 +22,6 @@ $(document).ready(function() {
 
                         var settingValue = settings[key];
                         var newBox = $('<div class="box"></div>');
-                        if (settingValue != "true" && settingValue != "false") {
-                            settingValue = settingValue + "s";
-                        }
 
                         newBox.text(settingParsed + ": " + settingValue);
                         

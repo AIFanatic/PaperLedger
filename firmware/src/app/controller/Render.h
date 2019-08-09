@@ -37,8 +37,10 @@ class Render {
         void fillScreen(int color);
         void drawRectangle(int x, int y, int w, int h, int color, bool filled = false);
         void drawCircle(int x, int y, int r, int color, bool filled = false);
+        void drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int color, bool filled);
         void drawImage(int index, int x, int y, int w, int h, int color, int mode);
         void drawText(int x, int y, const char *text, int size, int color, int alignment = 0);
+        void drawPixel(int x, int y, int color);
         void setFont(int size);
 
         void getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1);

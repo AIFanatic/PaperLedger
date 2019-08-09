@@ -66,7 +66,7 @@ void WebServer::requestWifiList(AsyncWebServerRequest *request) {
 
 void WebServer::requestWifiConnect(AsyncWebServerRequest *request) {
     if(!request->hasParam("ssid", true) || !request->hasParam("password", true)) {
-        manager->webserver->requestInvalid(request);
+        requestInvalid(request);
         return;
     }
 
@@ -161,6 +161,10 @@ void WebServer::begin() {
         manager->settings->requestChangeSettings(request);
     });
 
+    server.on("/data/battery/status", HTTP_GET, [this](AsyncWebServerRequest *request) {
+        manager->battery->requestBatteryStatus(request);
+    });
+
     server.on("/update", HTTP_POST, [this](AsyncWebServerRequest *request){
         manager->updater->requestUpdate(request);
     },[this](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
@@ -224,7 +228,7 @@ bool WebServer::connectAP(const char *apName) {
         return false;
     }
 
-    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+    // WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 
     Serial.println(F("AP connected"));
     Serial.println("");

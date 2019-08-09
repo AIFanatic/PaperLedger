@@ -3,6 +3,8 @@
 LayoutBase::LayoutBase(Manager *_manager) {
     manager = _manager;
     initButtons();
+
+    statusView = new StatusView(_manager);
 };
 
 void LayoutBase::initButtons() {
@@ -30,6 +32,7 @@ void LayoutBase::updateButtons() {
 
 void LayoutBase::update() {
     updateButtons();
+    statusView->update();
 }
 
 void LayoutBase::beepIfNotMuted() {
@@ -37,7 +40,6 @@ void LayoutBase::beepIfNotMuted() {
         return;
     }
 
-    manager->speaker->tone(2240);
-    delay(100);
+    manager->speaker->beep(2240, 100, 1);
     manager->speaker->mute();
 }

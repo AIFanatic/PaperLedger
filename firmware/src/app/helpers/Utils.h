@@ -38,6 +38,24 @@ class Utils {
             String readable_timestamp = buffer;
             return readable_timestamp;
         }
+
+        static long getCurrentTime() {
+            timeval t;
+            gettimeofday(&t, NULL);
+            return (t.tv_sec * (uint64_t)1000) + (t.tv_usec / 1000);
+        }
+
+        static long getBootCurrentTime() {
+            return millis();
+        }
+
+        static int diff(int prev, int value) {
+            if(prev==0 || value == 0) {
+                return 0;
+            }
+            
+            return 100 * (value - prev) / prev;
+        }
 };
 
 #endif

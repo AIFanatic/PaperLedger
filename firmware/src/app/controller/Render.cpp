@@ -21,7 +21,6 @@ void Render::initDisplay() {
     isInit = true;
     display->init();
     display->setRotation(3);
-    display->eraseDisplay();
     display->setTextColor(GxEPD_BLACK);
     display->setFont(&FreeSans9pt7b);
     display->setTextSize(0);
@@ -54,6 +53,16 @@ void Render::drawFromJson(String json) {
             int r = obj["r"];
             bool filled = obj["filled"];
             drawCircle(x, y, r, color, filled);
+        }
+        else if(type.equals("triangle")) {
+            int x0 = obj["x0"];
+            int y0 = obj["y0"];
+            int x1 = obj["x1"];
+            int y1 = obj["y1"];
+            int x2 = obj["x2"];
+            int y2 = obj["y2"];
+            bool filled = obj["filled"];
+            drawTriangle(x0, y0, x1, y1, x2, y2, color, filled);
         }
         else if(type.equals("text")) {
             const char *text = obj["text"];
@@ -102,6 +111,15 @@ void Render::drawCircle(int x, int y, int r, int color, bool filled) {
     display->drawCircle(x, y, r, color);
 }
 
+void Render::drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int color, bool filled) {
+    if(filled) {
+        display->fillTriangle(x0, y0, x1, y1, x2, y2, color);
+        return;
+    }
+
+    display->drawTriangle(x0, y0, x1, y1, x2, y2, color);
+}
+
 void Render::drawText(int x, int y, const char *text, int size, int color, int alignment) {
     int16_t x1, y1;
     uint16_t w, h;
@@ -131,19 +149,11 @@ void Render::drawText(int x, int y, const char *text, int size, int color, int a
     display->print(text);
 }
 
+void Render::drawPixel(int x, int y, int color) {
+    display->drawPixel(x, y, color);
+}
+
 void Render::setFont(int size) {
-    // if(currentFontSize != size) {
-    //     const GFXfont *font = &DVUS24pt7b;
-
-    //     if(size == 9) { font = &DVUS9pt7b; }
-    //     else if(size == 12) { font = &DVUS12pt7b; }
-    //     else if(size == 18) { font = &DVUS18pt7b; }
-    //     else if(size == 24) { font = &DVUS24pt7b; }
-
-    //     display->setFont(font);
-
-    //     currentFontSize = size;
-    // }
     if(currentFontSize != size) {
         const GFXfont *font = &FreeSans24pt7b;
 

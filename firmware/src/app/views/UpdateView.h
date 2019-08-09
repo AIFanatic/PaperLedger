@@ -1,8 +1,6 @@
 #ifndef UpdateView_H
 #define UpdateView_H
 
-#include "../controller/Render.h"
-#include "../Manager.h"
 #include "../helpers/LayoutBase.h"
 
 class UpdateView: public LayoutBase {

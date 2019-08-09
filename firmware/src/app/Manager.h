@@ -9,8 +9,12 @@
 #include "./controller/Alarms.h"
 #include "./controller/Speaker.h"
 #include "./controller/Updater.h"
+#include "./controller/Battery.h"
+#include "./controller/DeepSleep.h"
 
 #include "../variables.h"
+
+#include "./helpers/RTC.h"
 
 class Manager {
     public:
@@ -19,7 +23,6 @@ class Manager {
 
         void update();
         void show(int index);
-        int getCurrentIndex();
         void *getCurrentView();
 
         Render *render;
@@ -29,12 +32,16 @@ class Manager {
         Settings *settings;
         Tickers *tickers;
         Alarms *alarms;
-        Updater *updater;
-
         SPEAKER *speaker;
+        Updater *updater;
+        Battery *battery;
+        DeepSleep *deepSleep;
         
     private:
-        int currentIndex;
+        void wakeup();
+
+        void setCurrentViewIndex(int value) { RTC::write(RTC_STORAGE::CURRENT_VIEW_INDEX, value); }
+        int getCurrentViewIndex() { return RTC::read(RTC_STORAGE::CURRENT_VIEW_INDEX); }
 
         void *currentView;
 

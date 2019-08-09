@@ -44,6 +44,7 @@ Temporary Items
 .apdisk
 
 ### PlatformIO ###
+.pio
 .pioenvs
 .piolibdeps
 .clang_complete

@@ -24,6 +24,10 @@
 #define RIGHT_BUTTON GPIO_NUM_37
 #define OK_BUTTON GPIO_NUM_38
 
+#define RED_LED_PIN 26
+#define VBAT_PIN 34
+#define CHARGE_PIN 33
+
 // DISPLAY
 #define BLACK 0
 #define WHITE 1
@@ -40,7 +44,8 @@ enum VIEWS {
     SETUP_VIEW,
     DISCONNECTED_VIEW,
     LOADING_VIEW,
-    UPDATE_VIEW
+    UPDATE_VIEW,
+    BATTERY_VIEW
 };
 
 // FILENAMES
@@ -49,13 +54,33 @@ enum VIEWS {
 
 // NETWORK
 #define AP_NAME "PaperLedger"
-#define AP_IP "192.168.1.1"
+#define AP_IP "192.168.4.1"
 
 // ENDPOINTS
 #define URL_IM_ALIVE "https://api.ipify.org/"
 #define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true"
 
 // SETTINGS
-#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60,\"tickers_scroll_frequency\":10,\"mute_speakers\": \"false\"}"
+#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60000,\"tickers_scroll_frequency\":10000,\"mute_speakers\": \"false\"}"
+
+#define BATTERY_WARNING_PERCENTAGE 20
+#define BATTERY_CHARGED_PERCENTAGE 90
+#define BATTERY_CHECK_FREQUENCY 10
+#define BATTERY_FULL_CHARGE_ADC 2365
+#define BATTERY_ZERO_CHARGE_ADC 1610
+#define BATTERY_CHARGE_DIFFERENCE_ADC 115
+
+#define MIN_AWAKE_TIME_MS 60000
+
+// RTC only supports 16bit, therefore for longs an extra offset needs to be reserved
+// in order to prevent data from being overwritten
+enum RTC_STORAGE {
+    CURRENT_VIEW_INDEX,
+    TICKER_INDEX,
+    TICKER_LAST_TICKERS_UPDATE,
+    TICKER_LAST_TICKERS_UPDATE_RESERVED,
+    TICKER_LAST_SCROLL_UPDATE,
+    TICKER_LAST_SCROLL_UPDATE_RESERVED
+};
 
 #endif
