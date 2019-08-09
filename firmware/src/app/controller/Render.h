@@ -5,10 +5,7 @@
 
 #include "icons.h"
 
-
-#include <GxEPD.h>
-
-#include <GxGDEH029A1/GxGDEH029A1.h>      // 2.9" b/w
+#include <GxEPD2_BW.h>
 
 // FreeFonts from Adafruit_GFX
 #include <fonts/FreeSans7.h>
@@ -17,9 +14,6 @@
 #include <Fonts/FreeSans12pt7b.h>
 #include <Fonts/FreeSans18pt7b.h>
 #include <Fonts/FreeSans24pt7b.h>
-
-#include <GxIO/GxIO_SPI/GxIO_SPI.h>
-#include <GxIO/GxIO.h>
 
 #include "SPI.h"
 
@@ -38,7 +32,7 @@ class Render {
         void drawRectangle(int x, int y, int w, int h, int color, bool filled = false);
         void drawCircle(int x, int y, int r, int color, bool filled = false);
         void drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int color, bool filled);
-        void drawImage(int index, int x, int y, int w, int h, int color, int mode);
+        void drawImage(int index, int x, int y, int w, int h, int color);
         void drawText(int x, int y, const char *text, int size, int color, int alignment = 0);
         void drawPixel(int x, int y, int color);
         void setFont(int size);
@@ -49,8 +43,7 @@ class Render {
         void draw(int x, int y, int w, int h, bool adjustRotate = false);
 
     private:
-        GxIO_Class *io;
-        GxEPD_Class *display;
+        GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> *display;
 
         int currentFontSize = 0;
 };

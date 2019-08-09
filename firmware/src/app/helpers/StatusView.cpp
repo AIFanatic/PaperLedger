@@ -49,7 +49,7 @@ void StatusView::drawWifi(int rssi, bool hasInternet, bool shouldRender) {
 void StatusView::drawState(int stateIcon, bool shouldRender) {
     int x = 5;
     int y = 5;
-    manager->render->drawImage(stateIcon, x, y, 16, 16, BLACK, 0);
+    manager->render->drawImage(stateIcon, x, y, 16, 16, BLACK);
     if(shouldRender) {
         manager->render->draw(x, y, 16, 16, true);
     }

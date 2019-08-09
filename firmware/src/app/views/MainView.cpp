@@ -13,27 +13,27 @@ void MainView::showMenu() {
     manager->render->drawRectangle(85, 4, 130, 120, BLACK, 0);
 
     if(currentMenu == WALLET) {
-        manager->render->drawImage(8, 115, 15, 64, 64, BLACK, 2);
+        manager->render->drawImage(8, 115, 15, 64, 64, BLACK);
         manager->render->drawText(0, 115, "Wallet", 18, BLACK, CENTER_ALIGNMENT);
 
-        manager->render->drawRectangle(100, 44, 100, 15, BLACK, 1);
+        manager->render->drawRectangle(100, 44, 100, 15, BLACK);
         manager->render->drawText(0, 55, "Coming soon", 7, WHITE, CENTER_ALIGNMENT);
     }
     else if(currentMenu == TICKERS) {
-        manager->render->drawImage(9, 115, 15, 64, 64, BLACK, 2);
+        manager->render->drawImage(9, 115, 15, 64, 64, BLACK);
         manager->render->drawText(0, 115, "Tickers", 18, BLACK, CENTER_ALIGNMENT);
     }
     else if(currentMenu == SETUP) {
-        manager->render->drawImage(7, 115, 15, 64, 64, BLACK, 2);
+        manager->render->drawImage(7, 115, 15, 64, 64, BLACK);
         manager->render->drawText(0, 115, "Setup", 18, BLACK, CENTER_ALIGNMENT);
     }
 
     if(currentMenu != WALLET) {
-        manager->render->drawImage(1, 5, 32, 64, 64, BLACK, 1);
+        manager->render->drawImage(1, 5, 32, 64, 64, BLACK);
     }
 
     if(currentMenu != SETUP) {
-        manager->render->drawImage(0, 225, 32, 64, 64, BLACK, 1);
+        manager->render->drawImage(0, 225, 32, 64, 64, BLACK);
     }
 
     statusView->draw();

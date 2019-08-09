@@ -8,26 +8,21 @@ Render::~Render() {
 };
 
 void Render::initDisplay() {
-    io = new GxIO_Class(SPI, ELINK_SS, ELINK_DC, ELINK_RESET);
-    display = new GxEPD_Class(*io, ELINK_RESET, ELINK_BUSY);
+    display = new GxEPD2_BW<GxEPD2_290, GxEPD2_290::HEIGHT> (GxEPD2_290(ELINK_SS, ELINK_DC, ELINK_RESET, ELINK_BUSY));
 
     SPI.begin(SPI_CLK, SPI_MISO, SPI_MOSI, -1);
 
-    static bool isInit = false;
-    if (isInit)
-    {
-        return;
-    }
-    isInit = true;
-    display->init();
+    display->init(115200);
     display->setRotation(3);
+    display->mirror(false);
     display->setTextColor(GxEPD_BLACK);
     display->setFont(&FreeSans9pt7b);
     display->setTextSize(0);
 }
 
 void Render::clearScreen(bool partialUpdate) {
-    display->eraseDisplay(partialUpdate);
+    // display->eraseDisplay(partialUpdate);
+    display->clearScreen();
 }
 
 void Render::drawFromJson(String json) {
@@ -72,10 +67,9 @@ void Render::drawFromJson(String json) {
         }
         else if(type.equals("image")) {
             int index = obj["index"];
-            int mode = obj["mode"];
             int w = obj["w"];
             int h = obj["h"];
-            drawImage(index, x, y, w, h, color, mode);
+            drawImage(index, x, y, w, h, color);
         }
         else if(type.equals("clear")) {
             bool partial = obj["partial"];
@@ -86,7 +80,7 @@ void Render::drawFromJson(String json) {
         }
     }
 
-    display->updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, false);
+    draw();
 }
 
 void Render::fillScreen(int color) {
@@ -171,16 +165,16 @@ void Render::setFont(int size) {
     }
 }
 
-void Render::drawImage(int index, int x, int y, int w, int h, int color, int mode) {
-    display->drawBitmap(ICONS[index], x, y, w, h, color, mode);
+void Render::drawImage(int index, int x, int y, int w, int h, int color) {
+    display->drawBitmap(x, y, ICONS[index], w, h, color);
 }
 
 void Render::draw() {
-    display->updateWindow(0, 0, GxEPD_WIDTH, GxEPD_HEIGHT, false);
+    display->displayWindow(0, 0, GxEPD2_290::HEIGHT, GxEPD2_290::WIDTH);
 }
 
 void Render::draw(int x, int y, int w, int h, bool adjustRotate) {
-    display->updateWindow(x, y, w, h, adjustRotate);
+    display->displayWindow(0, 0, GxEPD2_290::HEIGHT, GxEPD2_290::WIDTH);
 }
 
 void Render::getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1) {
