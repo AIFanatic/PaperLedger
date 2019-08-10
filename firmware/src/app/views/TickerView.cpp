@@ -12,6 +12,9 @@ TickerView::TickerView(Manager *_manager): LayoutBase(_manager) {
 
     if(manager->deepSleep->getWakeupCause() == ESP_SLEEP_WAKEUP_EXT0) {
         manager->deepSleep->setMinAwakeBootTimeOffset(MIN_AWAKE_TIME_MS);
+        if(!manager->webserver->hasInternetAccess) {
+            manager->webserver->needNetworkReconnect = true;
+        }
     }
 
     showTicker();
@@ -116,7 +119,7 @@ void TickerView::update() {
         setLastTickersUpdate(currentTime);
         updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
     }
-    
+
     if((currentTime - getLastScrollUpdate()) > scrollFrequency) {
         gotoNextTicker();
         scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();

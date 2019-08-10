@@ -2,6 +2,9 @@
 
 MainView::MainView(Manager *_manager): LayoutBase(_manager) {
     showMenu();
+    if(!manager->webserver->hasInternetAccess) {
+        manager->webserver->needNetworkReconnect = true;
+    }
 };
 
 MainView::~MainView() {

@@ -31,7 +31,6 @@ Manager::~Manager() {
 void Manager::wakeup() {
     // If device is not awaken by deep sleep load main view
     if(!deepSleep->hasBootedFromDeepSleep()) {
-        webserver->needNetworkReconnect = true;
         render->clearScreen();
         setCurrentViewIndex(MAIN_VIEW);
     }
