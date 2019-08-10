@@ -12,7 +12,7 @@ void Render::initDisplay() {
 
     SPI.begin(SPI_CLK, SPI_MISO, SPI_MOSI, -1);
 
-    display->init(115200);
+    display->init(115200, false);
     display->setRotation(3);
     display->mirror(false);
     display->setTextColor(GxEPD_BLACK);
@@ -20,8 +20,7 @@ void Render::initDisplay() {
     display->setTextSize(0);
 }
 
-void Render::clearScreen(bool partialUpdate) {
-    // display->eraseDisplay(partialUpdate);
+void Render::clearScreen() {
     display->clearScreen();
 }
 
@@ -72,8 +71,7 @@ void Render::drawFromJson(String json) {
             drawImage(index, x, y, w, h, color);
         }
         else if(type.equals("clear")) {
-            bool partial = obj["partial"];
-            clearScreen(partial);
+            clearScreen();
         }
         else if(type.equals("fill")) {
             fillScreen(color);
@@ -178,7 +176,7 @@ void Render::draw() {
 }
 
 void Render::draw(int x, int y, int w, int h, bool adjustRotate) {
-    display->displayWindow(0, 0, GxEPD2_290::HEIGHT, GxEPD2_290::WIDTH);
+    display->displayWindow(x, y, h, w);
 }
 
 void Render::getTextBounds(int x, int y, const char *text, uint16_t &w1, uint16_t &h1) {

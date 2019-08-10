@@ -8,6 +8,8 @@ class MainView: public LayoutBase {
         MainView(Manager *_manager);
         ~MainView(void);
 
+        void update();
+
     private:
         void leftButtonClicked();
         void rightButtonClicked();

@@ -18,12 +18,12 @@ class StatusView {
         void drawState(const unsigned char *icon, bool shouldRender);
 
 
-        int lastUpdate;
-        int batteryChargePercentage;
-        int networkSignalStrength;
-        bool networkHasInternet;
-        bool isCharging;
-        bool isGoingToSleep;
+        int lastUpdate = 0;
+        int batteryChargePercentage = 0;
+        int networkSignalStrength = 0;
+        bool networkHasInternet = false;
+        bool isCharging = 0;
+        bool isGoingToSleep = 0;
 
         #define UPDATE_FREQUENCY 5000
 };

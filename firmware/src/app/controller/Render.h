@@ -25,7 +25,7 @@ class Render {
         ~Render(void);
 
         void initDisplay();
-        void clearScreen(bool partialUpdate = true);
+        void clearScreen();
         void drawFromJson(String json);
 
         void fillScreen(int color);

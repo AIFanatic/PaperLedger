@@ -49,9 +49,10 @@ void StatusView::drawWifi(int rssi, bool hasInternet, bool shouldRender) {
 void StatusView::drawState(const unsigned char *icon, bool shouldRender) {
     int x = 5;
     int y = 5;
+    manager->render->drawRectangle(x, y, 16, 16, WHITE, 1);
     manager->render->drawImage(icon, x, y, 16, 16, BLACK);
     if(shouldRender) {
-        manager->render->draw(x, y, 16, 16, true);
+        manager->render->draw(x, y, 20, 20, true);
     }
 }
 

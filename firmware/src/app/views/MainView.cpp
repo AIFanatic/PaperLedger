@@ -66,3 +66,9 @@ void MainView::okButtonClicked() {
         manager->show(SETUP_VIEW);
     }
 };
+
+void MainView::update() {
+    LayoutBase::update();
+    
+    statusView->update();
+};

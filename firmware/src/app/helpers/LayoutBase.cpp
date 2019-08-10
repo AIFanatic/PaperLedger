@@ -32,7 +32,6 @@ void LayoutBase::updateButtons() {
 
 void LayoutBase::update() {
     updateButtons();
-    statusView->update();
 }
 
 void LayoutBase::beepIfNotMuted() {

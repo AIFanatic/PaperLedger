@@ -102,6 +102,8 @@ void TickerView::showTicker() {
 void TickerView::update() {
     LayoutBase::update();
 
+    statusView->update();
+
     long currentTime = Utils::getCurrentTime();
 
     if((currentTime - getLastScrollUpdate()) > scrollFrequency) {

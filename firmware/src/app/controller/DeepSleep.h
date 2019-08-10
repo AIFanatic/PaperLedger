@@ -25,10 +25,8 @@ class DeepSleep {
     private:
         Manager *manager;
 
-        long minAwakeBootTime;
-
+        long minAwakeBootTime = 0;
         bool needDeepSleep = false;
-
         int sleepCountdown = 1000;
 };
 
