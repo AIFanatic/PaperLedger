@@ -46,7 +46,7 @@ int Battery::getChargePercentage() {
 void Battery::update() {
     long currentTime = Utils::getCurrentTime();
 
-    if((currentTime - lastUpdate) > BATTERY_CHECK_FREQUENCY) {
+    if((currentTime - lastUpdate) > BATTERY_CHECK_FREQUENCY_MS) {
         isCharging = getIsCharging();
         chargePercentage = getChargePercentage();
 

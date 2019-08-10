@@ -16,8 +16,8 @@ public:
 
     void requestBatteryStatus(AsyncWebServerRequest *request);
 
-    bool isCharging;
-    int chargePercentage;
+    bool isCharging = false;
+    int chargePercentage = 0;
 
 private:
     bool getIsCharging();

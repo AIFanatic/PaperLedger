@@ -18,7 +18,7 @@
 #define BUTTON_2 37
 #define BUTTON_3 39
 
-#define SPEAKER_PIN_PIN 25
+#define SPEAKER_PIN 25
 
 #define LEFT_BUTTON GPIO_NUM_39
 #define RIGHT_BUTTON GPIO_NUM_37
@@ -61,11 +61,11 @@ enum VIEWS {
 #define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true"
 
 // SETTINGS
-#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60000,\"tickers_scroll_frequency\":10000,\"mute_speakers\": \"false\"}"
+#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60000,\"tickers_scroll_frequency\":10000,\"mute_speakers\": \"true\"}"
 
 #define BATTERY_WARNING_PERCENTAGE 20
 #define BATTERY_CHARGED_PERCENTAGE 90
-#define BATTERY_CHECK_FREQUENCY 10
+#define BATTERY_CHECK_FREQUENCY_MS 10000
 #define BATTERY_FULL_CHARGE_ADC 2365
 #define BATTERY_ZERO_CHARGE_ADC 1610
 #define BATTERY_CHARGE_DIFFERENCE_ADC 115

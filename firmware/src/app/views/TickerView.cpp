@@ -106,11 +106,6 @@ void TickerView::update() {
 
     long currentTime = Utils::getCurrentTime();
 
-    if((currentTime - getLastScrollUpdate()) > scrollFrequency) {
-        gotoNextTicker();
-        scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
-    }
-
     if((currentTime - getLastTickersUpdate()) > updateFrequency) {
         if(!manager->webserver->hasInternetAccess) {
             manager->webserver->needNetworkReconnect = true;
@@ -120,6 +115,11 @@ void TickerView::update() {
         manager->alarms->checkAlarms();
         setLastTickersUpdate(currentTime);
         updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+    }
+    
+    if((currentTime - getLastScrollUpdate()) > scrollFrequency) {
+        gotoNextTicker();
+        scrollFrequency = manager->settings->get("tickers_scroll_frequency").toInt();
     }
 
     // Enter deep sleep

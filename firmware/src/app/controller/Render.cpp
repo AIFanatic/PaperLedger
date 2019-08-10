@@ -21,7 +21,15 @@ void Render::initDisplay() {
 }
 
 void Render::clearScreen() {
-    display->clearScreen();
+    // display->clearScreen();
+    drawRectangle(0, 0, display->width(), display->height(), BLACK, true);
+    draw();
+    drawRectangle(0, 0, display->width(), display->height(), WHITE, true);
+    draw();
+    drawRectangle(0, 0, display->width(), display->height(), BLACK, true);
+    draw();
+    drawRectangle(0, 0, display->width(), display->height(), WHITE, true);
+    draw();
 }
 
 void Render::drawFromJson(String json) {
