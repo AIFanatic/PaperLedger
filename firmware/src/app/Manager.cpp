@@ -15,7 +15,7 @@ Manager::Manager() {
     updater = new Updater(this);
     battery = new Battery(this);
     deepSleep = new DeepSleep(this);
-    speaker = new SPEAKER();
+    speaker = new Speaker(this);
 
     // Setup pins
     pinMode(RED_LED_PIN, OUTPUT);

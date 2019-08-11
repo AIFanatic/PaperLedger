@@ -66,6 +66,15 @@ void Render::drawFromJson(String json) {
             bool filled = obj["filled"];
             drawTriangle(x0, y0, x1, y1, x2, y2, color, filled);
         }
+        else if(type.equals("arc")) {
+            int x = obj["x"];
+            int y = obj["y"];
+            int startAngle = obj["startAngle"];
+            int endAngle = obj["endAngle"];
+            int radius = obj["r"];
+            int color = obj["color"];
+            drawArc(x, y, startAngle, endAngle, radius, color);
+        }
         else if(type.equals("text")) {
             const char *text = obj["text"];
             int size = obj["size"];
@@ -118,6 +127,14 @@ void Render::drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int co
     }
 
     display->drawTriangle(x0, y0, x1, y1, x2, y2, color);
+}
+
+void Render::drawArc(int x, int y, int startAngle, int endAngle, int radius, int color) {
+    for (int i = startAngle; i < endAngle; i++) {
+        int pX = x + cos((i-90)*3.14/180) * radius;
+        int pY = y + sin((i-90)*3.14/180) * radius;
+        drawPixel(pX, pY, BLACK);
+    }
 }
 
 void Render::drawText(int x, int y, const char *text, int size, int color, int alignment) {

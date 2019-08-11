@@ -28,12 +28,6 @@ class WebServer {
         void requestNotFound(AsyncWebServerRequest *request);
         void requestInvalid(AsyncWebServerRequest *request);
 
-        void begin();
-        void reset();
-
-        void connectNetwork();
-        void checkInternetAccess();
-
         bool disconnectWifi();
         bool reconnectWifi();
         bool connectAP(const char *apName);
@@ -47,11 +41,17 @@ class WebServer {
         bool hasInternetAccess = false;
 
     private:
+        void connectNetwork();
+        void connectInternet();
+
+        void begin();
+        void reset();
+
         Manager *manager;
 
         IPAddress apIP = IPAddress(192, 168, 4, 1);
         AsyncWebServer server = AsyncWebServer(80);
-        HTTPClient http;
+        HTTPClient http; 
 };
 
 #endif

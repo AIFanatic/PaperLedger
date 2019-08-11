@@ -32,7 +32,7 @@ class Manager {
         Settings *settings;
         Tickers *tickers;
         Alarms *alarms;
-        SPEAKER *speaker;
+        Speaker *speaker;
         Updater *updater;
         Battery *battery;
         DeepSleep *deepSleep;

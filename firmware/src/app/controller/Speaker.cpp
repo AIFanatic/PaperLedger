@@ -1,22 +1,27 @@
 #include "Speaker.h"
 
-SPEAKER::SPEAKER(void) {
+#include "../Manager.h"
+
+Speaker::Speaker(Manager *_manager) {
+    manager = _manager;
+
+    // pinMode(SPEAKER_PIN, INPUT_PULLDOWN);
 }
 
-void SPEAKER::start() {
+void Speaker::start() {
     ledcSetup(TONE_PIN_CHANNEL, 0, 8);
     ledcAttachPin(SPEAKER_PIN, TONE_PIN_CHANNEL);
 }
 
-void SPEAKER::end() {
+void Speaker::end() {
     ledcDetachPin(SPEAKER_PIN);
 }
 
-void SPEAKER::tone(uint16_t frequency) {
+void Speaker::tone(uint16_t frequency) {
     ledcWriteTone(TONE_PIN_CHANNEL, frequency);
 }
 
-void SPEAKER::beep(uint16_t frequency, uint16_t duration, uint16_t numBeeps) {
+void Speaker::beep(uint16_t frequency, uint16_t duration, uint16_t numBeeps) {
     start();
 
     for(int i = 0; i < numBeeps; i++) {
@@ -30,10 +35,13 @@ void SPEAKER::beep(uint16_t frequency, uint16_t duration, uint16_t numBeeps) {
     end();
 }
 
-void SPEAKER::mute() {
+void Speaker::mute() {
     ledcWriteTone(TONE_PIN_CHANNEL, 0);
     digitalWrite(SPEAKER_PIN, 0);
 }
 
-void SPEAKER::update() {
+void Speaker::update() {
+    if(manager->deepSleep->isGoingToDeepSleep()) {
+        // pinMode(SPEAKER_PIN, OUTPUT);
+    }
 }

@@ -18,31 +18,31 @@ void StatusView::drawBattery(int percentage, bool shouldRender) {
     }
 }
 
-void StatusView::drawWifi(int rssi, bool hasInternet, bool shouldRender) {
+void StatusView::drawWifi(int rssi, bool hasInternet, bool isInAccessPointMode, bool shouldRender) {
     int x = 250;
     int y = 10;
 
+    manager->render->drawRectangle(x-17, y-10, 35, 20, WHITE, true);
     manager->render->drawCircle(x, y, 3, BLACK, hasInternet);
 
-    if (rssi >= 0) return;
+    if(isInAccessPointMode) {
+        manager->render->drawArc(x, y, 50, 130, 7, BLACK);
+        manager->render->drawArc(x, y, 50, 130, 11, BLACK);
+        manager->render->drawArc(x, y, 50, 130, 15, BLACK);
 
-    int WIFIsignal = 0;
-    for (int _rssi = -100; _rssi <= rssi; _rssi = _rssi + 20) {
-        if (_rssi <= -33)  WIFIsignal = 8;
-        if (_rssi <= -66)  WIFIsignal = 6;
-        if (_rssi <= -100)  WIFIsignal = 4;
+        manager->render->drawArc(x, y, 230, 310, 7, BLACK);
+        manager->render->drawArc(x, y, 230, 310, 11, BLACK);
+        manager->render->drawArc(x, y, 230, 310, 15, BLACK);
+    }
 
-        int start_angle = 50; // Arc size left
-        int end_angle   =  130; // Arc size right
-        for (int i = start_angle; i < end_angle; i++) {
-            int pX = x + cos((i-90)*3.14/180) * WIFIsignal*1.6;
-            int pY = y + sin((i-90)*3.14/180) * WIFIsignal*1.6;
-            manager->render->drawPixel(pX, pY, BLACK);
-        }
+    if (hasInternet) {
+        if(rssi > -100) manager->render->drawArc(x, y, 50, 130, 7, BLACK);
+        if(rssi > -66) manager->render->drawArc(x, y, 50, 130, 11, BLACK);
+        if(rssi > -33) manager->render->drawArc(x, y, 50, 130, 15, BLACK);
     }
 
     if(shouldRender) {
-        manager->render->draw(x-10, y-10, 30, 30, true);
+        manager->render->draw(x-15, y-10, 50, 50, true);
     }
 }
 
@@ -70,14 +70,17 @@ void StatusView::update() {
         // Wifi
         int currentNetworkSignalStrength = manager->webserver->getWifiSignal();
         bool currentNetworkHasInternetAccess = manager->webserver->hasInternetAccess;
+        bool currentIsInAccessPointMode = manager->webserver->getWifiMode() == WIFI_MODE_AP;
 
         if(networkHasInternet != currentNetworkHasInternetAccess ||
+        isInAccessPointMode != currentIsInAccessPointMode ||
         abs(Utils::diff(networkSignalStrength, currentNetworkSignalStrength)) > 33) {
 
             networkSignalStrength = currentNetworkSignalStrength;
-            networkHasInternet = manager->webserver->hasInternetAccess;
+            networkHasInternet = currentNetworkHasInternetAccess;
+            isInAccessPointMode = currentIsInAccessPointMode;
 
-            drawWifi(networkSignalStrength, networkHasInternet, true);
+            drawWifi(networkSignalStrength, networkHasInternet, isInAccessPointMode, true);
         }
 
         // Status
@@ -105,7 +108,8 @@ void StatusView::draw() {
 
     networkSignalStrength = manager->webserver->getWifiSignal();
     networkHasInternet = manager->webserver->hasInternetAccess;
-    drawWifi(networkSignalStrength, networkHasInternet, false);
+    isInAccessPointMode = manager->webserver->getWifiMode() == WIFI_MODE_AP;
+    drawWifi(networkSignalStrength, networkHasInternet, isInAccessPointMode, false);
 
     isGoingToSleep = manager->deepSleep->isGoingToDeepSleep();
     isCharging = manager->battery->isCharging;

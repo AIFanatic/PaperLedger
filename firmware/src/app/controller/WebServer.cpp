@@ -285,15 +285,25 @@ wifi_mode_t WebServer::getWifiMode() {
 }
 
 
-void WebServer::checkInternetAccess() {
+void WebServer::connectInternet() {
     String response = get(URL_IM_ALIVE);
 
     if(response.length() == 0) {
+        hasInternetAccess = false;
         return;
     }
 
     hasInternetAccess = true;
-    Serial.println("Im alive!!!");
+
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& responseJson = jsonBuffer.parse(response);
+
+    int utcOffset = responseJson["utc_offset"];
+    String utcOffsetStr = String(utcOffset / 100 * 3600);
+
+    manager->settings->set("utc_offset", utcOffsetStr.c_str());
+
+    Serial.printf("offfset: %s\n", utcOffsetStr.c_str());
 }
 
 void WebServer::connectNetwork() {
@@ -317,7 +327,7 @@ void WebServer::update() {
         reset();
         disconnectWifi();
         connectNetwork();
-        checkInternetAccess();
+        connectInternet();
         begin();
 
         needNetworkReconnect = false;

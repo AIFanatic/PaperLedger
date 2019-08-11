@@ -5,9 +5,11 @@
 
 #include "../../variables.h"
 
-class SPEAKER {
+class Manager;
+
+class Speaker {
 public:
-    SPEAKER(void);
+    Speaker(Manager *_manager);
     
     void mute();
     void tone(uint16_t frequency);
@@ -15,6 +17,8 @@ public:
     void update();
     
 private:
+    Manager *manager;
+    
     void start();
     void end();
 

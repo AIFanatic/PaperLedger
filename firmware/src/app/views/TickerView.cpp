@@ -89,8 +89,14 @@ void TickerView::showTicker() {
 
     String vol_24h = ticker["vol_24h"];
     String change_24h = ticker["change_24h"];
-    String last_update = ticker["last_update"] != "0" ? Utils::readableTimestamp(ticker["last_update"]) : "Never";
     String stats = "24h: " + change_24h + " " + (char)37 + " | Vol: $" + vol_24h; // % character needs to be passed directly
+
+    String last_update = "Never";
+    if(ticker["last_update"] != "0") {
+        last_update = Utils::readableTimestamp(ticker["last_update"], manager->settings->get("utc_offset").toInt());
+    }
+
+    Serial.printf("Last update: %s %lu\n", last_update.c_str(), manager->settings->get("utc_offset").toInt());
 
     manager->render->fillScreen(1);
     manager->render->drawText(0, 45, coin.c_str(), 18, BLACK, CENTER_ALIGNMENT);

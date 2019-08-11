@@ -14,9 +14,6 @@
 #define SPI_CLK 18
 
 #define SDCARD_SS 13
-#define BUTTON_1 38
-#define BUTTON_2 37
-#define BUTTON_3 39
 
 #define SPEAKER_PIN 25
 
@@ -57,11 +54,11 @@ enum VIEWS {
 #define AP_IP "192.168.4.1"
 
 // ENDPOINTS
-#define URL_IM_ALIVE "https://api.ipify.org/"
+#define URL_IM_ALIVE "https://ipapi.co/json/"
 #define URL_TICKER_DATA "https://api.coingecko.com/api/v3/simple/price?include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&include_24hr_vol=true"
 
 // SETTINGS
-#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"tickers_update_frequency\":60000,\"tickers_scroll_frequency\":10000,\"mute_speakers\": \"true\"}"
+#define DEFAULT_SETTINGS "{\"ssid\":\"\",\"password\":\"\",\"utc_offset\":0,\"tickers_update_frequency\":60000,\"tickers_scroll_frequency\":10000,\"mute_speakers\": \"true\"}"
 
 #define BATTERY_WARNING_PERCENTAGE 20
 #define BATTERY_CHARGED_PERCENTAGE 90

@@ -30,10 +30,14 @@ class Utils {
             return String(Utils::roundDecimals(num, precision));
         }
         
-        static String readableTimestamp(String timestamp) { 
-            char buffer[21];
-            time_t input_time = (time_t) timestamp.toInt();
-            strftime(buffer, 21, "%Y-%m-%d %H:%M UTC", localtime(&input_time));
+        static String readableTimestamp(String timestamp, int utcOffsetSeconds) {
+            String utcOffsetSign = utcOffsetSeconds >= 0 ? "+" : "-";
+
+            String format = "%Y-%m-%d %H:%M UTC " + utcOffsetSign + String(utcOffsetSeconds/3600);
+
+            char buffer[30];
+            time_t input_time = (time_t) timestamp.toInt() + utcOffsetSeconds;
+            strftime(buffer, 30, format.c_str(), localtime(&input_time));
 
             String readable_timestamp = buffer;
             return readable_timestamp;
