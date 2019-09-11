@@ -67,7 +67,13 @@ $(document).ready(function() {
         }
 
         $.post("/data/wifi/connect", {ssid: ssid, password: password}, (response) => {
-            showWifiNetworks();
+            if(response["status"] == "ok") {
+                $(HEADER_TITLE_RIGHT).html('Connecting <i class="fas fa-circle-notch fa-spin"></i>');
+
+                setTimeout(() => {
+                    location.reload(true);
+                }, 20000);
+            }
         });
     });
 
