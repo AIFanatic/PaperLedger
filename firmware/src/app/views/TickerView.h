@@ -34,6 +34,8 @@ class TickerView: public LayoutBase {
 
         int updateFrequency = 0;
         int scrollFrequency = 0;
+
+        bool hasTickers = false;
 };
 
 #endif

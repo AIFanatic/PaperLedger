@@ -87,6 +87,7 @@ void WebServer::requestWifiDisconnect(AsyncWebServerRequest *request) {
 };
 
 void WebServer::reset() {
+    dnsServer.stop();
     server.reset();
 }
 
@@ -172,6 +173,13 @@ void WebServer::begin() {
     });
 
     server.onNotFound([this](AsyncWebServerRequest *request) {
+        if(getWifiMode() == WIFI_MODE_AP) {
+            String apName = String(AP_NAME);
+            apName.toLowerCase();
+            String url = "http://" + apName + ".local";
+            request->redirect(url);
+            return;
+        }
         requestNotFound(request);
     });
 
@@ -229,6 +237,7 @@ bool WebServer::connectAP(const char *apName) {
     }
 
     // WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+    dnsServer.start(53, "*", WiFi.softAPIP());
 
     Serial.println(F("AP connected"));
     Serial.println("");
@@ -332,4 +341,6 @@ void WebServer::update() {
 
         needNetworkReconnect = false;
     }
+
+    dnsServer.processNextRequest();
 }

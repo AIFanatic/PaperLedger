@@ -12,9 +12,6 @@ TickerView::TickerView(Manager *_manager): LayoutBase(_manager) {
 
     if(manager->deepSleep->getWakeupCause() == ESP_SLEEP_WAKEUP_EXT0) {
         manager->deepSleep->setMinAwakeBootTimeOffset(MIN_AWAKE_TIME_MS);
-        if(!manager->webserver->hasInternetAccess) {
-            manager->webserver->needNetworkReconnect = true;
-        }
     }
 
     showTicker();
@@ -50,9 +47,9 @@ void TickerView::gotoNextTicker() {
 }
 
 void TickerView::showNoTickers() {
+    hasTickers = false;
     manager->render->fillScreen(1);
-    manager->render->drawRectangle(0, 0, 296, 50, BLACK, 1);
-    manager->render->drawText(0, 35, "No tickers", 18, WHITE, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 35, "No tickers", 18, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 85, "Manage your tickers in the", 9, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 110, "Web Portal" , 9, BLACK, CENTER_ALIGNMENT);
     manager->render->draw();
@@ -60,6 +57,8 @@ void TickerView::showNoTickers() {
 
 // TODO: Show ticker by index. RTC is uint, no negative numbers
 void TickerView::showTicker() {
+    hasTickers = true;
+    
     String str = manager->tickers->get();
     DynamicJsonBuffer buffer;
     JsonArray& tickers = buffer.parse(str);
@@ -118,12 +117,14 @@ void TickerView::update() {
     if((currentTime - getLastTickersUpdate()) > updateFrequency) {
         if(!manager->webserver->hasInternetAccess) {
             manager->webserver->needNetworkReconnect = true;
-            return;
+            // return;
         }
-        manager->tickers->updateTickers();
-        manager->alarms->checkAlarms();
-        setLastTickersUpdate(currentTime);
-        updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+        else {
+            manager->tickers->updateTickers();
+            manager->alarms->checkAlarms();
+            setLastTickersUpdate(currentTime);
+            updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+        }
     }
 
     if((currentTime - getLastScrollUpdate()) > scrollFrequency) {
@@ -132,7 +133,7 @@ void TickerView::update() {
     }
 
     // Enter deep sleep
-    if(manager->deepSleep->canEnterDeepSleep()) {
+    if(hasTickers && manager->deepSleep->canEnterDeepSleep()) {
         esp_sleep_enable_timer_wakeup(scrollFrequency * 1000); // uS
         manager->deepSleep->enterDeepSleep();
     }

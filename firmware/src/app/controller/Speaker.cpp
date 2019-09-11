@@ -5,15 +5,17 @@
 Speaker::Speaker(Manager *_manager) {
     manager = _manager;
 
-    // pinMode(SPEAKER_PIN, INPUT_PULLDOWN);
+    pinMode(SPEAKER_POWER_PIN, INPUT);
 }
 
 void Speaker::start() {
+    pinMode(SPEAKER_POWER_PIN, OUTPUT);
     ledcSetup(TONE_PIN_CHANNEL, 0, 8);
     ledcAttachPin(SPEAKER_PIN, TONE_PIN_CHANNEL);
 }
 
 void Speaker::end() {
+    pinMode(SPEAKER_POWER_PIN, OUTPUT);
     ledcDetachPin(SPEAKER_PIN);
 }
 
@@ -41,7 +43,4 @@ void Speaker::mute() {
 }
 
 void Speaker::update() {
-    if(manager->deepSleep->isGoingToDeepSleep()) {
-        // pinMode(SPEAKER_PIN, OUTPUT);
-    }
 }

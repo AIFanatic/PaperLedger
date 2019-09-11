@@ -2,6 +2,7 @@
 #define Networking_h
 
 #include <HTTPClient.h>
+#include <DNSServer.h>
 #include <ESPAsyncWebServer.h>
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
@@ -50,6 +51,7 @@ class WebServer {
         Manager *manager;
 
         IPAddress apIP = IPAddress(192, 168, 4, 1);
+        DNSServer dnsServer;
         AsyncWebServer server = AsyncWebServer(80);
         HTTPClient http; 
 };

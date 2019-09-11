@@ -13,9 +13,9 @@ Manager::Manager() {
     tickers = new Tickers(this);
     alarms = new Alarms(this);
     updater = new Updater(this);
-    battery = new Battery(this);
-    deepSleep = new DeepSleep(this);
     speaker = new Speaker(this);
+    deepSleep = new DeepSleep(this);
+    battery = new Battery(this);
 
     // Setup pins
     pinMode(RED_LED_PIN, OUTPUT);

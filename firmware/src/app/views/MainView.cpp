@@ -2,7 +2,8 @@
 
 MainView::MainView(Manager *_manager): LayoutBase(_manager) {
     showMenu();
-    if(!manager->webserver->hasInternetAccess) {
+    
+    if(!manager->webserver->hasInternetAccess && manager->webserver->getWifiMode() != WIFI_MODE_AP) {
         manager->webserver->needNetworkReconnect = true;
     }
 };
