@@ -4,6 +4,11 @@
 
 DeepSleep::DeepSleep(Manager *_manager) {
     manager = _manager;
+
+    // Get variable here so that SPIFFS is not called every frame. Requires reset after change
+    deepSleepEnabled = manager->settings->get("enable_deep_sleep").toInt();
+
+    Serial.printf("Deep sleep: %s, %i, %i\n", manager->settings->get("enable_deep_sleep").c_str(), manager->settings->get("enable_deep_sleep").toInt(), deepSleepEnabled);
 };
 
 int DeepSleep::getWakeupCause() {
@@ -20,6 +25,10 @@ bool DeepSleep::isGoingToDeepSleep() {
 
 bool DeepSleep::canEnterDeepSleep() {
     if(Utils::getBootCurrentTime() <= minAwakeBootTime) {
+        return false;
+    }
+
+    if(!deepSleepEnabled) {
         return false;
     }
 

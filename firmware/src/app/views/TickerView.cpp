@@ -49,9 +49,11 @@ void TickerView::gotoNextTicker() {
 void TickerView::showNoTickers() {
     hasTickers = false;
     manager->render->fillScreen(1);
-    manager->render->drawText(0, 35, "No tickers", 18, BLACK, CENTER_ALIGNMENT);
-    manager->render->drawText(0, 85, "Manage your tickers in the", 9, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 45, "No tickers", 18, BLACK, CENTER_ALIGNMENT);
+    manager->render->drawText(0, 82, "Manage your tickers in the", 9, BLACK, CENTER_ALIGNMENT);
     manager->render->drawText(0, 110, "Web Portal" , 9, BLACK, CENTER_ALIGNMENT);
+
+    statusView->draw();
     manager->render->draw();
 }
 
@@ -117,7 +119,6 @@ void TickerView::update() {
     if((currentTime - getLastTickersUpdate()) > updateFrequency) {
         if(!manager->webserver->hasInternetAccess) {
             manager->webserver->needNetworkReconnect = true;
-            // return;
         }
         else {
             manager->tickers->updateTickers();

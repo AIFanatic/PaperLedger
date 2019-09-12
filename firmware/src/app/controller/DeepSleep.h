@@ -28,6 +28,8 @@ class DeepSleep {
         long minAwakeBootTime = 0;
         bool needDeepSleep = false;
         int sleepCountdown = 1000;
+
+        bool deepSleepEnabled = true;
 };
 
 #endif

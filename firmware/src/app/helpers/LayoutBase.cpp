@@ -35,7 +35,7 @@ void LayoutBase::update() {
 }
 
 void LayoutBase::beepIfNotMuted() {
-    if(manager->settings->get("mute_speakers") == "true") {
+    if(manager->settings->get("mute_speakers").toInt()) {
         return;
     }
 
