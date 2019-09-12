@@ -80,7 +80,13 @@ void LayoutList::draw() {
     int currentHeight = y + textHeight;
 
     // Draw rows
-    for(int i = 0; i < rowLen; i++) {
+    int itemsPerPage = 6;
+    int startRow = 0;
+    if(activeRow > itemsPerPage) {
+        startRow = itemsPerPage + 1;
+    }
+
+    for(int i = startRow; i < rowLen; i++) {
         // int tY = y + textHeight;
 
         int textColor = color;
@@ -96,6 +102,10 @@ void LayoutList::draw() {
         render->drawText(x + textMargin , currentHeight, rows[i][TEXT].c_str(), fontSize, textColor);
 
         currentHeight += textHeight;
+
+        if(i - startRow >= 6) {
+            break;
+        }
     }
 
     render->draw();

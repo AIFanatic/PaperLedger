@@ -28,11 +28,11 @@ void StatusView::drawWifi(int rssi, bool hasInternet, bool isInAccessPointMode, 
     if(isInAccessPointMode) {
         manager->render->drawArc(x, y, 50, 130, 7, BLACK);
         manager->render->drawArc(x, y, 50, 130, 11, BLACK);
-        manager->render->drawArc(x, y, 50, 130, 15, BLACK);
+        // manager->render->drawArc(x, y, 50, 130, 15, BLACK);
 
         manager->render->drawArc(x, y, 230, 310, 7, BLACK);
         manager->render->drawArc(x, y, 230, 310, 11, BLACK);
-        manager->render->drawArc(x, y, 230, 310, 15, BLACK);
+        // manager->render->drawArc(x, y, 230, 310, 15, BLACK);
     }
 
     if (hasInternet) {
