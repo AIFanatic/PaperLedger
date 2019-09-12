@@ -117,14 +117,16 @@ void TickerView::update() {
     long currentTime = Utils::getCurrentTime();
 
     if((currentTime - getLastTickersUpdate()) > updateFrequency) {
-        if(!manager->webserver->hasInternetAccess) {
-            manager->webserver->needNetworkReconnect = true;
-        }
-        else {
-            manager->tickers->updateTickers();
-            manager->alarms->checkAlarms();
-            setLastTickersUpdate(currentTime);
-            updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+        if(manager->webserver->getWifiMode() != WIFI_MODE_AP) {
+            if(!manager->webserver->hasInternetAccess) {
+                manager->webserver->needNetworkReconnect = true;
+            }
+            else {
+                manager->tickers->updateTickers();
+                manager->alarms->checkAlarms();
+                setLastTickersUpdate(currentTime);
+                updateFrequency = manager->settings->get("tickers_update_frequency").toInt();
+            }
         }
     }
 
